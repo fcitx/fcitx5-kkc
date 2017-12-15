@@ -35,6 +35,48 @@ void KKC::save() {}
 
 void KKC::updateUI(InputContext *inputContext) {}
 
+void KKC::loadRule()
+{
+    FILE* fp = FcitxXDGGetFileWithPrefix("kkc", "rule", "r", NULL);
+    KkcRuleMetadata* meta = NULL;
+
+    do {
+        if (!fp) {
+            break;
+        }
+
+        char* line = NULL;
+        size_t bufsize = 0;
+        getline(&line, &bufsize, fp);
+        fclose(fp);
+
+        if (!line) {
+            break;
+        }
+
+        char* trimmed = fcitx_utils_trim(line);
+        meta = kkc_rule_metadata_find(trimmed);
+        free(trimmed);
+        free(line);
+    } while(0);
+
+    if (!meta) {
+        meta = kkc_rule_metadata_find("default");
+        if (!meta) {
+            return false;
+        }
+    }
+
+    char* fcitxBasePath = NULL;
+    FcitxXDGGetFileUserWithPrefix("kkc", "rules", NULL, &fcitxBasePath);
+    KkcUserRule* userRule = kkc_user_rule_new(meta, fcitxBasePath, "fcitx-kkc", NULL);
+    if (!userRule) {
+        return false;
+    }
+
+    kkc_context_set_typing_rule(kkc->context, KKC_RULE(userRule));
+ 
+}
 std::string KKC::subMode(const InputMethodEntry &, InputContext &) {}
 
 KKCState *KKC::state(InputContext *ic) {}
