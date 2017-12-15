@@ -27,16 +27,15 @@ namespace Ui {
 class AddDictDialog;
 }
 
-class AddDictDialog : public QDialog
-{
+class AddDictDialog : public QDialog {
     Q_OBJECT
 public:
-    explicit AddDictDialog(QWidget* parent = 0);
+    explicit AddDictDialog(QWidget *parent = 0);
     virtual ~AddDictDialog();
     QMap<QString, QString> dictionary();
 
 private:
-    Ui::AddDictDialog* m_ui;
+    Ui::AddDictDialog *m_ui;
 public Q_SLOTS:
     void browseClicked();
 };

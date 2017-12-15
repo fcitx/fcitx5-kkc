@@ -27,11 +27,10 @@ namespace Ui {
 class KkcDictWidget;
 }
 
-class KkcDictWidget : public FcitxQtConfigUIWidget
-{
+class KkcDictWidget : public FcitxQtConfigUIWidget {
     Q_OBJECT
 public:
-    explicit KkcDictWidget(QWidget* parent = 0);
+    explicit KkcDictWidget(QWidget *parent = 0);
     virtual ~KkcDictWidget();
 
     virtual void load();
@@ -46,10 +45,10 @@ private Q_SLOTS:
     void removeDictClicked();
     void moveUpDictClicked();
     void moveDownClicked();
-private:
-    Ui::KkcDictWidget* m_ui;
-    DictModel* m_dictModel;
-};
 
+private:
+    Ui::KkcDictWidget *m_ui;
+    DictModel *m_dictModel;
+};
 
 #endif // FCITX_KKC_GUI_DICTWIDGET_H

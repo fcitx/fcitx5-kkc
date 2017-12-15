@@ -29,11 +29,10 @@ namespace Ui {
 class KkcShortcutWidget;
 }
 
-class KkcShortcutWidget : public FcitxQtConfigUIWidget
-{
+class KkcShortcutWidget : public FcitxQtConfigUIWidget {
     Q_OBJECT
 public:
-    explicit KkcShortcutWidget(QWidget* parent = 0);
+    explicit KkcShortcutWidget(QWidget *parent = 0);
     virtual ~KkcShortcutWidget();
 
     virtual void load();
@@ -49,11 +48,10 @@ public Q_SLOTS:
     void currentShortcutChanged();
 
 private:
-    Ui::KkcShortcutWidget* m_ui;
-    ShortcutModel* m_shortcutModel;
-    RuleModel* m_ruleModel;
+    Ui::KkcShortcutWidget *m_ui;
+    ShortcutModel *m_shortcutModel;
+    RuleModel *m_ruleModel;
     QString m_name;
 };
-
 
 #endif // FCITX_KKC_GUI_SHORTCUTWIDGET_H

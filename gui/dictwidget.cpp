@@ -17,64 +17,53 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "common.h"
 #include "dictwidget.h"
 #include "adddictdialog.h"
+#include "common.h"
 #include "dictmodel.h"
 #include "shortcutmodel.h"
 #include "ui_dictwidget.h"
 
-KkcDictWidget::KkcDictWidget(QWidget* parent): FcitxQtConfigUIWidget(parent)
-    ,m_ui(new Ui::KkcDictWidget)
-{
+KkcDictWidget::KkcDictWidget(QWidget *parent)
+    : FcitxQtConfigUIWidget(parent), m_ui(new Ui::KkcDictWidget) {
     m_ui->setupUi(this);
     m_dictModel = new DictModel(this);
 
     m_ui->dictionaryView->setModel(m_dictModel);
 
-    connect(m_ui->addDictButton, SIGNAL(clicked(bool)), this, SLOT(addDictClicked()));
-    connect(m_ui->defaultDictButton, SIGNAL(clicked(bool)), this,  SLOT(defaultDictClicked()));
-    connect(m_ui->removeDictButton, SIGNAL(clicked(bool)), this, SLOT(removeDictClicked()));
-    connect(m_ui->moveUpDictButton, SIGNAL(clicked(bool)), this, SLOT(moveUpDictClicked()));
-    connect(m_ui->moveDownDictButton, SIGNAL(clicked(bool)), this, SLOT(moveDownClicked()));
+    connect(m_ui->addDictButton, SIGNAL(clicked(bool)), this,
+            SLOT(addDictClicked()));
+    connect(m_ui->defaultDictButton, SIGNAL(clicked(bool)), this,
+            SLOT(defaultDictClicked()));
+    connect(m_ui->removeDictButton, SIGNAL(clicked(bool)), this,
+            SLOT(removeDictClicked()));
+    connect(m_ui->moveUpDictButton, SIGNAL(clicked(bool)), this,
+            SLOT(moveUpDictClicked()));
+    connect(m_ui->moveDownDictButton, SIGNAL(clicked(bool)), this,
+            SLOT(moveDownClicked()));
 
     load();
 }
 
-KkcDictWidget::~KkcDictWidget()
-{
-    delete m_ui;
-}
+KkcDictWidget::~KkcDictWidget() { delete m_ui; }
 
-QString KkcDictWidget::addon()
-{
-    return "fcitx-kkc";
-}
+QString KkcDictWidget::addon() { return "fcitx-kkc"; }
 
-QString KkcDictWidget::title()
-{
-    return _("Dictionary Manager");
-}
+QString KkcDictWidget::title() { return _("Dictionary Manager"); }
 
-QString KkcDictWidget::icon()
-{
-    return "fcitx-kkc";
-}
+QString KkcDictWidget::icon() { return "fcitx-kkc"; }
 
-void KkcDictWidget::load()
-{
+void KkcDictWidget::load() {
     m_dictModel->load();
     Q_EMIT changed(false);
 }
 
-void KkcDictWidget::save()
-{
+void KkcDictWidget::save() {
     m_dictModel->save();
     Q_EMIT changed(false);
 }
 
-void KkcDictWidget::addDictClicked()
-{
+void KkcDictWidget::addDictClicked() {
     AddDictDialog dialog;
     int result = dialog.exec();
     if (result == QDialog::Accepted) {
@@ -83,22 +72,19 @@ void KkcDictWidget::addDictClicked()
     }
 }
 
-void KkcDictWidget::defaultDictClicked()
-{
+void KkcDictWidget::defaultDictClicked() {
     m_dictModel->defaults();
     Q_EMIT changed(true);
 }
 
-void KkcDictWidget::removeDictClicked()
-{
+void KkcDictWidget::removeDictClicked() {
     if (m_ui->dictionaryView->currentIndex().isValid()) {
         m_dictModel->removeRow(m_ui->dictionaryView->currentIndex().row());
         Q_EMIT changed(true);
     }
 }
 
-void KkcDictWidget::moveUpDictClicked()
-{
+void KkcDictWidget::moveUpDictClicked() {
     int row = m_ui->dictionaryView->currentIndex().row();
     if (m_dictModel->moveUp(m_ui->dictionaryView->currentIndex())) {
         m_ui->dictionaryView->selectionModel()->setCurrentIndex(
@@ -107,8 +93,7 @@ void KkcDictWidget::moveUpDictClicked()
     }
 }
 
-void KkcDictWidget::moveDownClicked()
-{
+void KkcDictWidget::moveDownClicked() {
     int row = m_ui->dictionaryView->currentIndex().row();
     if (m_dictModel->moveDown(m_ui->dictionaryView->currentIndex())) {
         m_ui->dictionaryView->selectionModel()->setCurrentIndex(

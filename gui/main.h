@@ -22,16 +22,16 @@
 
 #include <fcitxqtconfiguiplugin.h>
 
-class KkcConfigPlugin : public FcitxQtConfigUIPlugin
-{
+class KkcConfigPlugin : public FcitxQtConfigUIPlugin {
     Q_OBJECT
 public:
-    Q_PLUGIN_METADATA(IID FcitxQtConfigUIFactoryInterface_iid FILE "kkc-config.json")
-    explicit KkcConfigPlugin(QObject* parent = 0);
+    Q_PLUGIN_METADATA(IID FcitxQtConfigUIFactoryInterface_iid FILE
+                      "kkc-config.json")
+    explicit KkcConfigPlugin(QObject *parent = 0);
     virtual QString name();
     virtual QStringList files();
     virtual QString domain();
-    virtual FcitxQtConfigUIWidget* create(const QString& key);
+    virtual FcitxQtConfigUIWidget *create(const QString &key);
 };
 
 #endif // FCITX_TOOLS_GUI_MAIN_H_

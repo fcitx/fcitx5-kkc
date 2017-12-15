@@ -17,26 +17,25 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <QApplication>
-#include <qplugin.h>
-#include <libintl.h>
-#include <fcitx-utils/utils.h>
-#include <glib-object.h>
-#include <libkkc/libkkc.h>
 #include "main.h"
 #include "dictwidget.h"
 #include "shortcutwidget.h"
+#include <QApplication>
+#include <fcitx-utils/utils.h>
+#include <glib-object.h>
+#include <libintl.h>
+#include <libkkc/libkkc.h>
+#include <qplugin.h>
 
-KkcConfigPlugin::KkcConfigPlugin(QObject* parent): FcitxQtConfigUIPlugin(parent)
-{
+KkcConfigPlugin::KkcConfigPlugin(QObject *parent)
+    : FcitxQtConfigUIPlugin(parent) {
 #if !GLIB_CHECK_VERSION(2, 36, 0)
     g_type_init();
 #endif
     kkc_init();
 }
 
-FcitxQtConfigUIWidget* KkcConfigPlugin::create(const QString& key)
-{
+FcitxQtConfigUIWidget *KkcConfigPlugin::create(const QString &key) {
     if (key == "kkc/dictionary_list") {
         return new KkcDictWidget;
     } else if (key == "kkc/rule") {
@@ -45,19 +44,13 @@ FcitxQtConfigUIWidget* KkcConfigPlugin::create(const QString& key)
     return NULL;
 }
 
-QStringList KkcConfigPlugin::files()
-{
+QStringList KkcConfigPlugin::files() {
     QStringList fileList;
-    fileList << "kkc/dictionary_list" << "kkc/rule";
+    fileList << "kkc/dictionary_list"
+             << "kkc/rule";
     return fileList;
 }
 
-QString KkcConfigPlugin::name()
-{
-    return "kkc-config";
-}
+QString KkcConfigPlugin::name() { return "kkc-config"; }
 
-QString KkcConfigPlugin::domain()
-{
-    return "fcitx-kkc";
-}
+QString KkcConfigPlugin::domain() { return "fcitx-kkc"; }

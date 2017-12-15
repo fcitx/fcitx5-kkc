@@ -25,6 +25,6 @@
 #define _(x) QString::fromUtf8(dgettext("fcitx-kkc", x))
 
 #define N_(X) (X)
-extern const char* modeName[];
+extern const char *modeName[];
 
 #endif // _COMMON_H_

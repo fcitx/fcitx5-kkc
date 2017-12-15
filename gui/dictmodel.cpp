@@ -17,37 +17,34 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <QFile>
-#include <QStringList>
-#include <QSet>
 #include <QDebug>
+#include <QFile>
+#include <QSet>
+#include <QStringList>
 #include <QTemporaryFile>
 #include <fcitx-config/xdg.h>
 
 #include "dictmodel.h"
 
-DictModel::DictModel(QObject* parent) : QAbstractListModel(parent)
-{
-    m_requiredKeys << "file" << "type" << "mode";
+DictModel::DictModel(QObject *parent) : QAbstractListModel(parent) {
+    m_requiredKeys << "file"
+                   << "type"
+                   << "mode";
 }
 
-DictModel::~DictModel()
-{
+DictModel::~DictModel() {}
 
-}
-
-void DictModel::defaults()
-{
-    char* path = fcitx_utils_get_fcitx_path_with_filename("pkgdatadir", "kkc/dictionary_list");
+void DictModel::defaults() {
+    char *path = fcitx_utils_get_fcitx_path_with_filename(
+        "pkgdatadir", "kkc/dictionary_list");
     QFile f(path);
     if (f.open(QIODevice::ReadOnly)) {
         load(f);
     }
 }
 
-void DictModel::load()
-{
-    FILE* fp = FcitxXDGGetFileWithPrefix("kkc", "dictionary_list", "r", NULL);
+void DictModel::load() {
+    FILE *fp = FcitxXDGGetFileWithPrefix("kkc", "dictionary_list", "r", NULL);
     if (!fp) {
         return;
     }
@@ -62,8 +59,7 @@ void DictModel::load()
     fclose(fp);
 }
 
-void DictModel::load(QFile& file)
-{
+void DictModel::load(QFile &file) {
     beginResetModel();
     m_dicts.clear();
 
@@ -77,7 +73,7 @@ void DictModel::load(QFile& file)
 
         bool failed = false;
         QMap<QString, QString> dict;
-        Q_FOREACH(const QString& item, items) {
+        Q_FOREACH (const QString &item, items) {
             if (!item.contains('=')) {
                 failed = true;
                 break;
@@ -99,9 +95,8 @@ void DictModel::load(QFile& file)
     endResetModel();
 }
 
-bool DictModel::save()
-{
-    char* name = NULL;
+bool DictModel::save() {
+    char *name = NULL;
     FcitxXDGMakeDirUser("kkc");
     FcitxXDGGetFileUserWithPrefix("kkc", "dictionary_list", NULL, &name);
     QString fileName = QString::fromLocal8Bit(name);
@@ -113,9 +108,9 @@ bool DictModel::save()
 
     typedef QMap<QString, QString> DictType;
 
-    Q_FOREACH(const DictType& dict, m_dicts) {
+    Q_FOREACH (const DictType &dict, m_dicts) {
         boolean first = true;
-        Q_FOREACH(const QString& key, dict.keys()) {
+        Q_FOREACH (const QString &key, dict.keys()) {
             if (first) {
                 first = false;
             } else {
@@ -138,20 +133,16 @@ bool DictModel::save()
     return true;
 }
 
-int DictModel::rowCount(const QModelIndex& parent) const
-{
+int DictModel::rowCount(const QModelIndex &parent) const {
     return m_dicts.size();
 }
 
-bool DictModel::removeRows(int row, int count, const QModelIndex& parent)
-{
+bool DictModel::removeRows(int row, int count, const QModelIndex &parent) {
     if (parent.isValid()) {
         return false;
     }
 
-    if (count == 0
-        || row >= m_dicts.size()
-        || row + count > m_dicts.size()) {
+    if (count == 0 || row >= m_dicts.size() || row + count > m_dicts.size()) {
         return false;
     }
 
@@ -162,9 +153,7 @@ bool DictModel::removeRows(int row, int count, const QModelIndex& parent)
     return true;
 }
 
-
-QVariant DictModel::data(const QModelIndex& index, int role) const
-{
+QVariant DictModel::data(const QModelIndex &index, int role) const {
     if (!index.isValid()) {
         return QVariant();
     }
@@ -173,17 +162,15 @@ QVariant DictModel::data(const QModelIndex& index, int role) const
         return QVariant();
     }
 
-    switch(role) {
-        case Qt::DisplayRole:
-            return m_dicts[index.row()]["file"];
+    switch (role) {
+    case Qt::DisplayRole:
+        return m_dicts[index.row()]["file"];
     }
     return QVariant();
 }
 
-bool DictModel::moveUp(const QModelIndex& currentIndex)
-{
-    if (currentIndex.row() > 0
-        && currentIndex.row() < m_dicts.size()) {
+bool DictModel::moveUp(const QModelIndex &currentIndex) {
+    if (currentIndex.row() > 0 && currentIndex.row() < m_dicts.size()) {
         beginResetModel();
         m_dicts.swap(currentIndex.row() - 1, currentIndex.row());
         endResetModel();
@@ -192,10 +179,8 @@ bool DictModel::moveUp(const QModelIndex& currentIndex)
     return false;
 }
 
-bool DictModel::moveDown(const QModelIndex& currentIndex)
-{
-    if (currentIndex.row() >= 0
-        && currentIndex.row() + 1 < m_dicts.size()) {
+bool DictModel::moveDown(const QModelIndex &currentIndex) {
+    if (currentIndex.row() >= 0 && currentIndex.row() + 1 < m_dicts.size()) {
         beginResetModel();
         m_dicts.swap(currentIndex.row() + 1, currentIndex.row());
         endResetModel();
@@ -205,8 +190,7 @@ bool DictModel::moveDown(const QModelIndex& currentIndex)
     return false;
 }
 
-void DictModel::add(const QMap< QString, QString >& dict)
-{
+void DictModel::add(const QMap<QString, QString> &dict) {
     beginInsertRows(QModelIndex(), m_dicts.size(), m_dicts.size());
     m_dicts << dict;
     endInsertRows();

@@ -21,8 +21,8 @@
 #define _FCITX_Kkc_INTERNAL_H_
 
 #include "kkc.h"
-#include <fcitx/instance.h>
 #include <fcitx/candidate.h>
+#include <fcitx/instance.h>
 #include <libkkc/libkkc.h>
 
 #define _(x) dgettext("fcitx-kkc", x)
@@ -46,11 +46,11 @@ typedef struct {
 typedef struct {
     FcitxKkcConfig config;
     FcitxInstance *owner;
-    KkcLanguageModel* model;
-    KkcContext* context;
+    KkcLanguageModel *model;
+    KkcContext *context;
     FcitxUIMenu inputModeMenu;
     gulong handler;
-    FcitxMessages* tempMsg;
+    FcitxMessages *tempMsg;
 } FcitxKkc;
 
 CONFIG_BINDING_DECLARE(FcitxKkcConfig);

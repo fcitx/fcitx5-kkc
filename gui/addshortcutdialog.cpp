@@ -20,13 +20,11 @@
 #include <QDebug>
 
 #include "addshortcutdialog.h"
-#include "ui_addshortcutdialog.h"
 #include "common.h"
+#include "ui_addshortcutdialog.h"
 
-AddShortcutDialog::AddShortcutDialog(QWidget* parent): QDialog(parent)
-    ,m_ui(new Ui::AddShortcutDialog)
-    ,m_length(0)
-{
+AddShortcutDialog::AddShortcutDialog(QWidget *parent)
+    : QDialog(parent), m_ui(new Ui::AddShortcutDialog), m_length(0) {
     m_ui->setupUi(this);
     m_ui->inputModeLabel->setText(_("&Input Mode"));
     m_ui->commandLabel->setText(_("&Command"));
@@ -40,18 +38,19 @@ AddShortcutDialog::AddShortcutDialog(QWidget* parent): QDialog(parent)
     m_commands = kkc_keymap_commands(&m_length);
 
     for (int i = 0; i < m_length; i++) {
-        gchar* label = kkc_keymap_get_command_label(m_commands[i]);
+        gchar *label = kkc_keymap_get_command_label(m_commands[i]);
         m_ui->commandComboBox->addItem(QString::fromUtf8(label));
         g_free(label);
     }
 
-    connect(m_ui->keyButton, SIGNAL(keySequenceChanged(QKeySequence,FcitxQtModifierSide)), this, SLOT(keyChanged()));
+    connect(m_ui->keyButton,
+            SIGNAL(keySequenceChanged(QKeySequence, FcitxQtModifierSide)), this,
+            SLOT(keyChanged()));
 
     keyChanged();
 }
 
-AddShortcutDialog::~AddShortcutDialog()
-{
+AddShortcutDialog::~AddShortcutDialog() {
     for (int i = 0; i < m_length; i++) {
         g_free(m_commands[i]);
     }
@@ -59,19 +58,22 @@ AddShortcutDialog::~AddShortcutDialog()
     delete m_ui;
 }
 
-void AddShortcutDialog::keyChanged()
-{
-    m_ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(m_ui->keyButton->keySequence().count() > 0);
+void AddShortcutDialog::keyChanged() {
+    m_ui->buttonBox->button(QDialogButtonBox::Ok)
+        ->setEnabled(m_ui->keyButton->keySequence().count() > 0);
 }
 
-ShortcutEntry AddShortcutDialog::shortcut()
-{
-    KkcInputMode mode = (KkcInputMode) m_ui->inputModeComboBox->currentIndex();
-    const QString command = QString::fromUtf8(m_commands[m_ui->commandComboBox->currentIndex()]);
+ShortcutEntry AddShortcutDialog::shortcut() {
+    KkcInputMode mode = (KkcInputMode)m_ui->inputModeComboBox->currentIndex();
+    const QString command =
+        QString::fromUtf8(m_commands[m_ui->commandComboBox->currentIndex()]);
     int keyQt = m_ui->keyButton->keySequence()[0];
     int sym;
     uint state;
-    FcitxQtKeySequenceWidget::keyQtToFcitx(keyQt, m_ui->keyButton->modifierSide(), sym, state);
-    KkcKeyEvent* event = kkc_key_event_new_from_x_event((guint) sym, 0, (KkcModifierType) state);
-    return ShortcutEntry(command, event, m_ui->commandComboBox->currentText(), mode);
+    FcitxQtKeySequenceWidget::keyQtToFcitx(
+        keyQt, m_ui->keyButton->modifierSide(), sym, state);
+    KkcKeyEvent *event =
+        kkc_key_event_new_from_x_event((guint)sym, 0, (KkcModifierType)state);
+    return ShortcutEntry(command, event, m_ui->commandComboBox->currentText(),
+                         mode);
 }
