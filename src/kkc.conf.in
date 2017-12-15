@@ -1,7 +1,6 @@
 [InputMethod]
-UniqueName=kkc
-_Name=Kana Kanji
-IconName=kkc
-Priority=1
+Name=Kana Kanji
+Icon=fcitx-kkc
+Label=あ
 LangCode=ja
-Parent=fcitx-kkc
+Addon=kkc

@@ -1,23 +1,12 @@
-# Source files
-set(fcitx_kkc_sources
-  kkc-config.c
-  kkc.c
-  )
+set(KKC_SOURCES
+    kkc.cpp
+)
+add_library(kkc MODULE ${KKC_SOURCES})
+target_link_libraries(kkc Fcitx5::Core Fcitx5::Config LibKKC::LibKKC)
+set_target_properties(kkc PROPERTIES PREFIX "")
+install(TARGETS kkc DESTINATION "${CMAKE_INSTALL_LIBDIR}/fcitx5")
+fcitx5_translate_desktop_file(kkc.conf.in kkc.conf)
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/kkc.conf" DESTINATION "${CMAKE_INSTALL_DATADIR}/fcitx5/inputmethod")
+fcitx5_translate_desktop_file(kkc-addon.conf.in kkc-addon.conf)
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/kkc-addon.conf" RENAME kkc.conf DESTINATION "${FCITX_INSTALL_PKGDATADIR}/addon")
 
-# See document in FcitxMacro.cmake and the kkc .fxaddon file
-# doc/fcitx-kkc.fxaddon in the fcitx repo for more information.
-fcitx_add_addon_full(kkc
-  DESC # Use configdesc file
-  SCAN # Generate api header
-  SCAN_PRIV # Generate addfunction header
-  IM_CONFIG kkc.conf
-  # HEADER_DIR alternative_name # change dir name your header is installed
-  # LIB_NAME lib_name # module file name (without extension)
-  # HEADERS headers.h # extra public headers to install
-  # EXTRA_PO extra_files # extra files to translate
-  LINK_LIBS ${LIBKKC_LIBRARIES} ${GLIB2_LIBRARIES}
-  SOURCES ${fcitx_kkc_sources})
-
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/dictionary_list.in ${CMAKE_CURRENT_BINARY_DIR}/dictionary_list @ONLY)
-
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/dictionary_list rule DESTINATION "${FCITX4_PREFIX}/share/fcitx/kkc")

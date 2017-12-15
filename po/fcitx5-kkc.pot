@@ -1,0 +1,126 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the fcitx5-kkc package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: fcitx5-kkc\n"
+"Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
+"POT-Creation-Date: 2017-12-15 10:37-0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: LANG\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: gui/addshortcutdialog.cpp:32
+msgid "&Command"
+msgstr ""
+
+#: gui/addshortcutdialog.cpp:31
+msgid "&Input Mode"
+msgstr ""
+
+#: gui/addshortcutdialog.cpp:33
+msgid "&Key"
+msgstr ""
+
+#: gui/adddictdialog.cpp:36
+msgid "&Path:"
+msgstr ""
+
+#: gui/shortcutwidget.cpp:37
+msgid "&Rule:"
+msgstr ""
+
+#: gui/adddictdialog.cpp:35
+msgid "&Type:"
+msgstr ""
+
+#: gui/dictwidget.cpp:56
+msgid "Dictionary Manager"
+msgstr ""
+
+#: gui/shortcutmodel.cpp:94
+msgid "Function"
+msgstr ""
+
+#: gui/shortcutmodel.cpp:50
+msgid "Half width Katakana"
+msgstr ""
+
+#: gui/shortcutmodel.cpp:48
+msgid "Hiragana"
+msgstr ""
+
+#: gui/shortcutmodel.cpp:90
+msgid "Input Mode"
+msgstr ""
+
+#: src/kkc.conf.in:3
+msgid "Kana Kanji"
+msgstr ""
+
+#: gui/shortcutmodel.cpp:49
+msgid "Katakana"
+msgstr ""
+
+#: gui/shortcutmodel.cpp:92
+msgid "Key"
+msgstr ""
+
+#: gui/shortcutwidget.cpp:155
+msgid "Key Conflict"
+msgstr ""
+
+#: gui/shortcutwidget.cpp:155
+msgid "Key to add is conflict with existing shortcut."
+msgstr ""
+
+#: src/kkc-addon.conf.in:3
+msgid "Kkc Addon of Fcitx"
+msgstr ""
+
+#: gui/shortcutmodel.cpp:51
+msgid "Latin"
+msgstr ""
+
+#: gui/shortcutwidget.cpp:130
+msgid "Save Changes"
+msgstr ""
+
+#: gui/adddictdialog.cpp:91
+msgid "Select Dictionary Directory"
+msgstr ""
+
+#: gui/adddictdialog.cpp:77
+msgid "Select Dictionary File"
+msgstr ""
+
+#: gui/shortcutwidget.cpp:117
+msgid "Shortcut Manager"
+msgstr ""
+
+#: gui/adddictdialog.cpp:37
+msgid "System"
+msgstr ""
+
+#: gui/shortcutwidget.cpp:131
+msgid ""
+"The content has changed.\n"
+"Do you want to save the changes or discard them?"
+msgstr ""
+
+#: gui/adddictdialog.cpp:38
+msgid "User"
+msgstr ""
+
+#: gui/shortcutmodel.cpp:52
+msgid "Wide latin"
+msgstr ""
+
+#: src/kkc.conf.in:4
+msgid "fcitx-kkc"
+msgstr ""

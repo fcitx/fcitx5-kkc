@@ -1,0 +1,6 @@
+[Addon]
+Name=Kkc Addon of Fcitx
+Category=InputMethod
+Library=kkc
+Type=SharedLibrary
+OnDemand=True
