@@ -10,3 +10,6 @@ install(FILES "${CMAKE_CURRENT_BINARY_DIR}/kkc.conf" DESTINATION "${CMAKE_INSTAL
 fcitx5_translate_desktop_file(kkc-addon.conf.in kkc-addon.conf)
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/kkc-addon.conf" RENAME kkc.conf DESTINATION "${FCITX_INSTALL_PKGDATADIR}/addon")
 
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/dictionary_list.in ${CMAKE_CURRENT_BINARY_DIR}/dictionary_list @ONLY)
+
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/dictionary_list rule DESTINATION "${CMAKE_INSTALL_DATADIR}/fcitx5/kkc")

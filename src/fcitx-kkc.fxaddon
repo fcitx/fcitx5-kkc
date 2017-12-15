@@ -1,8 +1,0 @@
-[FcitxAddon]
-Name=fcitx-kkc
-Prefix=Kkc
-Include0="kkc.h"
-Function0=
-Function1=
-Function2=
-Self.Type=FcitxKkc*
