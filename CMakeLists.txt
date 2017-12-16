@@ -15,6 +15,9 @@ find_package(PkgConfig REQUIRED)
 find_package(Fcitx5Core REQUIRED)
 find_package(LibKKC REQUIRED)
 find_package(Gettext REQUIRED)
+pkg_check_modules(Gee IMPORTED_TARGET "gee-0.8" REQUIRED)
+pkg_check_modules(JSonGlib IMPORTED_TARGET "json-glib-1.0" REQUIRED)
+pkg_check_modules(GObject2 IMPORTED_TARGET "gobject-2.0" REQUIRED)
 
 # if (ENABLE_QT)
 # find_package(Qt5 5.7 REQUIRED COMPONENTS Core Gui Widgets)
@@ -27,7 +30,7 @@ endif ()
 
 include("${FCITX_INSTALL_CMAKECONFIG_DIR}/Fcitx5Utils/Fcitx5CompilerSettings.cmake")
 
-add_definitions(-DFCITX_GETTEXT_DOMAIN=\"fcitx5-kkc\")
+add_definitions(-DFCITX_GETTEXT_DOMAIN=\"fcitx5-kkc\" -D_GNU_SOURCE)
 
 configure_file(config.h.in config.h
   IMMEDIATE @ONLY)
