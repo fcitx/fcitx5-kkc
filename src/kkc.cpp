@@ -157,6 +157,8 @@ void KKC::loadDictionary() {
             }
         }
     }
+
+    free(buf);
 }
 
 void KKC::loadRule() {}
