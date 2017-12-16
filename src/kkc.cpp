@@ -19,9 +19,15 @@
 //
 
 #include "kkc.h"
+#include <fcitx-utils/fs.h>
+#include <fcitx-utils/log.h>
 #include <fcitx-utils/standardpath.h>
 #include <fcitx/inputcontextmanager.h>
 #include <fcntl.h>
+
+FCITX_DEFINE_LOG_CATEGORY(kkc_logcategory, "kkc");
+
+#define KKC_DEBUG() FCITX_LOGC(kkc_logcategory, Debug)
 
 namespace fcitx {
 
@@ -38,12 +44,7 @@ public:
     KKCState(KKC *parent, InputContext &ic)
         : parent_(parent), ic_(&ic),
           context_(kkc_context_new(parent->model()), &g_object_unref) {
-        KkcDictionaryList *kkcdicts =
-            kkc_context_get_dictionaries(context_.get());
-        kkc_dictionary_list_clear(kkcdicts);
-        for (auto &dictionary : parent->dictionaries()) {
-            kkc_dictionary_list_add(kkcdicts, KKC_DICTIONARY(dictionary.get()));
-        }
+        kkc_context_set_dictionaries(context_.get(), parent_->dictionaries());
     }
 
     KKC *parent_;
@@ -53,13 +54,23 @@ public:
 KKC::KKC(Instance *instance)
     : instance_(instance),
       factory_([this](InputContext &ic) { return new KKCState(this, ic); }),
-      model_(nullptr, &g_object_unref) {
+      model_(nullptr, &g_object_unref),
+      dictionaries_(nullptr, &g_object_unref) {
 #if !GLIB_CHECK_VERSION(2, 36, 0)
     g_type_init();
 #endif
     kkc_init();
 
+    fs::makePath(stringutils::joinPath(
+        StandardPath::global().userDirectory(StandardPath::Type::PkgData),
+        "kkc/dictionary"));
+    fs::makePath(stringutils::joinPath(
+        StandardPath::global().userDirectory(StandardPath::Type::PkgData),
+        "kkc/rule"));
+
+    // We can only create kkc object here after we called kkc_init().
     model_.reset(kkc_language_model_load("sorted3", NULL));
+    dictionaries_.reset(kkc_dictionary_list_new());
     loadDictionary();
     loadRule();
 
@@ -73,12 +84,12 @@ void KKC::activate(const InputMethodEntry &entry, InputContextEvent &event) {}
 void KKC::keyEvent(const InputMethodEntry &entry, KeyEvent &keyEvent) {}
 void KKC::reloadConfig() {}
 void KKC::reset(const InputMethodEntry &entry, InputContextEvent &event) {}
-void KKC::save() {}
+void KKC::save() { kkc_dictionary_list_save(dictionaries_.get()); }
 
 void KKC::updateUI(InputContext *inputContext) {}
 
 void KKC::loadDictionary() {
-    dictionaries_.clear();
+    kkc_dictionary_list_clear(dictionaries_.get());
     auto file = StandardPath::global().open(StandardPath::Type::PkgData,
                                             "kkc/dictionary_list", O_RDONLY);
     if (file.fd() < 0) {
@@ -137,7 +148,9 @@ void KKC::loadDictionary() {
                 kkc_system_segment_dictionary_new(path.c_str(), "EUC-JP",
                                                   NULL)));
             if (dict) {
-                dictionaries_.push_back(std::move(dict));
+                KKC_DEBUG() << "Loaded readonly dict: " << path;
+                kkc_dictionary_list_add(dictionaries_.get(),
+                                        KKC_DICTIONARY(dict.get()));
             }
         } else {
             constexpr char configDir[] = "$FCITX_CONFIG_DIR/";
@@ -147,13 +160,15 @@ void KKC::loadDictionary() {
                 realpath =
                     stringutils::joinPath(StandardPath::global().userDirectory(
                                               StandardPath::Type::PkgData),
-                                          "kkc", path.substr(len));
+                                          path.substr(len));
             }
 
             auto userdict = makeGObjectUnique(reinterpret_cast<KkcDictionary *>(
                 kkc_user_dictionary_new(realpath.c_str(), NULL)));
             if (userdict) {
-                dictionaries_.push_back(std::move(userdict));
+                KKC_DEBUG() << "Loaded user dict: " << realpath;
+                kkc_dictionary_list_add(dictionaries_.get(),
+                                        KKC_DICTIONARY(userdict.get()));
             }
         }
     }

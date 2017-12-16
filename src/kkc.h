@@ -51,7 +51,7 @@ public:
                InputContextEvent &event) override;
     void save() override;
     auto &factory() { return factory_; }
-    const auto &dictionaries() { return dictionaries_; }
+    auto dictionaries() { return dictionaries_.get(); }
     auto model() { return model_.get(); }
 
     void updateUI(InputContext *inputContext);
@@ -67,7 +67,7 @@ private:
     Instance *instance_;
     FactoryFor<KKCState> factory_;
     GObjectUniquePtr<KkcLanguageModel> model_;
-    std::vector<GObjectUniquePtr<KkcDictionary>> dictionaries_;
+    GObjectUniquePtr<KkcDictionaryList> dictionaries_;
 };
 
 class KKCFactory : public AddonFactory {
