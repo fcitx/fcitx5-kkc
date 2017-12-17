@@ -4,3 +4,4 @@ Icon=fcitx-kkc
 Label=あ
 LangCode=ja
 Addon=kkc
+Configurable=True

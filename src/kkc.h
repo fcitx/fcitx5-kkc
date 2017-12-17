@@ -23,15 +23,70 @@
 #include "config.h"
 
 #include <fcitx-config/configuration.h>
+#include <fcitx-config/enum.h>
+#include <fcitx-config/iniparser.h>
+#include <fcitx-utils/i18n.h>
 #include <fcitx/addonfactory.h>
 #include <fcitx/addonmanager.h>
+#include <fcitx/candidatelist.h>
 #include <fcitx/inputcontextproperty.h>
 #include <fcitx/inputmethodengine.h>
 #include <fcitx/instance.h>
 #include <libkkc/libkkc.h>
 #include <memory>
-
 namespace fcitx {
+
+FCITX_CONFIG_ENUM_NAME_WITH_I18N(CandidateLayoutHint, N_("Not set"),
+                                 N_("Vertical"), N_("Horizontal"));
+
+FCITX_CONFIG_ENUM_NAME_WITH_I18N(KkcPunctuationStyle, N_("Japanese"),
+                                 N_("Latin"), N_("Wide latin"),
+                                 N_("Wide latin Japanese"));
+
+FCITX_CONFIG_ENUM_NAME_WITH_I18N(KkcInputMode, N_("Hiragana"), N_("Katakana"),
+                                 N_("Half width Katakana"), N_("Direct input"),
+                                 N_("Wide latin"));
+
+FCITX_CONFIGURATION(
+    KkcConfig,
+    Option<KkcPunctuationStyle> punctuationStyle{this, "PunctuationStyle",
+                                                 _("Punctuation Style"),
+                                                 KKC_PUNCTUATION_STYLE_JA_JA};
+    Option<KkcInputMode> inputMode{this, "InitialInputMode",
+                                   _("Initial Input Mode"),
+                                   KKC_INPUT_MODE_HIRAGANA};
+    Option<int, IntConstrain> pageSize{this, "PageSize", _("Page size"), 10,
+                                       IntConstrain(1, 10)};
+    Option<bool> autoCorrect{this, "AutoCorrect", _("Auto Correct"), true};
+    KeyListOption prevPageKey{
+        this,
+        "CandidatesPageUpKey",
+        _("Candidates Page Up"),
+        {Key(FcitxKey_Page_Up)},
+        KeyListConstrain({KeyConstrainFlag::AllowModifierLess})};
+    KeyListOption nextPageKey{
+        this,
+        "CandidatesPageDownKey",
+        _("Candidates Page Down"),
+        {Key(FcitxKey_Page_Down)},
+        KeyListConstrain({KeyConstrainFlag::AllowModifierLess})};
+    KeyListOption cursorUpKey{
+        this,
+        "CursorUp",
+        _("Cursor Up"),
+        {Key(FcitxKey_Up)},
+        KeyListConstrain({KeyConstrainFlag::AllowModifierLess})};
+    KeyListOption cursorDownKey{
+        this,
+        "CursorDown",
+        _("Cursor Down"),
+        {Key(FcitxKey_Down)},
+        KeyListConstrain({KeyConstrainFlag::AllowModifierLess})};
+    Option<bool> showAnnotation{this, "ShowAnnotation", _("Show Annotation")};
+    Option<int, IntConstrain> nTriggersToShowCandWin{
+        this, "NTriggersToShowCandWin",
+        _("Number candidate of Triggers To Show Candidate Window"), 0,
+        IntConstrain(0, 7)};);
 
 class KkcState;
 
@@ -43,6 +98,14 @@ public:
     KkcEngine(Instance *instance);
     ~KkcEngine();
     Instance *instance() { return instance_; }
+
+    const Configuration *getConfig() const override { return &config_; }
+    void setConfig(const RawConfig &config) override {
+        config_.load(config, true);
+        safeSaveAsIni(config_, "conf/kkc.conf");
+        reloadConfig();
+    }
+
     void activate(const InputMethodEntry &entry,
                   InputContextEvent &event) override;
     void keyEvent(const InputMethodEntry &entry, KeyEvent &keyEvent) override;
@@ -52,6 +115,7 @@ public:
     void save() override;
     auto &factory() { return factory_; }
     auto dictionaries() { return dictionaries_.get(); }
+    auto &config() { return config_; }
     auto model() { return model_.get(); }
     auto rule() { return userRule_.get(); }
 
@@ -65,6 +129,7 @@ private:
     void loadDictionary();
     void loadRule();
 
+    KkcConfig config_;
     Instance *instance_;
     FactoryFor<KkcState> factory_;
     GObjectUniquePtr<KkcLanguageModel> model_;

@@ -45,7 +45,8 @@ public:
         : parent_(parent), ic_(&ic),
           context_(kkc_context_new(parent->model()), &g_object_unref) {
         kkc_context_set_dictionaries(context_.get(), parent_->dictionaries());
-        kkc_context_set_typing_rule(context_.get(), KKC_RULE(parent_->rule()));
+        kkc_context_set_input_mode(context_.get(),
+                                   *parent_->config().inputMode);
     }
 
     KkcEngine *parent_;
@@ -72,23 +73,48 @@ KkcEngine::KkcEngine(Instance *instance)
     // We can only create kkc object here after we called kkc_init().
     model_.reset(kkc_language_model_load("sorted3", NULL));
     dictionaries_.reset(kkc_dictionary_list_new());
-    loadDictionary();
-    loadRule();
+    instance_->inputContextManager().registerProperty("kkcState", &factory_);
+
+    reloadConfig();
 
     if (!userRule_ || !dictionaries_) {
         throw std::runtime_error("Failed to load kkc data");
     }
-
-    instance_->inputContextManager().registerProperty("kkcState", &factory_);
-
-    reloadConfig();
+    instance_->inputContextManager().foreach([this](InputContext *ic) {
+        auto state = this->state(ic);
+        kkc_context_set_input_mode(state->context_.get(), *config_.inputMode);
+        return true;
+    });
 }
 
 KkcEngine::~KkcEngine() {}
 void KkcEngine::activate(const InputMethodEntry &entry,
                          InputContextEvent &event) {}
 void KkcEngine::keyEvent(const InputMethodEntry &entry, KeyEvent &keyEvent) {}
-void KkcEngine::reloadConfig() {}
+void KkcEngine::reloadConfig() {
+    readAsIni(config_, "conf/kkc.conf");
+
+    loadDictionary();
+    loadRule();
+
+    instance_->inputContextManager().foreach([this](InputContext *ic) {
+        auto state = this->state(ic);
+        KkcCandidateList *kkcCandidates =
+            kkc_context_get_candidates(state->context_.get());
+        kkc_candidate_list_set_page_start(kkcCandidates,
+                                          *config_.nTriggersToShowCandWin);
+        kkc_candidate_list_set_page_size(kkcCandidates, *config_.pageSize);
+        kkc_context_set_punctuation_style(state->context_.get(),
+                                          *config_.punctuationStyle);
+        kkc_context_set_auto_correct(state->context_.get(),
+                                     *config_.autoCorrect);
+        if (rule()) {
+            kkc_context_set_typing_rule(state->context_.get(),
+                                        KKC_RULE(rule()));
+        }
+        return true;
+    });
+}
 void KkcEngine::reset(const InputMethodEntry &entry, InputContextEvent &event) {
 }
 void KkcEngine::save() { kkc_dictionary_list_save(dictionaries_.get()); }
