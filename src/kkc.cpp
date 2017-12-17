@@ -179,6 +179,7 @@ void KKC::loadDictionary() {
 void KKC::loadRule() {
     auto file = StandardPath::global().open(StandardPath::Type::PkgData,
                                             "kkc/dictionary_list", O_RDONLY);
+    KkcRuleMetadata *meta = NULL;
     if (file.fd() < 0) {
         return;
     }
@@ -198,7 +199,23 @@ void KKC::loadRule() {
     }
 
     rule_ = stringutils::trim(line);
+    meta = kkc_rule_metadata_find(rule_.c_str());
     free(line);
+
+    if (!meta) {
+        meta = kkc_rule_metadata_find("default");
+        if (!meta) {
+            return;
+        }
+    }
+    std::string basePath = stringutils::joinPath(
+        StandardPath::global().userDirectory(StandardPath::Type::PkgData),
+        "kkc/rule");
+    KkcUserRule *userRule =
+        kkc_user_rule_new(meta, basePath.c_str(), "fcitx-kkc", NULL);
+    if (!userRule) {
+        return;
+    }
 }
 
 std::string KKC::subMode(const InputMethodEntry &, InputContext &) {
