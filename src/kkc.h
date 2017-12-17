@@ -53,7 +53,7 @@ public:
     auto &factory() { return factory_; }
     auto dictionaries() { return dictionaries_.get(); }
     auto model() { return model_.get(); }
-    auto rule() { return rule_; }
+    auto rule() { return userRule_.get(); }
 
     void updateUI(InputContext *inputContext);
 
@@ -65,11 +65,11 @@ private:
     void loadDictionary();
     void loadRule();
 
-    std::string rule_;
     Instance *instance_;
     FactoryFor<KKCState> factory_;
     GObjectUniquePtr<KkcLanguageModel> model_;
     GObjectUniquePtr<KkcDictionaryList> dictionaries_;
+    GObjectUniquePtr<KkcUserRule> userRule_;
 };
 
 class KKCFactory : public AddonFactory {

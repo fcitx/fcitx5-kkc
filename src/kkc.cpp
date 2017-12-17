@@ -45,6 +45,7 @@ public:
         : parent_(parent), ic_(&ic),
           context_(kkc_context_new(parent->model()), &g_object_unref) {
         kkc_context_set_dictionaries(context_.get(), parent_->dictionaries());
+        kkc_context_set_typing_rule(context_.get(), KKC_RULE(parent_->rule()));
     }
 
     KKC *parent_;
@@ -54,8 +55,8 @@ public:
 KKC::KKC(Instance *instance)
     : instance_(instance),
       factory_([this](InputContext &ic) { return new KKCState(this, ic); }),
-      model_(nullptr, &g_object_unref),
-      dictionaries_(nullptr, &g_object_unref) {
+      model_(nullptr, &g_object_unref), dictionaries_(nullptr, &g_object_unref),
+      userRule_(nullptr, &g_object_unref) {
 #if !GLIB_CHECK_VERSION(2, 36, 0)
     g_type_init();
 #endif
@@ -73,6 +74,10 @@ KKC::KKC(Instance *instance)
     dictionaries_.reset(kkc_dictionary_list_new());
     loadDictionary();
     loadRule();
+
+    if (!userRule_ || !dictionaries_) {
+        throw std::runtime_error("Failed to load kkc data");
+    }
 
     instance_->inputContextManager().registerProperty("kkcState", &factory_);
 
@@ -179,7 +184,6 @@ void KKC::loadDictionary() {
 void KKC::loadRule() {
     auto file = StandardPath::global().open(StandardPath::Type::PkgData,
                                             "kkc/dictionary_list", O_RDONLY);
-    KkcRuleMetadata *meta = NULL;
     if (file.fd() < 0) {
         return;
     }
@@ -198,24 +202,21 @@ void KKC::loadRule() {
         return;
     }
 
-    rule_ = stringutils::trim(line);
-    meta = kkc_rule_metadata_find(rule_.c_str());
+    auto rule = stringutils::trim(line);
     free(line);
 
+    auto meta = kkc_rule_metadata_find(rule.c_str());
     if (!meta) {
         meta = kkc_rule_metadata_find("default");
-        if (!meta) {
-            return;
-        }
+    }
+    if (!meta) {
+        return;
     }
     std::string basePath = stringutils::joinPath(
         StandardPath::global().userDirectory(StandardPath::Type::PkgData),
         "kkc/rule");
-    KkcUserRule *userRule =
-        kkc_user_rule_new(meta, basePath.c_str(), "fcitx-kkc", NULL);
-    if (!userRule) {
-        return;
-    }
+    userRule_.reset(
+        kkc_user_rule_new(meta, basePath.c_str(), "fcitx-kkc", NULL));
 }
 
 std::string KKC::subMode(const InputMethodEntry &, InputContext &) {
