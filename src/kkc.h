@@ -33,15 +33,15 @@
 
 namespace fcitx {
 
-class KKCState;
+class KkcState;
 
 template <typename T>
 using GObjectUniquePtr = std::unique_ptr<T, decltype(&g_object_unref)>;
 
-class KKC final : public InputMethodEngine {
+class KkcEngine final : public InputMethodEngine {
 public:
-    KKC(Instance *instance);
-    ~KKC();
+    KkcEngine(Instance *instance);
+    ~KkcEngine();
     Instance *instance() { return instance_; }
     void activate(const InputMethodEntry &entry,
                   InputContextEvent &event) override;
@@ -59,23 +59,23 @@ public:
 
     std::string subMode(const InputMethodEntry &, InputContext &) override;
 
-    KKCState *state(InputContext *ic);
+    KkcState *state(InputContext *ic);
 
 private:
     void loadDictionary();
     void loadRule();
 
     Instance *instance_;
-    FactoryFor<KKCState> factory_;
+    FactoryFor<KkcState> factory_;
     GObjectUniquePtr<KkcLanguageModel> model_;
     GObjectUniquePtr<KkcDictionaryList> dictionaries_;
     GObjectUniquePtr<KkcUserRule> userRule_;
 };
 
-class KKCFactory : public AddonFactory {
+class KkcFactory : public AddonFactory {
 public:
     AddonInstance *create(AddonManager *manager) override {
-        return new KKC(manager->instance());
+        return new KkcEngine(manager->instance());
     }
 };
 } // namespace fcitx

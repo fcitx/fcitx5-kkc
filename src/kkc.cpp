@@ -39,22 +39,22 @@ std::unique_ptr<T, decltype(&g_object_unref)> makeGObjectUnique(T *p) {
 }
 } // namespace
 
-class KKCState : public InputContextProperty {
+class KkcState : public InputContextProperty {
 public:
-    KKCState(KKC *parent, InputContext &ic)
+    KkcState(KkcEngine *parent, InputContext &ic)
         : parent_(parent), ic_(&ic),
           context_(kkc_context_new(parent->model()), &g_object_unref) {
         kkc_context_set_dictionaries(context_.get(), parent_->dictionaries());
         kkc_context_set_typing_rule(context_.get(), KKC_RULE(parent_->rule()));
     }
 
-    KKC *parent_;
+    KkcEngine *parent_;
     InputContext *ic_;
     std::unique_ptr<KkcContext, decltype(&g_object_unref)> context_;
 };
-KKC::KKC(Instance *instance)
+KkcEngine::KkcEngine(Instance *instance)
     : instance_(instance),
-      factory_([this](InputContext &ic) { return new KKCState(this, ic); }),
+      factory_([this](InputContext &ic) { return new KkcState(this, ic); }),
       model_(nullptr, &g_object_unref), dictionaries_(nullptr, &g_object_unref),
       userRule_(nullptr, &g_object_unref) {
 #if !GLIB_CHECK_VERSION(2, 36, 0)
@@ -84,16 +84,18 @@ KKC::KKC(Instance *instance)
     reloadConfig();
 }
 
-KKC::~KKC() {}
-void KKC::activate(const InputMethodEntry &entry, InputContextEvent &event) {}
-void KKC::keyEvent(const InputMethodEntry &entry, KeyEvent &keyEvent) {}
-void KKC::reloadConfig() {}
-void KKC::reset(const InputMethodEntry &entry, InputContextEvent &event) {}
-void KKC::save() { kkc_dictionary_list_save(dictionaries_.get()); }
+KkcEngine::~KkcEngine() {}
+void KkcEngine::activate(const InputMethodEntry &entry,
+                         InputContextEvent &event) {}
+void KkcEngine::keyEvent(const InputMethodEntry &entry, KeyEvent &keyEvent) {}
+void KkcEngine::reloadConfig() {}
+void KkcEngine::reset(const InputMethodEntry &entry, InputContextEvent &event) {
+}
+void KkcEngine::save() { kkc_dictionary_list_save(dictionaries_.get()); }
 
-void KKC::updateUI(InputContext *inputContext) {}
+void KkcEngine::updateUI(InputContext *inputContext) {}
 
-void KKC::loadDictionary() {
+void KkcEngine::loadDictionary() {
     kkc_dictionary_list_clear(dictionaries_.get());
     auto file = StandardPath::global().open(StandardPath::Type::PkgData,
                                             "kkc/dictionary_list", O_RDONLY);
@@ -181,7 +183,7 @@ void KKC::loadDictionary() {
     free(buf);
 }
 
-void KKC::loadRule() {
+void KkcEngine::loadRule() {
     auto file = StandardPath::global().open(StandardPath::Type::PkgData,
                                             "kkc/dictionary_list", O_RDONLY);
     if (file.fd() < 0) {
@@ -219,11 +221,13 @@ void KKC::loadRule() {
         kkc_user_rule_new(meta, basePath.c_str(), "fcitx-kkc", NULL));
 }
 
-std::string KKC::subMode(const InputMethodEntry &, InputContext &) {
+std::string KkcEngine::subMode(const InputMethodEntry &, InputContext &) {
     return "";
 }
 
-KKCState *KKC::state(InputContext *ic) { return ic->propertyFor(&factory_); }
+KkcState *KkcEngine::state(InputContext *ic) {
+    return ic->propertyFor(&factory_);
+}
 
 } // namespace fcitx
-FCITX_ADDON_FACTORY(fcitx::KKCFactory);
+FCITX_ADDON_FACTORY(fcitx::KkcFactory);
