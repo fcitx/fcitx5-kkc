@@ -37,7 +37,7 @@ template <typename T>
 std::unique_ptr<T, decltype(&g_object_unref)> makeGObjectUnique(T *p) {
     return {p, &g_object_unref};
 }
-}
+} // namespace
 
 class KKCState : public InputContextProperty {
 public:
@@ -176,7 +176,30 @@ void KKC::loadDictionary() {
     free(buf);
 }
 
-void KKC::loadRule() {}
+void KKC::loadRule() {
+    auto file = StandardPath::global().open(StandardPath::Type::PkgData,
+                                            "kkc/dictionary_list", O_RDONLY);
+    if (file.fd() < 0) {
+        return;
+    }
+    std::unique_ptr<FILE, decltype(&fclose)> fp(fdopen(file.fd(), "r"),
+                                                &std::fclose);
+    if (!fp) {
+        return;
+    }
+    file.release();
+
+    char *line = nullptr;
+    size_t bufsize = 0;
+    getline(&line, &bufsize, fp.get());
+
+    if (!line) {
+        return;
+    }
+
+    rule_ = stringutils::trim(line);
+    free(line);
+}
 
 std::string KKC::subMode(const InputMethodEntry &, InputContext &) {
     return "";
