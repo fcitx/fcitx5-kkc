@@ -23,6 +23,7 @@
 #include <fcitx-utils/log.h>
 #include <fcitx-utils/standardpath.h>
 #include <fcitx/inputcontextmanager.h>
+#include <fcitx/inputpanel.h>
 #include <fcntl.h>
 
 FCITX_DEFINE_LOG_CATEGORY(kkc_logcategory, "kkc");
@@ -37,6 +38,62 @@ template <typename T>
 std::unique_ptr<T, decltype(&g_object_unref)> makeGObjectUnique(T *p) {
     return {p, &g_object_unref};
 }
+
+class KkcCandidateWord : public CandidateWord {
+public:
+    KkcCandidateWord(KkcEngine *engine, Text text, int idx)
+        : CandidateWord(), engine_(engine), idx_(idx) {
+        setText(std::move(text));
+    }
+
+    void select(InputContext *inputContext) const {
+        // TODO, select candidate and update UI.
+        // Port FcitxKkcGetCandWord
+    }
+
+private:
+    KkcEngine *engine_;
+    int idx_;
+};
+
+class KkcFcitxCandidateList : public CandidateList,
+                              public PageableCandidateList,
+                              public CursorMovableCandidateList {
+public:
+    KkcFcitxCandidateList(KkcEngine *engine, KkcCandidateList *list) {
+        setPageable(this);
+        setCursorMovable(this);
+        // TODO fill candidate list, port from FcitxKkcGetCandWords
+    }
+
+    bool hasPrev() const override {}
+
+    bool hasNext() const override {}
+
+    void prev() override {}
+
+    void next() override {}
+
+    bool usedNextBefore() const override { return true; }
+
+    void prevCandidate() override {}
+
+    void nextCandidate() override {}
+
+    const Text &label(int idx) const override {}
+
+    std::shared_ptr<const CandidateWord> candidate(int idx) const override {}
+
+    int size() const override {}
+
+    int cursorIndex() const {}
+
+    CandidateLayoutHint layoutHint() const override {}
+
+private:
+    std::vector<std::shared_ptr<KkcCandidateWord>> words_;
+};
+
 } // namespace
 
 class KkcState : public InputContextProperty {
@@ -178,7 +235,38 @@ void KkcEngine::reset(const InputMethodEntry &entry, InputContextEvent &event) {
 }
 void KkcEngine::save() { kkc_dictionary_list_save(dictionaries_.get()); }
 
-void KkcEngine::updateUI(InputContext *inputContext) {}
+void KkcEngine::updateUI(InputContext *inputContext) {
+    auto state = this->state(inputContext);
+    auto context = state->context_.get();
+
+    auto &inputPanel = inputContext->inputPanel();
+    inputPanel.reset();
+    Text preedit;
+    // TODO: fill preedit.
+
+    if (inputContext->capabilityFlags().test(CapabilityFlag::Preedit)) {
+        inputPanel.setClientPreedit(preedit);
+        inputContext->updatePreedit();
+    } else {
+        inputPanel.setPreedit(preedit);
+    }
+
+    KkcCandidateList *kkcCandidates = kkc_context_get_candidates(context);
+    if (kkc_candidate_list_get_page_visible(kkcCandidates)) {
+        inputPanel.setCandidateList(
+            std::make_unique<KkcFcitxCandidateList>(this, kkcCandidates));
+    }
+
+    // TODO: Update candidate list.
+
+    if (kkc_context_has_output(context)) {
+        gchar *str = kkc_context_poll_output(context);
+        inputContext->commitString(str);
+        g_free(str);
+    }
+
+    inputContext->updateUserInterface(UserInterfaceComponent::InputPanel);
+}
 
 void KkcEngine::loadDictionary() {
     kkc_dictionary_list_clear(dictionaries_.get());
