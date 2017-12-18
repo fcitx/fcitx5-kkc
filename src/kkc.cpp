@@ -91,38 +91,64 @@ KkcEngine::~KkcEngine() {}
 void KkcEngine::activate(const InputMethodEntry &entry,
                          InputContextEvent &event) {}
 void KkcEngine::keyEvent(const InputMethodEntry &entry, KeyEvent &keyEvent) {
-    auto state = static_cast<uint32_t>(keyEvent.key().states());
-    auto sym = keyEvent.key().sym();
-    auto keycode = keyEvent.key().code();
+    auto state = static_cast<uint32_t>(keyEvent.rawKey().states());
+    if (keyEvent.isRelease()) {
+        state |= KKC_MODIFIER_TYPE_RELEASE_MASK;
+    }
 
-    if (keyEvent.key().checkKeyList(*config_.cursorUpKey)) {
-        if (!keyEvent.isRelease()) {
-            updateUI(keyEvent.inputContext());
-        } else
-            return;
-    } else if (keyEvent.key().checkKeyList(*config_.cursorDownKey)) {
-        if (!keyEvent.isRelease()) {
-            updateUI(keyEvent.inputContext());
-        } else
-            return;
+    auto kkcstate = this->state(keyEvent.inputContext());
+    auto context = kkcstate->context_.get();
+    KkcCandidateList *kkcCandidates = kkc_context_get_candidates(context);
+    if (kkc_candidate_list_get_page_visible(kkcCandidates) &&
+        !keyEvent.isRelease()) {
+        if (keyEvent.key().checkKeyList(*config_.cursorUpKey)) {
+            kkc_candidate_list_cursor_up(kkcCandidates);
+            keyEvent.filterAndAccept();
+        } else if (keyEvent.key().checkKeyList(*config_.cursorDownKey)) {
+            kkc_candidate_list_cursor_down(kkcCandidates);
+            keyEvent.filterAndAccept();
+        } else if (keyEvent.key().checkKeyList(*config_.prevPageKey)) {
+            kkc_candidate_list_page_up(kkcCandidates);
+            keyEvent.filterAndAccept();
+        } else if (keyEvent.key().checkKeyList(*config_.nextPageKey)) {
+            kkc_candidate_list_page_down(kkcCandidates);
+            keyEvent.filterAndAccept();
+        } else if (keyEvent.key().isDigit()) {
+            KeySym syms[] = {
+                FcitxKey_1, FcitxKey_2, FcitxKey_3, FcitxKey_4, FcitxKey_5,
+                FcitxKey_6, FcitxKey_7, FcitxKey_8, FcitxKey_9, FcitxKey_0,
+            };
 
-    } else if (keyEvent.key().checkKeyList(*config_.prevPageKey)) {
-        return;
-    } else if (keyEvent.key().checkKeyList(*config_.nextPageKey)) {
-        return;
-    } else if (keyEvent.key().isDigit()) {
+            KeyList selectionKey;
+            KeyStates states;
+            for (auto sym : syms) {
+                selectionKey.emplace_back(sym, states);
+            }
+            auto idx = keyEvent.key().keyListIndex(selectionKey);
+            if (idx >= 0) {
+                kkc_candidate_list_select_at(
+                    kkcCandidates,
+                    idx % kkc_candidate_list_get_page_size(kkcCandidates));
+                keyEvent.filterAndAccept();
+            }
+        }
+    }
+
+    if (keyEvent.filtered()) {
+        updateUI(keyEvent.inputContext());
         return;
     }
+
     KkcKeyEvent *key = kkc_key_event_new_from_x_event(
-        sym, keycode - 8, static_cast<KkcModifierType>(state));
-    if (!key)
+        keyEvent.rawKey().sym(), keyEvent.rawKey().code() - 8,
+        static_cast<KkcModifierType>(state));
+    if (!key) {
         return;
-    auto kkcstate = this->state(keyEvent.inputContext());
-    gboolean retval =
-        kkc_context_process_key_event(kkcstate->context_.get(), key);
-    if (retval)
+    }
+    if (kkc_context_process_key_event(context, key)) {
+        keyEvent.filterAndAccept();
         updateUI(keyEvent.inputContext());
-    return;
+    }
 }
 void KkcEngine::reloadConfig() {
     readAsIni(config_, "conf/kkc.conf");
