@@ -90,7 +90,40 @@ KkcEngine::KkcEngine(Instance *instance)
 KkcEngine::~KkcEngine() {}
 void KkcEngine::activate(const InputMethodEntry &entry,
                          InputContextEvent &event) {}
-void KkcEngine::keyEvent(const InputMethodEntry &entry, KeyEvent &keyEvent) {}
+void KkcEngine::keyEvent(const InputMethodEntry &entry, KeyEvent &keyEvent) {
+    auto state = static_cast<uint32_t>(keyEvent.key().states());
+    auto sym = keyEvent.key().sym();
+    auto keycode = keyEvent.key().code();
+
+    if (keyEvent.key().checkKeyList(*config_.cursorUpKey)) {
+        if (!keyEvent.isRelease()) {
+            updateUI(keyEvent.inputContext());
+        } else
+            return;
+    } else if (keyEvent.key().checkKeyList(*config_.cursorDownKey)) {
+        if (!keyEvent.isRelease()) {
+            updateUI(keyEvent.inputContext());
+        } else
+            return;
+
+    } else if (keyEvent.key().checkKeyList(*config_.prevPageKey)) {
+        return;
+    } else if (keyEvent.key().checkKeyList(*config_.nextPageKey)) {
+        return;
+    } else if (keyEvent.key().isDigit()) {
+        return;
+    }
+    KkcKeyEvent *key = kkc_key_event_new_from_x_event(
+        sym, keycode - 8, static_cast<KkcModifierType>(state));
+    if (!key)
+        return;
+    auto kkcstate = this->state(keyEvent.inputContext());
+    gboolean retval =
+        kkc_context_process_key_event(kkcstate->context_.get(), key);
+    if (retval)
+        updateUI(keyEvent.inputContext());
+    return;
+}
 void KkcEngine::reloadConfig() {
     readAsIni(config_, "conf/kkc.conf");
 
