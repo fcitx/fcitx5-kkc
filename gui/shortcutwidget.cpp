@@ -101,7 +101,7 @@ void KkcShortcutWidget::save() {
 
     auto file = StandardPath::global().open(StandardPath::Type::PkgData,
                                             "kkc/rule", O_WRONLY);
-    if (file.fd() > 0) {
+    if (file.fd() < 0) {
         return;
     }
 

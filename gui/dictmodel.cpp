@@ -48,7 +48,7 @@ void DictModel::load() {
         return;
     }
     QFile f;
-    if (!f.open(file.release(), QIODevice::ReadOnly)) {
+    if (!f.open(file.fd(), QIODevice::ReadOnly)) {
         return;
     }
 
