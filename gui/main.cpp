@@ -20,7 +20,6 @@
 #include "dictwidget.h"
 #include "shortcutwidget.h"
 #include <QApplication>
-#include <fcitx-utils/utils.h>
 #include <libkkc/libkkc.h>
 #include <qplugin.h>
 
