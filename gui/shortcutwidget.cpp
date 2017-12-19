@@ -99,17 +99,17 @@ void KkcShortcutWidget::save() {
                    Qt::UserRole)
             .toString();
 
-    auto file = StandardPath::global().open(StandardPath::Type::PkgData,
-                                            "kkc/rule", O_WRONLY);
-    if (file.fd() < 0) {
-        return;
-    }
-
-    QFile f;
-    if (f.open(file.fd(), QIODevice::WriteOnly)) {
-        f.write(name.toUtf8());
-        f.close();
-    }
+    StandardPath::global().safeSave(StandardPath::Type::PkgData, "kkc/rule",
+                                    [name](int fd) {
+                                        QFile f;
+                                        if (f.open(fd, QIODevice::WriteOnly)) {
+                                            f.write(name.toUtf8());
+                                            f.close();
+                                        } else {
+                                            return false;
+                                        }
+                                        return true;
+                                    });
 
     Q_EMIT changed(false);
 }
