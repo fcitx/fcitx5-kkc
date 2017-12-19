@@ -9,7 +9,7 @@ include(FeatureSummary)
 include(GNUInstallDirs)
 include(ECMUninstallTarget)
 
-# option(ENABLE_QT "Enable Qt for GUI configuration" On)
+option(ENABLE_QT "Enable Qt for GUI configuration" On)
 
 find_package(PkgConfig REQUIRED)
 find_package(Fcitx5Core REQUIRED)
@@ -19,10 +19,10 @@ pkg_check_modules(Gee IMPORTED_TARGET "gee-0.8" REQUIRED)
 pkg_check_modules(JSonGlib IMPORTED_TARGET "json-glib-1.0" REQUIRED)
 pkg_check_modules(GObject2 IMPORTED_TARGET "gobject-2.0" REQUIRED)
 
-# if (ENABLE_QT)
-# find_package(Qt5 5.7 REQUIRED COMPONENTS Core Gui Widgets)
-# find_package(FcitxQt5WidgetsAddons 1.1 REQUIRED)
-# endif ()
+if (ENABLE_QT)
+find_package(Qt5 5.7 REQUIRED COMPONENTS Core Gui Widgets)
+find_package(Fcitx5Qt5WidgetsAddons REQUIRED)
+endif ()
 
 if (NOT SKK_DEFAULT_PATH)
     set(SKK_DEFAULT_PATH "/usr/share/skk/")
@@ -37,5 +37,5 @@ configure_file(config.h.in config.h
 
 add_subdirectory(po)
 add_subdirectory(src)
-#add_subdirectory(gui)
+add_subdirectory(gui)
 add_subdirectory(data)

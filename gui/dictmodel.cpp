@@ -1,30 +1,28 @@
-/***************************************************************************
- *   Copyright (C) 2013~2013 by CSSlayer                                   *
- *   wengxt@gmail.com                                                      *
- *                                                                         *
- *  This program is free software: you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation, either version 3 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *  You should have received a copy of the GNU General Public License      *
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.  *
- *                                                                         *
- ***************************************************************************/
+//
+// Copyright (C) 2013~2017 by CSSlayer
+// wengxt@gmail.com
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
 
-#include <QDebug>
+#include "dictmodel.h"
 #include <QFile>
 #include <QSet>
 #include <QStringList>
-#include <QTemporaryFile>
-#include <fcitx-config/xdg.h>
-
-#include "dictmodel.h"
+#include <fcitx-utils/standardpath.h>
+#include <fcntl.h>
+namespace fcitx {
 
 DictModel::DictModel(QObject *parent) : QAbstractListModel(parent) {
     m_requiredKeys << "file"
@@ -35,28 +33,27 @@ DictModel::DictModel(QObject *parent) : QAbstractListModel(parent) {
 DictModel::~DictModel() {}
 
 void DictModel::defaults() {
-    char *path = fcitx_utils_get_fcitx_path_with_filename(
-        "pkgdatadir", "kkc/dictionary_list");
-    QFile f(path);
+    auto path = StandardPath::global().fcitxPath("pkgdatadir",
+                                              "kkc/dictionary_list");
+    QFile f(path.data());
     if (f.open(QIODevice::ReadOnly)) {
         load(f);
     }
 }
 
 void DictModel::load() {
-    FILE *fp = FcitxXDGGetFileWithPrefix("kkc", "dictionary_list", "r", NULL);
-    if (!fp) {
+    auto file = StandardPath::global().open(StandardPath::Type::PkgData,
+                                            "kkc/dictionary_list", O_RDONLY);
+    if (file.fd() < 0) {
         return;
     }
     QFile f;
-    if (!f.open(fp, QIODevice::ReadOnly)) {
-        fclose(fp);
+    if (!f.open(file.release(), QIODevice::ReadOnly)) {
         return;
     }
 
     load(f);
     f.close();
-    fclose(fp);
 }
 
 void DictModel::load(QFile &file) {
@@ -96,44 +93,37 @@ void DictModel::load(QFile &file) {
 }
 
 bool DictModel::save() {
-    char *name = NULL;
-    FcitxXDGMakeDirUser("kkc");
-    FcitxXDGGetFileUserWithPrefix("kkc", "dictionary_list", NULL, &name);
-    QString fileName = QString::fromLocal8Bit(name);
-    QTemporaryFile tempFile(fileName);
-    free(name);
-    if (!tempFile.open()) {
-        return false;
-    }
-
-    typedef QMap<QString, QString> DictType;
-
-    Q_FOREACH (const DictType &dict, m_dicts) {
-        boolean first = true;
-        Q_FOREACH (const QString &key, dict.keys()) {
-            if (first) {
-                first = false;
-            } else {
-                tempFile.write(",");
+    return StandardPath::global().safeSave(
+        StandardPath::Type::PkgData, "kkc/dictionary_list", [this](int fd) {
+            QFile tempFile;
+            if (!tempFile.open(fd, QIODevice::WriteOnly)) {
+                return false;
             }
-            tempFile.write(key.toUtf8());
-            tempFile.write("=");
-            tempFile.write(dict[key].toUtf8());
-        }
-        tempFile.write("\n");
-    }
 
-    tempFile.setAutoRemove(false);
-    QFile::remove(fileName);
-    if (!tempFile.rename(fileName)) {
-        tempFile.remove();
-        return false;
-    }
+            typedef QMap<QString, QString> DictType;
 
-    return true;
+            Q_FOREACH (const DictType &dict, m_dicts) {
+                bool first = true;
+                Q_FOREACH (const QString &key, dict.keys()) {
+                    if (first) {
+                        first = false;
+                    } else {
+                        tempFile.write(",");
+                    }
+                    tempFile.write(key.toUtf8());
+                    tempFile.write("=");
+                    tempFile.write(dict[key].toUtf8());
+                }
+                tempFile.write("\n");
+            }
+            return true;
+        });
 }
 
 int DictModel::rowCount(const QModelIndex &parent) const {
+    if (parent.isValid()) {
+        return 0;
+    }
     return m_dicts.size();
 }
 
@@ -195,3 +185,5 @@ void DictModel::add(const QMap<QString, QString> &dict) {
     m_dicts << dict;
     endInsertRows();
 }
+
+} // namespace fcitx

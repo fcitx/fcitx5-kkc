@@ -1,31 +1,31 @@
-/***************************************************************************
- *   Copyright (C) 2013~2013 by CSSlayer                                   *
- *   wengxt@gmail.com                                                      *
- *                                                                         *
- *  This program is free software: you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation, either version 3 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *  You should have received a copy of the GNU General Public License      *
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.  *
- *                                                                         *
- ***************************************************************************/
-
-#ifndef FCITX_KKC_GUI_DICTWIDGET_H
-#define FCITX_KKC_GUI_DICTWIDGET_H
+//
+// Copyright (C) 2013~2017 by CSSlayer
+// wengxt@gmail.com
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
+#ifndef _GUI_DICTWIDGET_H_
+#define _GUI_DICTWIDGET_H_
 
 #include <fcitxqtconfiguiwidget.h>
 
-class DictModel;
 namespace Ui {
 class KkcDictWidget;
 }
+
+namespace fcitx {
+class DictModel;
 
 class KkcDictWidget : public FcitxQtConfigUIWidget {
     Q_OBJECT
@@ -51,4 +51,6 @@ private:
     DictModel *m_dictModel;
 };
 
-#endif // FCITX_KKC_GUI_DICTWIDGET_H
+}  // namespace fcitx
+
+#endif // _GUI_DICTWIDGET_H_

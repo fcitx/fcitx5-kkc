@@ -1,26 +1,29 @@
-/***************************************************************************
- *   Copyright (C) 2013~2013 by CSSlayer                                   *
- *   wengxt@gmail.com                                                      *
- *                                                                         *
- *  This program is free software: you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation, either version 3 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *  You should have received a copy of the GNU General Public License      *
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.  *
- *                                                                         *
- ***************************************************************************/
+//
+// Copyright (C) 2013~2017 by CSSlayer
+// wengxt@gmail.com
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
+#ifndef _GUI_SHORTCUTMODEL_H_
+#define _GUI_SHORTCUTMODEL_H_
 
-#ifndef SHORTCUTMODEL_H
-#define SHORTCUTMODEL_H
+#include <memory>
 #include <QAbstractTableModel>
 #include <libkkc/libkkc.h>
+#include "common.h"
+
+namespace fcitx {
 
 class ShortcutEntry {
 public:
@@ -35,7 +38,7 @@ public:
 
     ShortcutEntry(const ShortcutEntry &other)
         : ShortcutEntry(other.m_command,
-                        KKC_KEY_EVENT(g_object_ref(other.m_event)),
+                        other.m_event,
                         other.m_label, other.m_mode) {}
 
     ~ShortcutEntry() { g_object_unref(m_event); }
@@ -84,8 +87,11 @@ private:
 
 private:
     QList<ShortcutEntry> m_entries;
-    KkcUserRule *m_userRule;
+    GObjectUniquePtr<KkcUserRule> m_userRule;
     bool m_needSave;
 };
 
-#endif // DICTMODEL_H
+extern const char *modeName[];
+}
+
+#endif // _GUI_SHORTCUTMODEL_H_

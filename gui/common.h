@@ -1,30 +1,37 @@
-/***************************************************************************
- *   Copyright (C) 2013~2013 by CSSlayer                                   *
- *   wengxt@gmail.com                                                      *
- *                                                                         *
- *  This program is free software: you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation, either version 3 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *  You should have received a copy of the GNU General Public License      *
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.  *
- *                                                                         *
- ***************************************************************************/
+//
+// Copyright (C) 2017~2017 by CSSlayer
+// wengxt@gmail.com
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
+#ifndef _GUI_COMMON_H_
+#define _GUI_COMMON_H_
 
-#ifndef _COMMON_H_
-#define _COMMON_H_
+#include <memory>
+#include <glib.h>
 
-#include <libintl.h>
+namespace fcitx {
 
-#define _(x) QString::fromUtf8(dgettext("fcitx-kkc", x))
+template <typename T>
+using GObjectUniquePtr = std::unique_ptr<T, decltype(&g_object_unref)>;
 
-#define N_(X) (X)
-extern const char *modeName[];
+template <typename T>
+GObjectUniquePtr<T> makeGObjectUnique(T *p) {
+    return {p, &g_object_unref};
+}
 
-#endif // _COMMON_H_
+}  // namespace fcitx
+
+
+#endif // _GUI_COMMON_H_

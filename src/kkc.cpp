@@ -125,7 +125,7 @@ KkcEngine::KkcEngine(Instance *instance)
         "kkc/dictionary"));
     fs::makePath(stringutils::joinPath(
         StandardPath::global().userDirectory(StandardPath::Type::PkgData),
-        "kkc/rule"));
+        "kkc/rules"));
 
     // We can only create kkc object here after we called kkc_init().
     model_.reset(kkc_language_model_load("sorted3", NULL));
@@ -196,13 +196,13 @@ void KkcEngine::keyEvent(const InputMethodEntry &entry, KeyEvent &keyEvent) {
         return;
     }
 
-    KkcKeyEvent *key = kkc_key_event_new_from_x_event(
+    GObjectUniquePtr<KkcKeyEvent> key = makeGObjectUnique(kkc_key_event_new_from_x_event(
         keyEvent.rawKey().sym(), keyEvent.rawKey().code() - 8,
-        static_cast<KkcModifierType>(state));
+        static_cast<KkcModifierType>(state)));
     if (!key) {
         return;
     }
-    if (kkc_context_process_key_event(context, key)) {
+    if (kkc_context_process_key_event(context, key.get())) {
         keyEvent.filterAndAccept();
         updateUI(keyEvent.inputContext());
     }
@@ -389,7 +389,7 @@ void KkcEngine::loadRule() {
     }
     std::string basePath = stringutils::joinPath(
         StandardPath::global().userDirectory(StandardPath::Type::PkgData),
-        "kkc/rule");
+        "kkc/rules");
     userRule_.reset(
         kkc_user_rule_new(meta, basePath.c_str(), "fcitx-kkc", NULL));
 }

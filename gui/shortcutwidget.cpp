@@ -1,35 +1,37 @@
-/***************************************************************************
- *   Copyright (C) 2013~2013 by CSSlayer                                   *
- *   wengxt@gmail.com                                                      *
- *                                                                         *
- *  This program is free software: you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation, either version 3 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *  You should have received a copy of the GNU General Public License      *
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.  *
- *                                                                         *
- ***************************************************************************/
+//
+// Copyright (C) 2013~2017 by CSSlayer
+// wengxt@gmail.com
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
 
 #include "shortcutwidget.h"
 #include "addshortcutdialog.h"
-#include "common.h"
 #include "rulemodel.h"
 #include "shortcutmodel.h"
 #include "ui_shortcutwidget.h"
 #include <QDebug>
 #include <QFile>
 #include <QMessageBox>
-#include <fcitx-config/xdg.h>
+#include <fcitx-utils/standardpath.h>
+#include <fcntl.h>
+#include <fcitx-utils/i18n.h>
+
+namespace fcitx {
 
 KkcShortcutWidget::KkcShortcutWidget(QWidget *parent)
-    : FcitxQtConfigUIWidget(parent), m_ui(new Ui::KkcShortcutWidget) {
+    : FcitxQtConfigUIWidget(parent), m_ui(new ::Ui::KkcShortcutWidget) {
     m_ruleModel = new RuleModel(this);
     m_shortcutModel = new ShortcutModel(this);
     m_ui->setupUi(this);
@@ -59,22 +61,20 @@ KkcShortcutWidget::~KkcShortcutWidget() { delete m_ui; }
 QString KkcShortcutWidget::addon() { return "fcitx-kkc"; }
 
 void KkcShortcutWidget::load() {
-    FILE *fp = FcitxXDGGetFileWithPrefix("kkc", "rule", "r", NULL);
-
+    auto fd = StandardPath::global().open(StandardPath::Type::PkgConfig,
+                                          "kkc/rule", O_RDONLY);
     QString sline;
     do {
-        if (!fp) {
+        if (fd.fd() >= 0) {
             break;
         }
 
         QFile f;
         QByteArray line;
-        if (f.open(fp, QIODevice::ReadOnly)) {
-            ;
+        if (f.open(fd.release(), QIODevice::ReadOnly)) {
             line = f.readLine();
             f.close();
         }
-        fclose(fp);
 
         sline = QString::fromUtf8(line).trimmed();
 
@@ -98,18 +98,18 @@ void KkcShortcutWidget::save() {
             ->data(m_ruleModel->index(m_ui->ruleComboBox->currentIndex(), 0),
                    Qt::UserRole)
             .toString();
-    FILE *fp = FcitxXDGGetFileUserWithPrefix("kkc", "rule", "w", NULL);
-    if (!fp) {
+
+    auto file = StandardPath::global().open(StandardPath::Type::PkgData,
+                                            "kkc/rule", O_WRONLY);
+    if (file.fd() > 0) {
         return;
     }
 
     QFile f;
-    if (f.open(fp, QIODevice::WriteOnly)) {
+    if (f.open(file.release(), QIODevice::WriteOnly)) {
         f.write(name.toUtf8());
         f.close();
     }
-
-    fclose(fp);
 
     Q_EMIT changed(false);
 }
@@ -171,3 +171,5 @@ void KkcShortcutWidget::currentShortcutChanged() {
     m_ui->removeShortCutButton->setEnabled(
         m_ui->shortcutView->currentIndex().isValid());
 }
+
+} // namespace fcitx
