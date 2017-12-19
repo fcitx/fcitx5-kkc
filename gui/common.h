@@ -18,7 +18,7 @@
 #ifndef _GUI_COMMON_H_
 #define _GUI_COMMON_H_
 
-#include <glib.h>
+#include <glib-object.h>
 #include <memory>
 
 namespace fcitx {

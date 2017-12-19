@@ -71,7 +71,7 @@ void KkcShortcutWidget::load() {
 
         QFile f;
         QByteArray line;
-        if (f.open(fd.release(), QIODevice::ReadOnly)) {
+        if (f.open(fd.fd(), QIODevice::ReadOnly)) {
             line = f.readLine();
             f.close();
         }
@@ -106,7 +106,7 @@ void KkcShortcutWidget::save() {
     }
 
     QFile f;
-    if (f.open(file.release(), QIODevice::WriteOnly)) {
+    if (f.open(file.fd(), QIODevice::WriteOnly)) {
         f.write(name.toUtf8());
         f.close();
     }
