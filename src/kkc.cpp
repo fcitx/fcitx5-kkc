@@ -196,9 +196,10 @@ void KkcEngine::keyEvent(const InputMethodEntry &entry, KeyEvent &keyEvent) {
         return;
     }
 
-    GObjectUniquePtr<KkcKeyEvent> key = makeGObjectUnique(kkc_key_event_new_from_x_event(
-        keyEvent.rawKey().sym(), keyEvent.rawKey().code() - 8,
-        static_cast<KkcModifierType>(state)));
+    GObjectUniquePtr<KkcKeyEvent> key =
+        makeGObjectUnique(kkc_key_event_new_from_x_event(
+            keyEvent.rawKey().sym(), keyEvent.rawKey().code() - 8,
+            static_cast<KkcModifierType>(state)));
     if (!key) {
         return;
     }

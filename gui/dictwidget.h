@@ -51,6 +51,6 @@ private:
     DictModel *m_dictModel;
 };
 
-}  // namespace fcitx
+} // namespace fcitx
 
 #endif // _GUI_DICTWIDGET_H_

@@ -18,10 +18,10 @@
 #ifndef _GUI_SHORTCUTMODEL_H_
 #define _GUI_SHORTCUTMODEL_H_
 
-#include <memory>
+#include "common.h"
 #include <QAbstractTableModel>
 #include <libkkc/libkkc.h>
-#include "common.h"
+#include <memory>
 
 namespace fcitx {
 
@@ -37,9 +37,8 @@ public:
     }
 
     ShortcutEntry(const ShortcutEntry &other)
-        : ShortcutEntry(other.m_command,
-                        other.m_event,
-                        other.m_label, other.m_mode) {}
+        : ShortcutEntry(other.m_command, other.m_event, other.m_label,
+                        other.m_mode) {}
 
     ~ShortcutEntry() { g_object_unref(m_event); }
 

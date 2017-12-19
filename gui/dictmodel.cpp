@@ -33,8 +33,8 @@ DictModel::DictModel(QObject *parent) : QAbstractListModel(parent) {
 DictModel::~DictModel() {}
 
 void DictModel::defaults() {
-    auto path = StandardPath::global().fcitxPath("pkgdatadir",
-                                              "kkc/dictionary_list");
+    auto path =
+        StandardPath::global().fcitxPath("pkgdatadir", "kkc/dictionary_list");
     QFile f(path.data());
     if (f.open(QIODevice::ReadOnly)) {
         load(f);

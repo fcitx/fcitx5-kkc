@@ -71,8 +71,8 @@ ShortcutEntry AddShortcutDialog::shortcut() {
     auto event = makeGObjectUnique(kkc_key_event_new_from_x_event(
         key.sym(), 0,
         static_cast<KkcModifierType>(static_cast<uint32_t>(key.states()))));
-    return ShortcutEntry(command, event.get(), m_ui->commandComboBox->currentText(),
-                         mode);
+    return ShortcutEntry(command, event.get(),
+                         m_ui->commandComboBox->currentText(), mode);
 }
 
 } // namespace fcitx

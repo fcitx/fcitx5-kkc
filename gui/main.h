@@ -33,6 +33,6 @@ public:
     virtual QString domain();
     virtual FcitxQtConfigUIWidget *create(const QString &key);
 };
-}  // namespace fcitx
+} // namespace fcitx
 
 #endif // _GUI_MAIN_H_

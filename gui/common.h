@@ -18,8 +18,8 @@
 #ifndef _GUI_COMMON_H_
 #define _GUI_COMMON_H_
 
-#include <memory>
 #include <glib.h>
+#include <memory>
 
 namespace fcitx {
 
@@ -31,7 +31,6 @@ GObjectUniquePtr<T> makeGObjectUnique(T *p) {
     return {p, &g_object_unref};
 }
 
-}  // namespace fcitx
-
+} // namespace fcitx
 
 #endif // _GUI_COMMON_H_

@@ -86,7 +86,10 @@ FCITX_CONFIGURATION(
     Option<int, IntConstrain> nTriggersToShowCandWin{
         this, "NTriggersToShowCandWin",
         _("Number candidate of Triggers To Show Candidate Window"), 0,
-        IntConstrain(0, 7)};);
+        IntConstrain(0, 7)};
+    ExternalOption rule{this, "Rule", _("Rule"), "gui://kkc/rule"};
+    ExternalOption dictionary{this, "Dict", _("Dictionary"),
+                              "gui://kkc/dictionary_list"};);
 
 class KkcState;
 

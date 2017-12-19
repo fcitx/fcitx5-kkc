@@ -103,4 +103,4 @@ void KkcDictWidget::moveDownClicked() {
     }
 }
 
-}  // namespace fcitx
+} // namespace fcitx
