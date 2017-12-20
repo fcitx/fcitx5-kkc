@@ -220,7 +220,7 @@ public:
             if (*engine->config().showAnnotation &&
                 kkc_candidate_get_annotation(kkcCandidate.get())) {
 
-                text.append(stringutils::join(
+                text.append(stringutils::concat(
                     " [", kkc_candidate_get_annotation(kkcCandidate.get()),
                     "]"));
             }
