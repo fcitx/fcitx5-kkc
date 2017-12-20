@@ -22,8 +22,11 @@
 #include <fcitx-utils/fs.h>
 #include <fcitx-utils/log.h>
 #include <fcitx-utils/standardpath.h>
+#include <fcitx/action.h>
 #include <fcitx/inputcontextmanager.h>
 #include <fcitx/inputpanel.h>
+#include <fcitx/menu.h>
+#include <fcitx/userinterfacemanager.h>
 #include <fcntl.h>
 
 FCITX_DEFINE_LOG_CATEGORY(kkc_logcategory, "kkc");
@@ -31,6 +34,9 @@ FCITX_DEFINE_LOG_CATEGORY(kkc_logcategory, "kkc");
 #define KKC_DEBUG() FCITX_LOGC(kkc_logcategory, Debug)
 
 namespace fcitx {
+
+static void _kkc_input_mode_changed_cb(GObject *gobject, GParamSpec *pspec,
+                                       gpointer user_data);
 
 class KkcState : public InputContextProperty {
 public:
@@ -41,7 +47,21 @@ public:
         kkc_context_set_input_mode(context_.get(),
                                    *parent_->config().inputMode);
         applyConfig();
+
+        signal_ =
+            g_signal_connect(context_.get(), "notify::input-mode",
+                             G_CALLBACK(&KkcState::inputModeChanged), this);
+        updateInputMode();
     }
+
+    ~KkcState() { g_signal_handler_disconnect(context_.get(), signal_); }
+
+    static void inputModeChanged(GObject *, GParamSpec *, gpointer user_data) {
+        auto that = static_cast<KkcState *>(user_data);
+        that->updateInputMode();
+    }
+
+    void updateInputMode() { parent_->updateInputMode(ic_); }
 
     void applyConfig() {
         KkcCandidateList *kkcCandidates =
@@ -63,6 +83,7 @@ public:
     KkcEngine *parent_;
     InputContext *ic_;
     std::unique_ptr<KkcContext, decltype(&g_object_unref)> context_;
+    gulong signal_;
 };
 
 namespace {
@@ -71,6 +92,76 @@ template <typename T>
 std::unique_ptr<T, decltype(&g_object_unref)> makeGObjectUnique(T *p) {
     return {p, &g_object_unref};
 }
+
+struct {
+    const char *icon;
+    const char *label;
+    const char *description;
+} input_mode_status[] = {
+    {"", "\xe3\x81\x82", N_("Hiragana")},
+    {"", "\xe3\x82\xa2", N_("Katakana")},
+    {"", "\xef\xbd\xb1", N_("Half width Katakana")},
+    {"", "A", N_("Latin")},
+    {"", "\xef\xbc\xa1", N_("Wide latin")},
+};
+
+auto inputModeStatus(KkcEngine *engine, InputContext *ic) {
+    auto state = engine->state(ic);
+    auto mode = kkc_context_get_input_mode(state->context_.get());
+    return (mode >= 0 || mode < FCITX_ARRAY_SIZE(input_mode_status))
+               ? &input_mode_status[mode]
+               : nullptr;
+}
+
+class KkcModeAction : public Action {
+public:
+    KkcModeAction(KkcEngine *engine) : engine_(engine) {}
+
+    std::string shortText(InputContext *ic) const override {
+        if (auto status = inputModeStatus(engine_, ic)) {
+            return status->label;
+        }
+        return "";
+    }
+    std::string longText(InputContext *ic) const override {
+        if (auto status = inputModeStatus(engine_, ic)) {
+            return _(status->description);
+        }
+        return "";
+    }
+    std::string icon(InputContext *ic) const override {
+        if (auto status = inputModeStatus(engine_, ic)) {
+            return status->icon;
+        }
+        return "";
+    }
+
+private:
+    KkcEngine *engine_;
+};
+
+class KkcModeSubAction : public SimpleAction {
+public:
+    KkcModeSubAction(KkcEngine *engine, KkcInputMode mode)
+        : engine_(engine), mode_(mode) {
+        setShortText(input_mode_status[mode].label);
+        setLongText(_(input_mode_status[mode].description));
+        setIcon(input_mode_status[mode].icon);
+        setCheckable(true);
+    }
+    bool isChecked(InputContext *ic) const override {
+        auto state = engine_->state(ic);
+        return mode_ == kkc_context_get_input_mode(state->context_.get());
+    }
+    void activate(InputContext *ic) override {
+        auto state = engine_->state(ic);
+        kkc_context_set_input_mode(state->context_.get(), mode_);
+    }
+
+private:
+    KkcEngine *engine_;
+    KkcInputMode mode_;
+};
 
 class KkcCandidateWord : public CandidateWord {
 public:
@@ -211,6 +302,38 @@ private:
     bool hasNext_ = false;
 };
 
+Text kkcContextGetPreedit(KkcContext *context) {
+    Text preedit;
+    KkcSegmentList *segments = kkc_context_get_segments(context);
+    if (kkc_segment_list_get_cursor_pos(segments) >= 0) {
+        int offset = 0;
+        for (int i = 0; i < kkc_segment_list_get_size(segments); i++) {
+            GObjectUniquePtr<KkcSegment> segment =
+                makeGObjectUnique(kkc_segment_list_get(segments, i));
+            const gchar *str = kkc_segment_get_output(segment.get());
+            TextFormatFlags format;
+            if (i < kkc_segment_list_get_cursor_pos(segments)) {
+                offset += strlen(str);
+            }
+            if (i == kkc_segment_list_get_cursor_pos(segments)) {
+                format = TextFormatFlag::HighLight;
+            } else {
+                format = TextFormatFlag::Underline;
+            }
+            preedit.append(str, format);
+        }
+        preedit.setCursor(offset);
+    } else {
+        gchar *str = kkc_context_get_input(context);
+        if (str && str[0]) {
+            preedit.append(str);
+            preedit.setCursor(strlen(str));
+        }
+        g_free(str);
+    }
+    return preedit;
+}
+
 } // namespace
 
 KkcEngine::KkcEngine(Instance *instance)
@@ -233,13 +356,36 @@ KkcEngine::KkcEngine(Instance *instance)
     // We can only create kkc object here after we called kkc_init().
     model_.reset(kkc_language_model_load("sorted3", NULL));
     dictionaries_.reset(kkc_dictionary_list_new());
-    instance_->inputContextManager().registerProperty("kkcState", &factory_);
 
     reloadConfig();
 
     if (!userRule_ || !dictionaries_) {
         throw std::runtime_error("Failed to load kkc data");
     }
+
+    modeAction_ = std::make_unique<KkcModeAction>(this);
+    menu_ = std::make_unique<Menu>();
+    modeAction_->setMenu(menu_.get());
+
+    instance_->userInterfaceManager().registerAction("kkc-input-mode",
+                                                     modeAction_.get());
+
+#define _ADD_ACTION(MODE, NAME)                                                \
+    subModeActions_.emplace_back(                                              \
+        std::make_unique<KkcModeSubAction>(this, MODE));                       \
+    instance_->userInterfaceManager().registerAction(                          \
+        NAME, subModeActions_.back().get());
+
+    _ADD_ACTION(KKC_INPUT_MODE_HIRAGANA, "kkc-input-mode-hiragana");
+    _ADD_ACTION(KKC_INPUT_MODE_KATAKANA, "kkc-input-mode-katakana");
+    _ADD_ACTION(KKC_INPUT_MODE_HANKAKU_KATAKANA,
+                "kkc-input-mode-hankaku-katakana");
+    _ADD_ACTION(KKC_INPUT_MODE_LATIN, "kkc-input-mode-latin");
+    _ADD_ACTION(KKC_INPUT_MODE_WIDE_LATIN, "kkc-input-mode-wide-latin");
+    for (auto &subModeAction : subModeActions_) {
+        menu_->addAction(subModeAction.get());
+    }
+    instance_->inputContextManager().registerProperty("kkcState", &factory_);
     instance_->inputContextManager().foreach([this](InputContext *ic) {
         auto state = this->state(ic);
         kkc_context_set_input_mode(state->context_.get(), *config_.inputMode);
@@ -248,7 +394,28 @@ KkcEngine::KkcEngine(Instance *instance)
 }
 
 KkcEngine::~KkcEngine() {}
-void KkcEngine::activate(const InputMethodEntry &, InputContextEvent &event) {}
+
+void KkcEngine::activate(const InputMethodEntry &, InputContextEvent &event) {
+    auto &statusArea = event.inputContext()->statusArea();
+    statusArea.addAction(StatusGroup::InputMethod, modeAction_.get());
+}
+
+void KkcEngine::deactivate(const InputMethodEntry &entry,
+                           InputContextEvent &event) {
+    auto &statusArea = event.inputContext()->statusArea();
+    statusArea.clearGroup(StatusGroup::InputMethod);
+    if (event.type() == EventType::InputContextSwitchInputMethod) {
+        auto kkcstate = this->state(event.inputContext());
+        auto context = kkcstate->context_.get();
+        auto text = kkcContextGetPreedit(context);
+        auto str = text.toString();
+        if (!str.empty()) {
+            event.inputContext()->commitString(str);
+        }
+    }
+    reset(entry, event);
+}
+
 void KkcEngine::keyEvent(const InputMethodEntry &, KeyEvent &keyEvent) {
     auto state = static_cast<uint32_t>(keyEvent.rawKey().states());
     if (keyEvent.isRelease()) {
@@ -316,11 +483,13 @@ void KkcEngine::reloadConfig() {
     loadDictionary();
     loadRule();
 
-    instance_->inputContextManager().foreach([this](InputContext *ic) {
-        auto state = this->state(ic);
-        state->applyConfig();
-        return true;
-    });
+    if (factory_.registered()) {
+        instance_->inputContextManager().foreach([this](InputContext *ic) {
+            auto state = this->state(ic);
+            state->applyConfig();
+            return true;
+        });
+    }
 }
 void KkcEngine::reset(const InputMethodEntry &, InputContextEvent &event) {
     auto state = this->state(event.inputContext());
@@ -336,34 +505,7 @@ void KkcEngine::updateUI(InputContext *inputContext) {
 
     auto &inputPanel = inputContext->inputPanel();
     inputPanel.reset();
-    Text preedit;
-    KkcSegmentList *segments = kkc_context_get_segments(context);
-    if (kkc_segment_list_get_cursor_pos(segments) >= 0) {
-        int offset = 0;
-        for (int i = 0; i < kkc_segment_list_get_size(segments); i++) {
-            GObjectUniquePtr<KkcSegment> segment =
-                makeGObjectUnique(kkc_segment_list_get(segments, i));
-            const gchar *str = kkc_segment_get_output(segment.get());
-            TextFormatFlags format;
-            if (i < kkc_segment_list_get_cursor_pos(segments)) {
-                offset += strlen(str);
-            }
-            if (i == kkc_segment_list_get_cursor_pos(segments)) {
-                format = TextFormatFlag::HighLight;
-            } else {
-                format = TextFormatFlag::Underline;
-            }
-            preedit.append(str, format);
-        }
-        preedit.setCursor(offset);
-    } else {
-        gchar *str = kkc_context_get_input(context);
-        if (str && str[0]) {
-            preedit.append(str);
-            preedit.setCursor(strlen(str));
-        }
-        g_free(str);
-    }
+    Text preedit = kkcContextGetPreedit(context);
     if (inputContext->capabilityFlags().test(CapabilityFlag::Preedit)) {
         inputPanel.setClientPreedit(preedit);
         inputContext->updatePreedit();
@@ -385,6 +527,8 @@ void KkcEngine::updateUI(InputContext *inputContext) {
 
     inputContext->updateUserInterface(UserInterfaceComponent::InputPanel);
 }
+
+void KkcEngine::updateInputMode(InputContext *ic) { modeAction_->update(ic); }
 
 void KkcEngine::loadDictionary() {
     kkc_dictionary_list_clear(dictionaries_.get());
@@ -512,7 +656,10 @@ void KkcEngine::loadRule() {
         kkc_user_rule_new(meta, basePath.c_str(), "fcitx-kkc", NULL));
 }
 
-std::string KkcEngine::subMode(const InputMethodEntry &, InputContext &) {
+std::string KkcEngine::subMode(const InputMethodEntry &, InputContext &ic) {
+    if (auto status = inputModeStatus(this, &ic)) {
+        return _(status->description);
+    }
     return "";
 }
 

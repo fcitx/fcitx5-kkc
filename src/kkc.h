@@ -26,6 +26,7 @@
 #include <fcitx-config/enum.h>
 #include <fcitx-config/iniparser.h>
 #include <fcitx-utils/i18n.h>
+#include <fcitx/action.h>
 #include <fcitx/addonfactory.h>
 #include <fcitx/addonmanager.h>
 #include <fcitx/candidatelist.h>
@@ -118,6 +119,8 @@ public:
     void reloadConfig() override;
     void reset(const InputMethodEntry &entry,
                InputContextEvent &event) override;
+    void deactivate(const fcitx::InputMethodEntry &,
+                    fcitx::InputContextEvent &event) override;
     void save() override;
     auto &factory() { return factory_; }
     auto dictionaries() { return dictionaries_.get(); }
@@ -131,6 +134,8 @@ public:
 
     KkcState *state(InputContext *ic);
 
+    void updateInputMode(InputContext *ic);
+
 private:
     void loadDictionary();
     void loadRule();
@@ -141,6 +146,10 @@ private:
     GObjectUniquePtr<KkcLanguageModel> model_;
     GObjectUniquePtr<KkcDictionaryList> dictionaries_;
     GObjectUniquePtr<KkcUserRule> userRule_;
+
+    std::unique_ptr<Action> modeAction_;
+    std::unique_ptr<Menu> menu_;
+    std::vector<std::unique_ptr<Action>> subModeActions_;
 };
 
 class KkcFactory : public AddonFactory {
