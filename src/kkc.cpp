@@ -217,12 +217,17 @@ public:
                 makeGObjectUnique(kkc_candidate_list_get(kkcCandidates, i));
             Text text;
             text.append(kkc_candidate_get_text(kkcCandidate.get()));
-            if (*engine->config().showAnnotation &&
-                kkc_candidate_get_annotation(kkcCandidate.get())) {
-
-                text.append(stringutils::concat(
-                    " [", kkc_candidate_get_annotation(kkcCandidate.get()),
-                    "]"));
+            if (*engine->config().showAnnotation) {
+                auto annotation =
+                    kkc_candidate_get_annotation(kkcCandidate.get());
+                // Make sure annotation is not null, empty, or equal to "?".
+                // ? seems to be a special debug purpose value.
+                if (annotation && annotation[0] &&
+                    g_strcmp0(annotation, "?") != 0) {
+                    text.append(stringutils::concat(
+                        " [", kkc_candidate_get_annotation(kkcCandidate.get()),
+                        "]"));
+                }
             }
             if (i == cursor_pos) {
                 cursorIndex_ = i - pageFirst;
