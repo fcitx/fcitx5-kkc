@@ -86,7 +86,8 @@ FCITX_CONFIGURATION(
         _("Cursor Down"),
         {Key(FcitxKey_Down)},
         KeyListConstrain({KeyConstrainFlag::AllowModifierLess})};
-    Option<bool> showAnnotation{this, "ShowAnnotation", _("Show Annotation")};
+    Option<bool> showAnnotation{this, "ShowAnnotation", _("Show Annotation"),
+                                true};
     Option<int, IntConstrain> nTriggersToShowCandWin{
         this, "NTriggersToShowCandWin",
         _("Number candidate of Triggers To Show Candidate Window"), 0,
