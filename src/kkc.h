@@ -49,14 +49,17 @@ FCITX_CONFIG_ENUM_NAME_WITH_I18N(KkcInputMode, N_("Hiragana"), N_("Katakana"),
 
 FCITX_CONFIGURATION(
     KkcConfig,
-    Option<KkcPunctuationStyle> punctuationStyle{this, "PunctuationStyle",
-                                                 _("Punctuation Style"),
-                                                 KKC_PUNCTUATION_STYLE_JA_JA};
-    Option<KkcInputMode> inputMode{this, "InitialInputMode",
-                                   _("Initial Input Mode"),
-                                   KKC_INPUT_MODE_HIRAGANA};
+    OptionWithAnnotation<KkcPunctuationStyle, KkcPunctuationStyleI18NAnnotation>
+        punctuationStyle{this, "PunctuationStyle", _("Punctuation Style"),
+                         KKC_PUNCTUATION_STYLE_JA_JA};
+    OptionWithAnnotation<KkcInputMode, KkcInputModeI18NAnnotation> inputMode{
+        this, "InitialInputMode", _("Initial Input Mode"),
+        KKC_INPUT_MODE_HIRAGANA};
     Option<int, IntConstrain> pageSize{this, "PageSize", _("Page size"), 10,
                                        IntConstrain(1, 10)};
+    OptionWithAnnotation<CandidateLayoutHint, CandidateLayoutHintI18NAnnotation>
+        candidateLayout{this, "Candidate Layout", _("Candidate Layout"),
+                        CandidateLayoutHint::Vertical};
     Option<bool> autoCorrect{this, "AutoCorrect", _("Auto Correct"), true};
     KeyListOption prevPageKey{
         this,

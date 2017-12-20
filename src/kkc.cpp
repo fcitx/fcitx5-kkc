@@ -32,6 +32,39 @@ FCITX_DEFINE_LOG_CATEGORY(kkc_logcategory, "kkc");
 
 namespace fcitx {
 
+class KkcState : public InputContextProperty {
+public:
+    KkcState(KkcEngine *parent, InputContext &ic)
+        : parent_(parent), ic_(&ic),
+          context_(kkc_context_new(parent->model()), &g_object_unref) {
+        kkc_context_set_dictionaries(context_.get(), parent_->dictionaries());
+        kkc_context_set_input_mode(context_.get(),
+                                   *parent_->config().inputMode);
+        applyConfig();
+    }
+
+    void applyConfig() {
+        KkcCandidateList *kkcCandidates =
+            kkc_context_get_candidates(context_.get());
+        kkc_candidate_list_set_page_start(
+            kkcCandidates, *parent_->config().nTriggersToShowCandWin);
+        kkc_candidate_list_set_page_size(kkcCandidates,
+                                         *parent_->config().pageSize);
+        kkc_context_set_punctuation_style(context_.get(),
+                                          *parent_->config().punctuationStyle);
+        kkc_context_set_auto_correct(context_.get(),
+                                     *parent_->config().autoCorrect);
+        if (parent_->rule()) {
+            kkc_context_set_typing_rule(context_.get(),
+                                        KKC_RULE(parent_->rule()));
+        }
+    }
+
+    KkcEngine *parent_;
+    InputContext *ic_;
+    std::unique_ptr<KkcContext, decltype(&g_object_unref)> context_;
+};
+
 namespace {
 
 template <typename T>
@@ -46,7 +79,16 @@ public:
         setText(std::move(text));
     }
 
-   void select(InputContext *inputContext) const ;
+    void select(InputContext *inputContext) const override {
+        auto state = engine_->state(inputContext);
+        auto context = state->context_.get();
+        KkcCandidateList *kkcCandidates = kkc_context_get_candidates(context);
+        if (kkc_candidate_list_select_at(
+                kkcCandidates,
+                idx_ % kkc_candidate_list_get_page_size(kkcCandidates))) {
+            engine_->updateUI(inputContext);
+        }
+    }
 
 private:
     KkcEngine *engine_;
@@ -57,56 +99,120 @@ class KkcFcitxCandidateList : public CandidateList,
                               public PageableCandidateList,
                               public CursorMovableCandidateList {
 public:
-    KkcFcitxCandidateList(KkcEngine *engine, KkcCandidateList *list) {
+    KkcFcitxCandidateList(KkcEngine *engine, InputContext *ic)
+        : engine_(engine), ic_(ic) {
         setPageable(this);
         setCursorMovable(this);
-        // TODO fill candidate list, port from FcitxKkcGetCandWords
+        auto kkcstate = engine_->state(ic_);
+        auto context = kkcstate->context_.get();
+        KkcCandidateList *kkcCandidates = kkc_context_get_candidates(context);
+        gint size = kkc_candidate_list_get_size(kkcCandidates);
+        gint cursor_pos = kkc_candidate_list_get_cursor_pos(kkcCandidates);
+        guint page_start = kkc_candidate_list_get_page_start(kkcCandidates);
+        guint page_size = kkc_candidate_list_get_page_size(kkcCandidates);
+
+        // Assume size = 27, cursor = 14, page_start = 4, page_size = 10
+        // 0~3 not in page.
+        // 4~13 1st page
+        // 14~23 2nd page
+        // 24~26 3nd page
+        int currentPage = (cursor_pos - page_start) / page_size;
+        int totalPage = (size - page_start + page_size - 1) / page_size;
+        int pageFirst = currentPage * page_size + page_start;
+        int pageLast = std::min(size, static_cast<int>(pageFirst + page_size));
+
+        for (int i = pageFirst; i < pageLast; i++) {
+            GObjectUniquePtr<KkcCandidate> kkcCandidate =
+                makeGObjectUnique(kkc_candidate_list_get(kkcCandidates, i));
+            Text text;
+            text.append(kkc_candidate_get_text(kkcCandidate.get()));
+            if (*engine->config().showAnnotation &&
+                kkc_candidate_get_annotation(kkcCandidate.get())) {
+
+                text.append(stringutils::join(
+                    " [", kkc_candidate_get_annotation(kkcCandidate.get()),
+                    "]"));
+            }
+            if (i == cursor_pos) {
+                cursorIndex_ = i - pageFirst;
+            }
+
+            labels_.push_back(Text(std::to_string(i - pageFirst + 1) + ". "));
+            words_.push_back(std::make_shared<KkcCandidateWord>(
+                engine, text, i - page_start));
+        }
+
+        hasPrev_ = currentPage != 0;
+        hasNext_ = currentPage + 1 < totalPage;
     }
 
-    bool hasPrev() const override {}
+    bool hasPrev() const override { return hasPrev_; }
 
-    bool hasNext() const override {}
+    bool hasNext() const override { return hasNext_; }
 
-    void prev() override {}
+    void prev() override { return paging(true); }
 
-    void next() override {}
+    void next() override { return paging(false); }
 
     bool usedNextBefore() const override { return true; }
 
-    void prevCandidate() override {}
+    void prevCandidate() override { return moveCursor(true); }
 
-    void nextCandidate() override {}
+    void nextCandidate() override { return moveCursor(false); }
 
-    const Text &label(int idx) const override {}
+    const Text &label(int idx) const override { return labels_[idx]; }
 
-    std::shared_ptr<const CandidateWord> candidate(int idx) const override {}
+    std::shared_ptr<const CandidateWord> candidate(int idx) const override {
+        return words_[idx];
+    }
 
-    int size() const override {}
+    int size() const override { return words_.size(); }
 
-    int cursorIndex() const {}
+    int cursorIndex() const override { return cursorIndex_; }
 
-    CandidateLayoutHint layoutHint() const override {}
+    CandidateLayoutHint layoutHint() const override {
+        return *engine_->config().candidateLayout;
+    }
 
 private:
+    void paging(bool prev) {
+        auto kkcstate = engine_->state(ic_);
+        auto context = kkcstate->context_.get();
+        KkcCandidateList *kkcCandidates = kkc_context_get_candidates(context);
+        if (kkc_candidate_list_get_page_visible(kkcCandidates)) {
+            if (prev) {
+                kkc_candidate_list_page_up(kkcCandidates);
+            } else {
+                kkc_candidate_list_page_down(kkcCandidates);
+            }
+            engine_->updateUI(ic_);
+        }
+    }
+    void moveCursor(bool prev) {
+        auto kkcstate = engine_->state(ic_);
+        auto context = kkcstate->context_.get();
+        KkcCandidateList *kkcCandidates = kkc_context_get_candidates(context);
+        if (kkc_candidate_list_get_page_visible(kkcCandidates)) {
+            if (prev) {
+                kkc_candidate_list_cursor_up(kkcCandidates);
+            } else {
+                kkc_candidate_list_cursor_down(kkcCandidates);
+            }
+            engine_->updateUI(ic_);
+        }
+    }
+
+    KkcEngine *engine_;
+    InputContext *ic_;
+    std::vector<Text> labels_;
     std::vector<std::shared_ptr<KkcCandidateWord>> words_;
+    int cursorIndex_ = -1;
+    bool hasPrev_ = false;
+    bool hasNext_ = false;
 };
 
 } // namespace
 
-class KkcState : public InputContextProperty {
-public:
-    KkcState(KkcEngine *parent, InputContext &ic)
-        : parent_(parent), ic_(&ic),
-          context_(kkc_context_new(parent->model()), &g_object_unref) {
-        kkc_context_set_dictionaries(context_.get(), parent_->dictionaries());
-        kkc_context_set_input_mode(context_.get(),
-                                   *parent_->config().inputMode);
-    }
-
-    KkcEngine *parent_;
-    InputContext *ic_;
-    std::unique_ptr<KkcContext, decltype(&g_object_unref)> context_;
-};
 KkcEngine::KkcEngine(Instance *instance)
     : instance_(instance),
       factory_([this](InputContext &ic) { return new KkcState(this, ic); }),
@@ -142,9 +248,8 @@ KkcEngine::KkcEngine(Instance *instance)
 }
 
 KkcEngine::~KkcEngine() {}
-void KkcEngine::activate(const InputMethodEntry &entry,
-                         InputContextEvent &event) {}
-void KkcEngine::keyEvent(const InputMethodEntry &entry, KeyEvent &keyEvent) {
+void KkcEngine::activate(const InputMethodEntry &, InputContextEvent &event) {}
+void KkcEngine::keyEvent(const InputMethodEntry &, KeyEvent &keyEvent) {
     auto state = static_cast<uint32_t>(keyEvent.rawKey().states());
     if (keyEvent.isRelease()) {
         state |= KKC_MODIFIER_TYPE_RELEASE_MASK;
@@ -213,23 +318,15 @@ void KkcEngine::reloadConfig() {
 
     instance_->inputContextManager().foreach([this](InputContext *ic) {
         auto state = this->state(ic);
-        KkcCandidateList *kkcCandidates =
-            kkc_context_get_candidates(state->context_.get());
-        kkc_candidate_list_set_page_start(kkcCandidates,
-                                          *config_.nTriggersToShowCandWin);
-        kkc_candidate_list_set_page_size(kkcCandidates, *config_.pageSize);
-        kkc_context_set_punctuation_style(state->context_.get(),
-                                          *config_.punctuationStyle);
-        kkc_context_set_auto_correct(state->context_.get(),
-                                     *config_.autoCorrect);
-        if (rule()) {
-            kkc_context_set_typing_rule(state->context_.get(),
-                                        KKC_RULE(rule()));
-        }
+        state->applyConfig();
         return true;
     });
 }
-void KkcEngine::reset(const InputMethodEntry &entry, InputContextEvent &event) {
+void KkcEngine::reset(const InputMethodEntry &, InputContextEvent &event) {
+    auto state = this->state(event.inputContext());
+    auto context = state->context_.get();
+    kkc_context_reset(context);
+    updateUI(event.inputContext());
 }
 void KkcEngine::save() { kkc_dictionary_list_save(dictionaries_.get()); }
 
@@ -240,24 +337,32 @@ void KkcEngine::updateUI(InputContext *inputContext) {
     auto &inputPanel = inputContext->inputPanel();
     inputPanel.reset();
     Text preedit;
-    // TODO: fill preedit.
-    KkcSegmentList* segments = kkc_context_get_segments(context);
-    if (kkc_segment_list_get_cursor_pos(segments) >= 0) 
-    {
-        for (int i = 0; i < kkc_segment_list_get_size(segments); i ++) 
-        {
-            KkcSegment* segment = kkc_segment_list_get(segments, i);
-            const gchar* str = kkc_segment_get_output(segment);       
-            preedit.append(std::string(str));
+    KkcSegmentList *segments = kkc_context_get_segments(context);
+    if (kkc_segment_list_get_cursor_pos(segments) >= 0) {
+        int offset = 0;
+        for (int i = 0; i < kkc_segment_list_get_size(segments); i++) {
+            GObjectUniquePtr<KkcSegment> segment =
+                makeGObjectUnique(kkc_segment_list_get(segments, i));
+            const gchar *str = kkc_segment_get_output(segment.get());
+            TextFormatFlags format;
+            if (i < kkc_segment_list_get_cursor_pos(segments)) {
+                offset += strlen(str);
+            }
+            if (i == kkc_segment_list_get_cursor_pos(segments)) {
+                format = TextFormatFlag::HighLight;
+            } else {
+                format = TextFormatFlag::Underline;
+            }
+            preedit.append(str, format);
         }
-    }
-    else
-    {
-        gchar* str = kkc_context_get_input(context);
-        if(str && str[0])
-        {
-            preedit.append(std::string(str));
+        preedit.setCursor(offset);
+    } else {
+        gchar *str = kkc_context_get_input(context);
+        if (str && str[0]) {
+            preedit.append(str);
+            preedit.setCursor(strlen(str));
         }
+        g_free(str);
     }
     if (inputContext->capabilityFlags().test(CapabilityFlag::Preedit)) {
         inputPanel.setClientPreedit(preedit);
@@ -269,10 +374,8 @@ void KkcEngine::updateUI(InputContext *inputContext) {
     KkcCandidateList *kkcCandidates = kkc_context_get_candidates(context);
     if (kkc_candidate_list_get_page_visible(kkcCandidates)) {
         inputPanel.setCandidateList(
-            std::make_unique<KkcFcitxCandidateList>(this, kkcCandidates));
+            std::make_unique<KkcFcitxCandidateList>(this, inputContext));
     }
-
-    // TODO: Update candidate list.
 
     if (kkc_context_has_output(context)) {
         gchar *str = kkc_context_poll_output(context);
@@ -416,20 +519,6 @@ std::string KkcEngine::subMode(const InputMethodEntry &, InputContext &) {
 KkcState *KkcEngine::state(InputContext *ic) {
     return ic->propertyFor(&factory_);
 }
-    void KkcCandidateWord::select(InputContext *inputContext) const {
-        // TODO, select candidate and update UI.
-        // Port FcitxKkcGetCandWord
-        auto state = engine_->state(inputContext);
-        auto context = state->context_.get();
-        KkcCandidateList *kkcCandidates =
-            kkc_context_get_candidates(context);
-        if(kkc_candidate_list_select_at(kkcCandidates, idx_ % kkc_candidate_list_get_page_size(kkcCandidates)))
-        {
-            engine_->updateUI(inputContext);
-        }
-    }
 } // namespace fcitx
-
-
 
 FCITX_ADDON_FACTORY(fcitx::KkcFactory);
