@@ -46,10 +46,7 @@ public:
         setText(std::move(text));
     }
 
-    void select(InputContext *inputContext) const {
-        // TODO, select candidate and update UI.
-        // Port FcitxKkcGetCandWord
-    }
+   void select(InputContext *inputContext) const ;
 
 private:
     KkcEngine *engine_;
@@ -244,7 +241,24 @@ void KkcEngine::updateUI(InputContext *inputContext) {
     inputPanel.reset();
     Text preedit;
     // TODO: fill preedit.
-
+    KkcSegmentList* segments = kkc_context_get_segments(context);
+    if (kkc_segment_list_get_cursor_pos(segments) >= 0) 
+    {
+        for (int i = 0; i < kkc_segment_list_get_size(segments); i ++) 
+        {
+            KkcSegment* segment = kkc_segment_list_get(segments, i);
+            const gchar* str = kkc_segment_get_output(segment);       
+            preedit.append(std::string(str));
+        }
+    }
+    else
+    {
+        gchar* str = kkc_context_get_input(context);
+        if(str && str[0])
+        {
+            preedit.append(std::string(str));
+        }
+    }
     if (inputContext->capabilityFlags().test(CapabilityFlag::Preedit)) {
         inputPanel.setClientPreedit(preedit);
         inputContext->updatePreedit();
@@ -402,6 +416,20 @@ std::string KkcEngine::subMode(const InputMethodEntry &, InputContext &) {
 KkcState *KkcEngine::state(InputContext *ic) {
     return ic->propertyFor(&factory_);
 }
-
+    void KkcCandidateWord::select(InputContext *inputContext) const {
+        // TODO, select candidate and update UI.
+        // Port FcitxKkcGetCandWord
+        auto state = engine_->state(inputContext);
+        auto context = state->context_.get();
+        KkcCandidateList *kkcCandidates =
+            kkc_context_get_candidates(context);
+        if(kkc_candidate_list_select_at(kkcCandidates, idx_ % kkc_candidate_list_get_page_size(kkcCandidates)))
+        {
+            engine_->updateUI(inputContext);
+        }
+    }
 } // namespace fcitx
+
+
+
 FCITX_ADDON_FACTORY(fcitx::KkcFactory);
