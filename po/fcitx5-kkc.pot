@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx5-kkc\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-12-15 10:37-0800\n"
+"POT-Creation-Date: 2017-12-21 00:01-0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,15 +15,15 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: gui/addshortcutdialog.cpp:32
+#: gui/addshortcutdialog.cpp:29
 msgid "&Command"
 msgstr ""
 
-#: gui/addshortcutdialog.cpp:31
+#: gui/addshortcutdialog.cpp:28
 msgid "&Input Mode"
 msgstr ""
 
-#: gui/addshortcutdialog.cpp:33
+#: gui/addshortcutdialog.cpp:30
 msgid "&Key"
 msgstr ""
 
@@ -31,7 +31,7 @@ msgstr ""
 msgid "&Path:"
 msgstr ""
 
-#: gui/shortcutwidget.cpp:37
+#: gui/shortcutwidget.cpp:38
 msgid "&Rule:"
 msgstr ""
 
@@ -39,43 +39,87 @@ msgstr ""
 msgid "&Type:"
 msgstr ""
 
-#: gui/dictwidget.cpp:56
+#: src/kkc.h:64
+msgid "Auto Correct"
+msgstr ""
+
+#: src/kkc.h:62
+msgid "Candidate Layout"
+msgstr ""
+
+#: src/kkc.h:74
+msgid "Candidates Page Down"
+msgstr ""
+
+#: src/kkc.h:68
+msgid "Candidates Page Up"
+msgstr ""
+
+#: src/kkc.h:86
+msgid "Cursor Down"
+msgstr ""
+
+#: src/kkc.h:80
+msgid "Cursor Up"
+msgstr ""
+
+#: src/kkc.h:96
+msgid "Dictionary"
+msgstr ""
+
+#: gui/dictwidget.cpp:53
 msgid "Dictionary Manager"
 msgstr ""
 
-#: gui/shortcutmodel.cpp:94
+#: src/kkc.h:48
+msgid "Direct input"
+msgstr ""
+
+#: gui/shortcutmodel.cpp:85
 msgid "Function"
 msgstr ""
 
-#: gui/shortcutmodel.cpp:50
+#: src/kkc.cpp:103 src/kkc.h:48 gui/shortcutmodel.cpp:43
 msgid "Half width Katakana"
 msgstr ""
 
-#: gui/shortcutmodel.cpp:48
+#: src/kkc.cpp:101 src/kkc.h:47 gui/shortcutmodel.cpp:43
 msgid "Hiragana"
 msgstr ""
 
-#: gui/shortcutmodel.cpp:90
+#: src/kkc.h:41
+msgid "Horizontal"
+msgstr ""
+
+#: src/kkc.h:57
+msgid "Initial Input Mode"
+msgstr ""
+
+#: gui/shortcutmodel.cpp:81
 msgid "Input Mode"
+msgstr ""
+
+#: src/kkc.h:43
+msgid "Japanese"
 msgstr ""
 
 #: src/kkc.conf.in:3
 msgid "Kana Kanji"
 msgstr ""
 
-#: gui/shortcutmodel.cpp:49
+#: src/kkc.cpp:102 src/kkc.h:47 gui/shortcutmodel.cpp:43
 msgid "Katakana"
 msgstr ""
 
-#: gui/shortcutmodel.cpp:92
+#: gui/shortcutmodel.cpp:83
 msgid "Key"
 msgstr ""
 
-#: gui/shortcutwidget.cpp:155
+#: gui/shortcutwidget.cpp:151
 msgid "Key Conflict"
 msgstr ""
 
-#: gui/shortcutwidget.cpp:155
+#: gui/shortcutwidget.cpp:152
 msgid "Key to add is conflict with existing shortcut."
 msgstr ""
 
@@ -83,19 +127,39 @@ msgstr ""
 msgid "Kkc Addon of Fcitx"
 msgstr ""
 
-#: gui/shortcutmodel.cpp:51
+#: src/kkc.cpp:104 src/kkc.h:44 gui/shortcutmodel.cpp:44
 msgid "Latin"
 msgstr ""
 
-#: gui/shortcutwidget.cpp:130
+#: src/kkc.h:40
+msgid "Not set"
+msgstr ""
+
+#: src/kkc.h:93
+msgid "Number candidate of Triggers To Show Candidate Window"
+msgstr ""
+
+#: src/kkc.h:59
+msgid "Page size"
+msgstr ""
+
+#: src/kkc.h:54
+msgid "Punctuation Style"
+msgstr ""
+
+#: src/kkc.h:95
+msgid "Rule"
+msgstr ""
+
+#: gui/shortcutwidget.cpp:126
 msgid "Save Changes"
 msgstr ""
 
-#: gui/adddictdialog.cpp:91
+#: gui/adddictdialog.cpp:85
 msgid "Select Dictionary Directory"
 msgstr ""
 
-#: gui/adddictdialog.cpp:77
+#: gui/adddictdialog.cpp:69
 msgid "Select Dictionary File"
 msgstr ""
 
@@ -103,11 +167,15 @@ msgstr ""
 msgid "Shortcut Manager"
 msgstr ""
 
+#: src/kkc.h:89
+msgid "Show Annotation"
+msgstr ""
+
 #: gui/adddictdialog.cpp:37
 msgid "System"
 msgstr ""
 
-#: gui/shortcutwidget.cpp:131
+#: gui/shortcutwidget.cpp:127
 msgid ""
 "The content has changed.\n"
 "Do you want to save the changes or discard them?"
@@ -117,10 +185,14 @@ msgstr ""
 msgid "User"
 msgstr ""
 
-#: gui/shortcutmodel.cpp:52
+#: src/kkc.h:41
+msgid "Vertical"
+msgstr ""
+
+#: src/kkc.cpp:105 src/kkc.h:44 src/kkc.h:49 gui/shortcutmodel.cpp:44
 msgid "Wide latin"
 msgstr ""
 
-#: src/kkc.conf.in:4
-msgid "fcitx-kkc"
+#: src/kkc.h:45
+msgid "Wide latin Japanese"
 msgstr ""
