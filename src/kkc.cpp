@@ -427,6 +427,10 @@ void KkcEngine::keyEvent(const InputMethodEntry &, KeyEvent &keyEvent) {
         state |= KKC_MODIFIER_TYPE_RELEASE_MASK;
     }
 
+    KKC_DEBUG() << "Kkc received key: " << keyEvent.rawKey()
+                << " isRelease: " << keyEvent.isRelease()
+                << " keycode: " << keyEvent.rawKey().code();
+
     auto kkcstate = this->state(keyEvent.inputContext());
     auto context = kkcstate->context_.get();
     KkcCandidateList *kkcCandidates = kkc_context_get_candidates(context);
@@ -475,12 +479,14 @@ void KkcEngine::keyEvent(const InputMethodEntry &, KeyEvent &keyEvent) {
             keyEvent.rawKey().sym(), keyEvent.rawKey().code() - 8,
             static_cast<KkcModifierType>(state)));
     if (!key) {
+        KKC_DEBUG() << "Failed to obtain kkc key event";
         return;
     }
     if (kkc_context_process_key_event(context, key.get())) {
         keyEvent.filterAndAccept();
         updateUI(keyEvent.inputContext());
     }
+    KKC_DEBUG() << "Key event filtered: " << keyEvent.filtered();
 }
 void KkcEngine::reloadConfig() {
     readAsIni(config_, "conf/kkc.conf");
