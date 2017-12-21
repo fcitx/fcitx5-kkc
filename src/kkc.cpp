@@ -423,6 +423,7 @@ void KkcEngine::deactivate(const InputMethodEntry &entry,
 
 void KkcEngine::keyEvent(const InputMethodEntry &, KeyEvent &keyEvent) {
     auto state = static_cast<uint32_t>(keyEvent.rawKey().states());
+    state &= static_cast<uint32_t>(KeyState::SimpleMask);
     if (keyEvent.isRelease()) {
         state |= KKC_MODIFIER_TYPE_RELEASE_MASK;
     }
