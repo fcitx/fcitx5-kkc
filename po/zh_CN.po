@@ -4,13 +4,14 @@
 #
 # Translators:
 # csslayer <wengxt@gmail.com>, 2017
+# Mingcong Bai <jeffbai@aosc.xyz>, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx5-kkc\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-12-21 00:01-0800\n"
+"POT-Creation-Date: 2017-12-27 00:01-0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: csslayer <wengxt@gmail.com>, 2017\n"
+"Last-Translator: Mingcong Bai <jeffbai@aosc.xyz>, 2017\n"
 "Language-Team: Chinese (China) (https://www.transifex.com/fcitx/teams/12005/"
 "zh_CN/)\n"
 "Language: zh_CN\n"
@@ -49,7 +50,7 @@ msgstr "自动纠正"
 
 #: src/kkc.h:62
 msgid "Candidate Layout"
-msgstr ""
+msgstr "候选词布局"
 
 #: src/kkc.h:74
 msgid "Candidates Page Down"
