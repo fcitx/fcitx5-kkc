@@ -37,8 +37,8 @@ AddDictDialog::AddDictDialog(QWidget *parent)
     m_ui->typeComboBox->addItem(_("System"));
     m_ui->typeComboBox->addItem(_("User"));
 
-    connect(m_ui->browseButton, SIGNAL(clicked(bool)), this,
-            SLOT(browseClicked()));
+    connect(m_ui->browseButton, &QPushButton::clicked, this,
+            &AddDictDialog::browseClicked);
 }
 
 AddDictDialog::~AddDictDialog() { delete m_ui; }

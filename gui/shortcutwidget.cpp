@@ -40,17 +40,17 @@ KkcShortcutWidget::KkcShortcutWidget(QWidget *parent)
     m_ui->shortcutView->setModel(m_shortcutModel);
     m_ui->shortcutView->sortByColumn(3);
 
-    connect(m_ui->ruleComboBox, SIGNAL(currentIndexChanged(int)), this,
-            SLOT(ruleChanged(int)));
-    connect(m_ui->addShortcutButton, SIGNAL(clicked(bool)), this,
-            SLOT(addShortcutClicked()));
-    connect(m_ui->removeShortCutButton, SIGNAL(clicked(bool)), this,
-            SLOT(removeShortcutClicked()));
-    connect(m_shortcutModel, SIGNAL(needSaveChanged(bool)), this,
-            SLOT(shortcutNeedSaveChanged(bool)));
+    connect(m_ui->ruleComboBox, qOverload<int>(&QComboBox::currentIndexChanged),
+            this, &KkcShortcutWidget::ruleChanged);
+    connect(m_ui->addShortcutButton, &QPushButton::clicked, this,
+            &KkcShortcutWidget::addShortcutClicked);
+    connect(m_ui->removeShortCutButton, &QPushButton::clicked, this,
+            &KkcShortcutWidget::removeShortcutClicked);
+    connect(m_shortcutModel, &ShortcutModel::needSaveChanged, this,
+            &KkcShortcutWidget::shortcutNeedSaveChanged);
     connect(m_ui->shortcutView->selectionModel(),
-            SIGNAL(currentChanged(QModelIndex, QModelIndex)), this,
-            SLOT(currentShortcutChanged()));
+            &QItemSelectionModel::currentChanged, this,
+            &KkcShortcutWidget::currentShortcutChanged);
 
     load();
     currentShortcutChanged();

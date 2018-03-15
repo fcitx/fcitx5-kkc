@@ -91,6 +91,6 @@ private:
 };
 
 extern const char *modeName[];
-}
+} // namespace fcitx
 
 #endif // _GUI_SHORTCUTMODEL_H_

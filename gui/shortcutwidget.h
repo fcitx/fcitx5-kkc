@@ -54,6 +54,6 @@ private:
     RuleModel *m_ruleModel;
     QString m_name;
 };
-}
+} // namespace fcitx
 
 #endif // _GUI_SHORTCUTWIDGET_H_

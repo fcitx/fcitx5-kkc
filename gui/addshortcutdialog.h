@@ -44,6 +44,6 @@ private:
     int m_length;
     gchar **m_commands;
 };
-}
+} // namespace fcitx
 
 #endif // _GUI_ADDSHORTCUTDIALOG_H_

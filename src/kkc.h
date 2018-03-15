@@ -45,8 +45,8 @@ FCITX_CONFIG_ENUM_NAME_WITH_I18N(KkcPunctuationStyle, N_("Japanese"),
                                  N_("Wide latin Japanese"));
 
 FCITX_CONFIG_ENUM_NAME_WITH_I18N(KkcInputMode, N_("Hiragana"), N_("Katakana"),
-                                 N_("Half width Katakana"), N_("Direct input"),
-                                 N_("Wide latin"));
+                                 N_("Half width Katakana"), N_("Latin"),
+                                 N_("Wide latin"), N_("Direct input"));
 
 FCITX_CONFIGURATION(
     KkcConfig,

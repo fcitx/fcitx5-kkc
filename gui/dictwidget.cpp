@@ -32,16 +32,16 @@ KkcDictWidget::KkcDictWidget(QWidget *parent)
 
     m_ui->dictionaryView->setModel(m_dictModel);
 
-    connect(m_ui->addDictButton, SIGNAL(clicked(bool)), this,
-            SLOT(addDictClicked()));
-    connect(m_ui->defaultDictButton, SIGNAL(clicked(bool)), this,
-            SLOT(defaultDictClicked()));
-    connect(m_ui->removeDictButton, SIGNAL(clicked(bool)), this,
-            SLOT(removeDictClicked()));
-    connect(m_ui->moveUpDictButton, SIGNAL(clicked(bool)), this,
-            SLOT(moveUpDictClicked()));
-    connect(m_ui->moveDownDictButton, SIGNAL(clicked(bool)), this,
-            SLOT(moveDownClicked()));
+    connect(m_ui->addDictButton, &QPushButton::clicked, this,
+            &KkcDictWidget::addDictClicked);
+    connect(m_ui->defaultDictButton, &QPushButton::clicked, this,
+            &KkcDictWidget::defaultDictClicked);
+    connect(m_ui->removeDictButton, &QPushButton::clicked, this,
+            &KkcDictWidget::removeDictClicked);
+    connect(m_ui->moveUpDictButton, &QPushButton::clicked, this,
+            &KkcDictWidget::moveUpDictClicked);
+    connect(m_ui->moveDownDictButton, &QPushButton::clicked, this,
+            &KkcDictWidget::moveDownClicked);
 
     load();
 }

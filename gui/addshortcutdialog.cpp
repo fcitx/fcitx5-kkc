@@ -30,7 +30,7 @@ AddShortcutDialog::AddShortcutDialog(QWidget *parent)
     m_ui->keyLabel->setText(_("&Key"));
     m_ui->keyButton->setModifierlessAllowed(true);
     m_ui->keyButton->setMultiKeyShortcutsAllowed(false);
-    for (int i = 0; i < KKC_INPUT_MODE_DIRECT; i++) {
+    for (int i = 0; i <= KKC_INPUT_MODE_DIRECT; i++) {
         m_ui->inputModeComboBox->addItem(_(modeName[i]));
     }
 
@@ -42,9 +42,8 @@ AddShortcutDialog::AddShortcutDialog(QWidget *parent)
         g_free(label);
     }
 
-    connect(m_ui->keyButton,
-            SIGNAL(keySequenceChanged(QKeySequence, FcitxQtModifierSide)), this,
-            SLOT(keyChanged()));
+    connect(m_ui->keyButton, &FcitxQtKeySequenceWidget::keySequenceChanged,
+            this, &AddShortcutDialog::keyChanged);
 
     keyChanged();
 }

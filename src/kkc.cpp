@@ -35,9 +35,6 @@ FCITX_DEFINE_LOG_CATEGORY(kkc_logcategory, "kkc");
 
 namespace fcitx {
 
-static void _kkc_input_mode_changed_cb(GObject *gobject, GParamSpec *pspec,
-                                       gpointer user_data);
-
 class KkcState : public InputContextProperty {
 public:
     KkcState(KkcEngine *parent, InputContext &ic)
@@ -101,14 +98,15 @@ struct {
     {"", "\xe3\x81\x82", N_("Hiragana")},
     {"", "\xe3\x82\xa2", N_("Katakana")},
     {"", "\xef\xbd\xb1", N_("Half width Katakana")},
-    {"", "A", N_("Latin")},
+    {"", "A_", N_("Latin")},
     {"", "\xef\xbc\xa1", N_("Wide latin")},
+    {"", "A", N_("Direct input")},
 };
 
 auto inputModeStatus(KkcEngine *engine, InputContext *ic) {
     auto state = engine->state(ic);
     auto mode = kkc_context_get_input_mode(state->context_.get());
-    return (mode >= 0 || mode < FCITX_ARRAY_SIZE(input_mode_status))
+    return (mode >= 0 && mode < FCITX_ARRAY_SIZE(input_mode_status))
                ? &input_mode_status[mode]
                : nullptr;
 }

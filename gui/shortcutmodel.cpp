@@ -41,7 +41,7 @@ int ShortcutModel::columnCount(const QModelIndex &parent) const {
 
 const char *modeName[] = {
     N_("Hiragana"), N_("Katakana"),   N_("Half width Katakana"),
-    N_("Latin"),    N_("Wide latin"),
+    N_("Latin"),    N_("Wide latin"), N_("Direct input"),
 };
 
 QVariant ShortcutModel::data(const QModelIndex &index, int role) const {
@@ -112,7 +112,7 @@ void ShortcutModel::load(const QString &name) {
             break;
         }
 
-        for (int mode = 0; mode < KKC_INPUT_MODE_DIRECT; mode++) {
+        for (int mode = 0; mode <= KKC_INPUT_MODE_DIRECT; mode++) {
             auto keymap = makeGObjectUnique(kkc_rule_get_keymap(
                 KKC_RULE(userRule.get()), (KkcInputMode)mode));
             int length;
@@ -143,7 +143,7 @@ void ShortcutModel::load(const QString &name) {
 
 void ShortcutModel::save() {
     if (m_userRule && m_needSave) {
-        for (int mode = 0; mode < KKC_INPUT_MODE_DIRECT; mode++) {
+        for (int mode = 0; mode <= KKC_INPUT_MODE_DIRECT; mode++) {
             kkc_user_rule_write(m_userRule.get(), (KkcInputMode)mode, NULL);
         }
     }
