@@ -146,7 +146,7 @@ void KkcShortcutWidget::ruleChanged(int rule) {
 void KkcShortcutWidget::addShortcutClicked() {
     AddShortcutDialog dialog;
     if (dialog.exec() == QDialog::Accepted) {
-        if (m_shortcutModel->add(dialog.shortcut())) {
+        if (!m_shortcutModel->add(dialog.shortcut())) {
             QMessageBox::critical(
                 this, _("Key Conflict"),
                 _("Key to add is conflict with existing shortcut."));

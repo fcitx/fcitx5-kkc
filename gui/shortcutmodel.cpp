@@ -158,13 +158,13 @@ bool ShortcutModel::add(const ShortcutEntry &entry) {
     if (kkc_keymap_lookup_key(map.get(), entry.event())) {
         result = false;
     }
-    beginInsertRows(QModelIndex(), m_entries.size(), m_entries.size());
-    m_entries << entry;
-    kkc_keymap_set(map.get(), entry.event(),
-                   entry.command().toUtf8().constData());
-    endInsertRows();
 
     if (result) {
+        beginInsertRows(QModelIndex(), m_entries.size(), m_entries.size());
+        m_entries << entry;
+        kkc_keymap_set(map.get(), entry.event(),
+                       entry.command().toUtf8().constData());
+        endInsertRows();
         setNeedSave(true);
     }
 
