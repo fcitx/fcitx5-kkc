@@ -42,15 +42,4 @@ FcitxQtConfigUIWidget *KkcConfigPlugin::create(const QString &key) {
     return NULL;
 }
 
-QStringList KkcConfigPlugin::files() {
-    QStringList fileList;
-    fileList << "kkc/dictionary_list"
-             << "kkc/rule";
-    return fileList;
-}
-
-QString KkcConfigPlugin::name() { return "kkc-config"; }
-
-QString KkcConfigPlugin::domain() { return "fcitx-kkc"; }
-
 } // namespace fcitx

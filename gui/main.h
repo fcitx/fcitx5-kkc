@@ -28,10 +28,7 @@ public:
     Q_PLUGIN_METADATA(IID FcitxQtConfigUIFactoryInterface_iid FILE
                       "kkc-config.json")
     explicit KkcConfigPlugin(QObject *parent = 0);
-    virtual QString name();
-    virtual QStringList files();
-    virtual QString domain();
-    virtual FcitxQtConfigUIWidget *create(const QString &key);
+    FcitxQtConfigUIWidget *create(const QString &key) override;
 };
 } // namespace fcitx
 

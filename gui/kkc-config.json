@@ -1,2 +1,4 @@
 {
+    "addon": "kkc",
+    "files": ["kkc/dictionary_list", "kkc/rule"]
 }
