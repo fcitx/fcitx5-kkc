@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx5-kkc\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-12-21 00:01-0800\n"
+"POT-Creation-Date: 2018-03-29 00:01-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: csslayer <wengxt@gmail.com>, 2017\n"
 "Language-Team: German (https://www.transifex.com/fcitx/teams/12005/de/)\n"
@@ -18,27 +18,38 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: gui/addshortcutdialog.cpp:29
-msgid "&Command"
-msgstr "&Befehl"
+#. i18n: file: gui/addshortcutdialog.ui:42
+#. i18n: ectx: property (text), widget (QLabel, commandLabel_)
+#: rc.cpp:18
+#, kde-format
+msgid "&Command:"
+msgstr ""
 
-#: gui/addshortcutdialog.cpp:28
-msgid "&Input Mode"
-msgstr "&Eingabemodus"
+#. i18n: file: gui/addshortcutdialog.ui:22
+#. i18n: ectx: property (text), widget (QLabel, inputModeLabel_)
+#: rc.cpp:15
+#, kde-format
+msgid "&Input Mode:"
+msgstr ""
 
-#: gui/addshortcutdialog.cpp:30
-msgid "&Key"
-msgstr "&Taste"
+#. i18n: file: gui/addshortcutdialog.ui:71
+#. i18n: ectx: property (text), widget (QLabel, keyLabel_)
+#: rc.cpp:21
+#, kde-format
+msgid "&Key:"
+msgstr ""
 
-#: gui/adddictdialog.cpp:36
+#. i18n: file: gui/adddictdialog.ui:42
+#. i18n: ectx: property (text), widget (QLabel, pathLabel_)
+#: rc.cpp:30
+#, kde-format
 msgid "&Path:"
 msgstr "&Pfad:"
 
-#: gui/shortcutwidget.cpp:38
-msgid "&Rule:"
-msgstr "&Regel:"
-
-#: gui/adddictdialog.cpp:35
+#. i18n: file: gui/adddictdialog.ui:22
+#. i18n: ectx: property (text), widget (QLabel, typeLabel_)
+#: rc.cpp:27
+#, kde-format
 msgid "&Type:"
 msgstr "&Taste:"
 
@@ -66,27 +77,45 @@ msgstr "Cursor runter"
 msgid "Cursor Up"
 msgstr "Cursor hoch"
 
+#. i18n: file: gui/addshortcutdialog.ui:14
+#. i18n: ectx: property (windowTitle), widget (QDialog, AddShortcutDialog)
+#. i18n: file: gui/adddictdialog.ui:14
+#. i18n: ectx: property (windowTitle), widget (QDialog, AddDictDialog)
+#: rc.cpp:12 rc.cpp:24
+#, kde-format
+msgid "Dialog"
+msgstr ""
+
 #: src/kkc.h:96
 msgid "Dictionary"
 msgstr "Wörterbuch"
 
-#: gui/dictwidget.cpp:53
+#: gui/dictwidget.cpp:47
 msgid "Dictionary Manager"
 msgstr "Wörterbuchverwaltung"
 
-#: src/kkc.h:48
+#: src/kkc.cpp:103 src/kkc.h:49 gui/shortcutmodel.cpp:44
 msgid "Direct input"
 msgstr "Direkte Eingabe"
+
+#. i18n: file: gui/dictwidget.ui:14
+#. i18n: ectx: property (windowTitle), widget (QWidget, KkcDictWidget)
+#. i18n: file: gui/shortcutwidget.ui:20
+#. i18n: ectx: property (windowTitle), widget (QWidget, KkcShortcutWidget)
+#: rc.cpp:3 rc.cpp:6
+#, kde-format
+msgid "Form"
+msgstr ""
 
 #: gui/shortcutmodel.cpp:85
 msgid "Function"
 msgstr "Funktion"
 
-#: src/kkc.cpp:103 src/kkc.h:48 gui/shortcutmodel.cpp:43
+#: src/kkc.cpp:100 src/kkc.h:48 gui/shortcutmodel.cpp:43
 msgid "Half width Katakana"
 msgstr "Halbweites Katakana"
 
-#: src/kkc.cpp:101 src/kkc.h:47 gui/shortcutmodel.cpp:43
+#: src/kkc.cpp:98 src/kkc.h:47 gui/shortcutmodel.cpp:43
 msgid "Hiragana"
 msgstr "Hiragana"
 
@@ -110,7 +139,7 @@ msgstr "Japanisch"
 msgid "Kana Kanji"
 msgstr "Kana Kanji"
 
-#: src/kkc.cpp:102 src/kkc.h:47 gui/shortcutmodel.cpp:43
+#: src/kkc.cpp:99 src/kkc.h:47 gui/shortcutmodel.cpp:43
 msgid "Katakana"
 msgstr "Katakana"
 
@@ -118,11 +147,11 @@ msgstr "Katakana"
 msgid "Key"
 msgstr "Taste"
 
-#: gui/shortcutwidget.cpp:151
+#: gui/shortcutwidget.cpp:143
 msgid "Key Conflict"
 msgstr "Tasten Konflikt"
 
-#: gui/shortcutwidget.cpp:152
+#: gui/shortcutwidget.cpp:144
 msgid "Key to add is conflict with existing shortcut."
 msgstr "Die hinzuzufügende Kurzbefehl wird schon verwendet. "
 
@@ -130,7 +159,7 @@ msgstr "Die hinzuzufügende Kurzbefehl wird schon verwendet. "
 msgid "Kkc Addon of Fcitx"
 msgstr "Kkc Addon von Fcitx"
 
-#: src/kkc.cpp:104 src/kkc.h:44 gui/shortcutmodel.cpp:44
+#: src/kkc.cpp:101 src/kkc.h:44 src/kkc.h:48 gui/shortcutmodel.cpp:44
 msgid "Latin"
 msgstr "Lateinisch"
 
@@ -150,23 +179,30 @@ msgstr "Seitengröße"
 msgid "Punctuation Style"
 msgstr "Interpunktionsstil"
 
+#. i18n: file: gui/shortcutwidget.ui:28
+#. i18n: ectx: property (text), widget (QLabel, ruleLabel_)
+#: rc.cpp:9
+#, kde-format
+msgid "R&ule:"
+msgstr ""
+
 #: src/kkc.h:95
 msgid "Rule"
 msgstr ""
 
-#: gui/shortcutwidget.cpp:126
+#: gui/shortcutwidget.cpp:118
 msgid "Save Changes"
 msgstr "Änderungen speichern"
 
-#: gui/adddictdialog.cpp:85
+#: gui/adddictdialog.cpp:79
 msgid "Select Dictionary Directory"
 msgstr "Wörterbuchverzeichnis auswählen"
 
-#: gui/adddictdialog.cpp:69
+#: gui/adddictdialog.cpp:63
 msgid "Select Dictionary File"
 msgstr "Wörterbuchdatei auswählen"
 
-#: gui/shortcutwidget.cpp:117
+#: gui/shortcutwidget.cpp:109
 msgid "Shortcut Manager"
 msgstr "Kurybefehlverwaltung"
 
@@ -174,11 +210,11 @@ msgstr "Kurybefehlverwaltung"
 msgid "Show Annotation"
 msgstr "Anmerkungen zeigen"
 
-#: gui/adddictdialog.cpp:37
+#: gui/adddictdialog.cpp:33
 msgid "System"
 msgstr "System"
 
-#: gui/shortcutwidget.cpp:127
+#: gui/shortcutwidget.cpp:119
 msgid ""
 "The content has changed.\n"
 "Do you want to save the changes or discard them?"
@@ -186,7 +222,7 @@ msgstr ""
 "Der Inhalt hat sich geändert.\n"
 "Möchten Sie die Änderungen speichern oder verwerfen?"
 
-#: gui/adddictdialog.cpp:38
+#: gui/adddictdialog.cpp:34
 msgid "User"
 msgstr "Benutzer"
 
@@ -194,7 +230,7 @@ msgstr "Benutzer"
 msgid "Vertical"
 msgstr "Senkrecht"
 
-#: src/kkc.cpp:105 src/kkc.h:44 src/kkc.h:49 gui/shortcutmodel.cpp:44
+#: src/kkc.cpp:102 src/kkc.h:44 src/kkc.h:49 gui/shortcutmodel.cpp:44
 msgid "Wide latin"
 msgstr "Wide latin"
 

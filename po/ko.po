@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx5-kkc\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-12-21 00:01-0800\n"
+"POT-Creation-Date: 2018-03-29 00:01-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Bon Keun Seo <scobyseo@gmail.com>, 2017\n"
 "Language-Team: Korean (https://www.transifex.com/fcitx/teams/12005/ko/)\n"
@@ -19,27 +19,38 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: gui/addshortcutdialog.cpp:29
-msgid "&Command"
-msgstr "명령(&C)"
+#. i18n: file: gui/addshortcutdialog.ui:42
+#. i18n: ectx: property (text), widget (QLabel, commandLabel_)
+#: rc.cpp:18
+#, kde-format
+msgid "&Command:"
+msgstr ""
 
-#: gui/addshortcutdialog.cpp:28
-msgid "&Input Mode"
-msgstr "입력 모드(&I)"
+#. i18n: file: gui/addshortcutdialog.ui:22
+#. i18n: ectx: property (text), widget (QLabel, inputModeLabel_)
+#: rc.cpp:15
+#, kde-format
+msgid "&Input Mode:"
+msgstr ""
 
-#: gui/addshortcutdialog.cpp:30
-msgid "&Key"
-msgstr "키(&K)"
+#. i18n: file: gui/addshortcutdialog.ui:71
+#. i18n: ectx: property (text), widget (QLabel, keyLabel_)
+#: rc.cpp:21
+#, kde-format
+msgid "&Key:"
+msgstr ""
 
-#: gui/adddictdialog.cpp:36
+#. i18n: file: gui/adddictdialog.ui:42
+#. i18n: ectx: property (text), widget (QLabel, pathLabel_)
+#: rc.cpp:30
+#, kde-format
 msgid "&Path:"
 msgstr "경로(&P)"
 
-#: gui/shortcutwidget.cpp:38
-msgid "&Rule:"
-msgstr "규칙(&R)"
-
-#: gui/adddictdialog.cpp:35
+#. i18n: file: gui/adddictdialog.ui:22
+#. i18n: ectx: property (text), widget (QLabel, typeLabel_)
+#: rc.cpp:27
+#, kde-format
 msgid "&Type:"
 msgstr "형식(&T):"
 
@@ -67,27 +78,45 @@ msgstr "커서를 아래로"
 msgid "Cursor Up"
 msgstr "커서를 위로"
 
+#. i18n: file: gui/addshortcutdialog.ui:14
+#. i18n: ectx: property (windowTitle), widget (QDialog, AddShortcutDialog)
+#. i18n: file: gui/adddictdialog.ui:14
+#. i18n: ectx: property (windowTitle), widget (QDialog, AddDictDialog)
+#: rc.cpp:12 rc.cpp:24
+#, kde-format
+msgid "Dialog"
+msgstr ""
+
 #: src/kkc.h:96
 msgid "Dictionary"
 msgstr "사전"
 
-#: gui/dictwidget.cpp:53
+#: gui/dictwidget.cpp:47
 msgid "Dictionary Manager"
 msgstr "사전 관리자"
 
-#: src/kkc.h:48
+#: src/kkc.cpp:103 src/kkc.h:49 gui/shortcutmodel.cpp:44
 msgid "Direct input"
 msgstr "직접 입력"
+
+#. i18n: file: gui/dictwidget.ui:14
+#. i18n: ectx: property (windowTitle), widget (QWidget, KkcDictWidget)
+#. i18n: file: gui/shortcutwidget.ui:20
+#. i18n: ectx: property (windowTitle), widget (QWidget, KkcShortcutWidget)
+#: rc.cpp:3 rc.cpp:6
+#, kde-format
+msgid "Form"
+msgstr ""
 
 #: gui/shortcutmodel.cpp:85
 msgid "Function"
 msgstr "기능"
 
-#: src/kkc.cpp:103 src/kkc.h:48 gui/shortcutmodel.cpp:43
+#: src/kkc.cpp:100 src/kkc.h:48 gui/shortcutmodel.cpp:43
 msgid "Half width Katakana"
 msgstr "반각 가타가나"
 
-#: src/kkc.cpp:101 src/kkc.h:47 gui/shortcutmodel.cpp:43
+#: src/kkc.cpp:98 src/kkc.h:47 gui/shortcutmodel.cpp:43
 msgid "Hiragana"
 msgstr "히라가나"
 
@@ -111,7 +140,7 @@ msgstr "일본어"
 msgid "Kana Kanji"
 msgstr "가나 한자"
 
-#: src/kkc.cpp:102 src/kkc.h:47 gui/shortcutmodel.cpp:43
+#: src/kkc.cpp:99 src/kkc.h:47 gui/shortcutmodel.cpp:43
 msgid "Katakana"
 msgstr "가타가나"
 
@@ -119,11 +148,11 @@ msgstr "가타가나"
 msgid "Key"
 msgstr "키"
 
-#: gui/shortcutwidget.cpp:151
+#: gui/shortcutwidget.cpp:143
 msgid "Key Conflict"
 msgstr "키 충돌"
 
-#: gui/shortcutwidget.cpp:152
+#: gui/shortcutwidget.cpp:144
 msgid "Key to add is conflict with existing shortcut."
 msgstr "추가하려는 키가 기존 단축기와 겹칩니다."
 
@@ -131,7 +160,7 @@ msgstr "추가하려는 키가 기존 단축기와 겹칩니다."
 msgid "Kkc Addon of Fcitx"
 msgstr "Fcitx를 위한 KKC 부가기능"
 
-#: src/kkc.cpp:104 src/kkc.h:44 gui/shortcutmodel.cpp:44
+#: src/kkc.cpp:101 src/kkc.h:44 src/kkc.h:48 gui/shortcutmodel.cpp:44
 msgid "Latin"
 msgstr "로마자"
 
@@ -151,23 +180,30 @@ msgstr "페이지 크기"
 msgid "Punctuation Style"
 msgstr "문장부호 스타일"
 
+#. i18n: file: gui/shortcutwidget.ui:28
+#. i18n: ectx: property (text), widget (QLabel, ruleLabel_)
+#: rc.cpp:9
+#, kde-format
+msgid "R&ule:"
+msgstr ""
+
 #: src/kkc.h:95
 msgid "Rule"
 msgstr "규칙"
 
-#: gui/shortcutwidget.cpp:126
+#: gui/shortcutwidget.cpp:118
 msgid "Save Changes"
 msgstr "변경 내용 저장"
 
-#: gui/adddictdialog.cpp:85
+#: gui/adddictdialog.cpp:79
 msgid "Select Dictionary Directory"
 msgstr "사전 경로 선택"
 
-#: gui/adddictdialog.cpp:69
+#: gui/adddictdialog.cpp:63
 msgid "Select Dictionary File"
 msgstr "사전 파일 선택"
 
-#: gui/shortcutwidget.cpp:117
+#: gui/shortcutwidget.cpp:109
 msgid "Shortcut Manager"
 msgstr "단축키 관리자"
 
@@ -175,11 +211,11 @@ msgstr "단축키 관리자"
 msgid "Show Annotation"
 msgstr "주석 보이기"
 
-#: gui/adddictdialog.cpp:37
+#: gui/adddictdialog.cpp:33
 msgid "System"
 msgstr "시스템"
 
-#: gui/shortcutwidget.cpp:127
+#: gui/shortcutwidget.cpp:119
 msgid ""
 "The content has changed.\n"
 "Do you want to save the changes or discard them?"
@@ -187,7 +223,7 @@ msgstr ""
 "내용이 변했습니다.\n"
 "변경사항을 저장할까요?"
 
-#: gui/adddictdialog.cpp:38
+#: gui/adddictdialog.cpp:34
 msgid "User"
 msgstr "사용자"
 
@@ -195,7 +231,7 @@ msgstr "사용자"
 msgid "Vertical"
 msgstr "세로"
 
-#: src/kkc.cpp:105 src/kkc.h:44 src/kkc.h:49 gui/shortcutmodel.cpp:44
+#: src/kkc.cpp:102 src/kkc.h:44 src/kkc.h:49 gui/shortcutmodel.cpp:44
 msgid "Wide latin"
 msgstr "전각 로마자"
 
