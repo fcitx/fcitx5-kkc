@@ -29,12 +29,13 @@ void RuleModel::load() {
     KkcRuleMetadata **rules = kkc_rule_list(&length);
     for (int i = 0; i < length; i++) {
         int priority;
-        g_object_get(G_OBJECT(rules[i]), "priority", &priority, NULL);
+        g_object_get(G_OBJECT(rules[i]), "priority", &priority, nullptr);
         if (priority < 70) {
             continue;
         }
         gchar *name, *label;
-        g_object_get(G_OBJECT(rules[i]), "label", &label, "name", &name, NULL);
+        g_object_get(G_OBJECT(rules[i]), "label", &label, "name", &name,
+                     nullptr);
         m_rules << Rule(QString::fromUtf8(name), QString::fromUtf8(label));
         g_object_unref(rules[i]);
         g_free(name);

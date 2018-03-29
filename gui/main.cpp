@@ -34,12 +34,12 @@ KkcConfigPlugin::KkcConfigPlugin(QObject *parent)
 }
 
 FcitxQtConfigUIWidget *KkcConfigPlugin::create(const QString &key) {
-    if (key == "kkc/dictionary_list") {
+    if (key == "dictionary_list") {
         return new KkcDictWidget;
-    } else if (key == "kkc/rule") {
+    } else if (key == "rule") {
         return new KkcShortcutWidget;
     }
-    return NULL;
+    return nullptr;
 }
 
 } // namespace fcitx

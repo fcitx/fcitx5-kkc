@@ -107,7 +107,7 @@ void ShortcutModel::load(const QString &name) {
             "kkc/rules");
 
         auto userRule = makeGObjectUnique(
-            kkc_user_rule_new(ruleMeta, basePath.data(), "fcitx-kkc", NULL));
+            kkc_user_rule_new(ruleMeta, basePath.data(), "fcitx-kkc", nullptr));
         if (!userRule) {
             break;
         }
@@ -144,7 +144,7 @@ void ShortcutModel::load(const QString &name) {
 void ShortcutModel::save() {
     if (m_userRule && m_needSave) {
         for (int mode = 0; mode <= KKC_INPUT_MODE_DIRECT; mode++) {
-            kkc_user_rule_write(m_userRule.get(), (KkcInputMode)mode, NULL);
+            kkc_user_rule_write(m_userRule.get(), (KkcInputMode)mode, nullptr);
         }
     }
 
@@ -187,7 +187,7 @@ void ShortcutModel::remove(const QModelIndex &index) {
     beginRemoveRows(QModelIndex(), index.row(), index.row());
     auto map = makeGObjectUnique(kkc_rule_get_keymap(
         KKC_RULE(m_userRule.get()), m_entries[index.row()].mode()));
-    kkc_keymap_set(map.get(), m_entries[index.row()].event(), NULL);
+    kkc_keymap_set(map.get(), m_entries[index.row()].event(), nullptr);
 
     m_entries.removeAt(index.row());
     endRemoveRows();
