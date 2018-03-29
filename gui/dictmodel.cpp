@@ -25,9 +25,9 @@
 namespace fcitx {
 
 DictModel::DictModel(QObject *parent) : QAbstractListModel(parent) {
-    m_requiredKeys << "file"
-                   << "type"
-                   << "mode";
+    requiredKeys_ << "file"
+                  << "type"
+                  << "mode";
 }
 
 DictModel::~DictModel() {}
@@ -58,13 +58,13 @@ void DictModel::load() {
 
 void DictModel::load(QFile &file) {
     beginResetModel();
-    m_dicts.clear();
+    dicts_.clear();
 
     QByteArray bytes;
     while (!(bytes = file.readLine()).isEmpty()) {
         QString line = QString::fromUtf8(bytes).trimmed();
         QStringList items = line.split(",");
-        if (items.size() < m_requiredKeys.size()) {
+        if (items.size() < requiredKeys_.size()) {
             continue;
         }
 
@@ -78,15 +78,15 @@ void DictModel::load(QFile &file) {
             QString key = item.section('=', 0, 0);
             QString value = item.section('=', 1, -1);
 
-            if (!m_requiredKeys.contains(key)) {
+            if (!requiredKeys_.contains(key)) {
                 continue;
             }
 
             dict[key] = value;
         }
 
-        if (!failed && m_requiredKeys.size() == dict.size()) {
-            m_dicts << dict;
+        if (!failed && requiredKeys_.size() == dict.size()) {
+            dicts_ << dict;
         }
     }
     endResetModel();
@@ -102,7 +102,7 @@ bool DictModel::save() {
 
             typedef QMap<QString, QString> DictType;
 
-            Q_FOREACH (const DictType &dict, m_dicts) {
+            Q_FOREACH (const DictType &dict, dicts_) {
                 bool first = true;
                 Q_FOREACH (const QString &key, dict.keys()) {
                     if (first) {
@@ -124,7 +124,7 @@ int DictModel::rowCount(const QModelIndex &parent) const {
     if (parent.isValid()) {
         return 0;
     }
-    return m_dicts.size();
+    return dicts_.size();
 }
 
 bool DictModel::removeRows(int row, int count, const QModelIndex &parent) {
@@ -132,12 +132,12 @@ bool DictModel::removeRows(int row, int count, const QModelIndex &parent) {
         return false;
     }
 
-    if (count == 0 || row >= m_dicts.size() || row + count > m_dicts.size()) {
+    if (count == 0 || row >= dicts_.size() || row + count > dicts_.size()) {
         return false;
     }
 
     beginRemoveRows(parent, row, row + count - 1);
-    m_dicts.erase(m_dicts.begin() + row, m_dicts.begin() + row + count);
+    dicts_.erase(dicts_.begin() + row, dicts_.begin() + row + count);
     endRemoveRows();
 
     return true;
@@ -148,21 +148,21 @@ QVariant DictModel::data(const QModelIndex &index, int role) const {
         return QVariant();
     }
 
-    if (index.row() >= m_dicts.size() || index.column() != 0) {
+    if (index.row() >= dicts_.size() || index.column() != 0) {
         return QVariant();
     }
 
     switch (role) {
     case Qt::DisplayRole:
-        return m_dicts[index.row()]["file"];
+        return dicts_[index.row()]["file"];
     }
     return QVariant();
 }
 
 bool DictModel::moveUp(const QModelIndex &currentIndex) {
-    if (currentIndex.row() > 0 && currentIndex.row() < m_dicts.size()) {
+    if (currentIndex.row() > 0 && currentIndex.row() < dicts_.size()) {
         beginResetModel();
-        m_dicts.swap(currentIndex.row() - 1, currentIndex.row());
+        dicts_.swap(currentIndex.row() - 1, currentIndex.row());
         endResetModel();
         return true;
     }
@@ -170,9 +170,9 @@ bool DictModel::moveUp(const QModelIndex &currentIndex) {
 }
 
 bool DictModel::moveDown(const QModelIndex &currentIndex) {
-    if (currentIndex.row() >= 0 && currentIndex.row() + 1 < m_dicts.size()) {
+    if (currentIndex.row() >= 0 && currentIndex.row() + 1 < dicts_.size()) {
         beginResetModel();
-        m_dicts.swap(currentIndex.row() + 1, currentIndex.row());
+        dicts_.swap(currentIndex.row() + 1, currentIndex.row());
         endResetModel();
         return true;
     }
@@ -181,8 +181,8 @@ bool DictModel::moveDown(const QModelIndex &currentIndex) {
 }
 
 void DictModel::add(const QMap<QString, QString> &dict) {
-    beginInsertRows(QModelIndex(), m_dicts.size(), m_dicts.size());
-    m_dicts << dict;
+    beginInsertRows(QModelIndex(), dicts_.size(), dicts_.size());
+    dicts_ << dict;
     endInsertRows();
 }
 

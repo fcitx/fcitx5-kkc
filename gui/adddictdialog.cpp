@@ -18,7 +18,6 @@
 
 #include "adddictdialog.h"
 #include "config.h"
-#include "ui_adddictdialog.h"
 #include <QDebug>
 #include <QFileDialog>
 #include <fcitx-utils/i18n.h>
@@ -29,22 +28,17 @@
 
 namespace fcitx {
 
-AddDictDialog::AddDictDialog(QWidget *parent)
-    : QDialog(parent), m_ui(new Ui::AddDictDialog) {
-    m_ui->setupUi(this);
-    m_ui->typeLabel->setText(_("&Type:"));
-    m_ui->pathLabel->setText(_("&Path:"));
-    m_ui->typeComboBox->addItem(_("System"));
-    m_ui->typeComboBox->addItem(_("User"));
+AddDictDialog::AddDictDialog(QWidget *parent) : QDialog(parent) {
+    setupUi(this);
+    typeComboBox_->addItem(_("System"));
+    typeComboBox_->addItem(_("User"));
 
-    connect(m_ui->browseButton, &QPushButton::clicked, this,
+    connect(browseButton_, &QPushButton::clicked, this,
             &AddDictDialog::browseClicked);
 }
 
-AddDictDialog::~AddDictDialog() { delete m_ui; }
-
 QMap<QString, QString> AddDictDialog::dictionary() {
-    int idx = m_ui->typeComboBox->currentIndex();
+    int idx = typeComboBox_->currentIndex();
     idx = idx < 0 ? 0 : idx;
     idx = idx > 2 ? 0 : idx;
 
@@ -52,15 +46,15 @@ QMap<QString, QString> AddDictDialog::dictionary() {
 
     QMap<QString, QString> dict;
     dict["type"] = "file";
-    dict["file"] = m_ui->urlLineEdit->text();
+    dict["file"] = urlLineEdit_->text();
     dict["mode"] = type[idx];
 
     return dict;
 }
 
 void AddDictDialog::browseClicked() {
-    QString path = m_ui->urlLineEdit->text();
-    if (m_ui->typeComboBox->currentIndex() == 0) {
+    QString path = urlLineEdit_->text();
+    if (typeComboBox_->currentIndex() == 0) {
         QString dir;
         if (path.isEmpty()) {
             path = SKK_DEFAULT_PATH;
@@ -89,7 +83,7 @@ void AddDictDialog::browseClicked() {
     }
 
     if (!path.isEmpty()) {
-        m_ui->urlLineEdit->setText(path);
+        urlLineEdit_->setText(path);
     }
 }
 

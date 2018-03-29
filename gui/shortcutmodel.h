@@ -29,35 +29,43 @@ class ShortcutEntry {
 public:
     ShortcutEntry(const QString &command, KkcKeyEvent *event,
                   const QString &label, KkcInputMode mode)
-        : m_command(command), m_event(KKC_KEY_EVENT(g_object_ref(event))),
-          m_label(label), m_mode(mode) {
-        gchar *keystr = kkc_key_event_to_string(m_event);
-        m_keyString = QString::fromUtf8(keystr);
+        : command_(command),
+          event_(makeGObjectUnique(KKC_KEY_EVENT(g_object_ref(event)))),
+          label_(label), mode_(mode) {
+        gchar *keystr = kkc_key_event_to_string(event_.get());
+        keyString_ = QString::fromUtf8(keystr);
         g_free(keystr);
     }
 
     ShortcutEntry(const ShortcutEntry &other)
-        : ShortcutEntry(other.m_command, other.m_event, other.m_label,
-                        other.m_mode) {}
+        : ShortcutEntry(other.command_, other.event_.get(), other.label_,
+                        other.mode_) {}
 
-    ~ShortcutEntry() { g_object_unref(m_event); }
+    ShortcutEntry &operator=(const ShortcutEntry &other) {
+        label_ = other.label_;
+        command_ = other.command_;
+        event_.reset(KKC_KEY_EVENT(g_object_ref(other.event())));
+        mode_ = other.mode_;
+        keyString_ = other.keyString_;
+        return *this;
+    }
 
-    const QString &label() const { return m_label; }
+    const QString &label() const { return label_; }
 
-    const QString &command() const { return m_command; }
+    const QString &command() const { return command_; }
 
-    KkcInputMode mode() const { return m_mode; }
+    KkcInputMode mode() const { return mode_; }
 
-    KkcKeyEvent *event() const { return m_event; }
+    KkcKeyEvent *event() const { return event_.get(); }
 
-    const QString &keyString() const { return m_keyString; }
+    const QString &keyString() const { return keyString_; }
 
 private:
-    QString m_command;
-    KkcKeyEvent *m_event;
-    QString m_label;
-    KkcInputMode m_mode;
-    QString m_keyString;
+    QString command_;
+    GObjectUniquePtr<KkcKeyEvent> event_;
+    QString label_;
+    KkcInputMode mode_;
+    QString keyString_;
 };
 
 class ShortcutModel : public QAbstractTableModel {
@@ -85,9 +93,9 @@ private:
     void setNeedSave(bool arg1);
 
 private:
-    QList<ShortcutEntry> m_entries;
-    GObjectUniquePtr<KkcUserRule> m_userRule;
-    bool m_needSave;
+    QList<ShortcutEntry> entries_;
+    GObjectUniquePtr<KkcUserRule> userRule_;
+    bool needSave_;
 };
 
 extern const char *modeName[];

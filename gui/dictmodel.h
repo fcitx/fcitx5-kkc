@@ -44,8 +44,8 @@ public:
     bool moveUp(const QModelIndex &currentIndex);
 
 private:
-    QSet<QString> m_requiredKeys;
-    QList<QMap<QString, QString>> m_dicts;
+    QSet<QString> requiredKeys_;
+    QList<QMap<QString, QString>> dicts_;
 };
 
 } // namespace fcitx

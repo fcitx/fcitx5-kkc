@@ -18,26 +18,21 @@
 #ifndef _GUI_DICTWIDGET_H_
 #define _GUI_DICTWIDGET_H_
 
+#include "ui_dictwidget.h"
 #include <fcitxqtconfiguiwidget.h>
-
-namespace Ui {
-class KkcDictWidget;
-}
 
 namespace fcitx {
 class DictModel;
 
-class KkcDictWidget : public FcitxQtConfigUIWidget {
+class KkcDictWidget : public FcitxQtConfigUIWidget, public Ui::KkcDictWidget {
     Q_OBJECT
 public:
     explicit KkcDictWidget(QWidget *parent = 0);
-    virtual ~KkcDictWidget();
 
-    virtual void load();
-    virtual void save();
-    virtual QString title();
-    virtual QString addon();
-    virtual QString icon();
+    void load() override;
+    void save() override;
+    QString title() override;
+    QString icon() override;
 
 private Q_SLOTS:
     void addDictClicked();
@@ -47,8 +42,7 @@ private Q_SLOTS:
     void moveDownClicked();
 
 private:
-    Ui::KkcDictWidget *m_ui;
-    DictModel *m_dictModel;
+    DictModel *dictModel_;
 };
 
 } // namespace fcitx

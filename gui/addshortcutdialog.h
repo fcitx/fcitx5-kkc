@@ -19,16 +19,13 @@
 #define _GUI_ADDSHORTCUTDIALOG_H_
 
 #include "shortcutmodel.h"
+#include "ui_addshortcutdialog.h"
 #include <QDialog>
 #include <QMap>
 
-namespace Ui {
-class AddShortcutDialog;
-}
-
 namespace fcitx {
 
-class AddShortcutDialog : public QDialog {
+class AddShortcutDialog : public QDialog, public Ui::AddShortcutDialog {
     Q_OBJECT
 public:
     explicit AddShortcutDialog(QWidget *parent = 0);
@@ -40,9 +37,8 @@ public Q_SLOTS:
     void keyChanged();
 
 private:
-    Ui::AddShortcutDialog *m_ui;
-    int m_length;
-    gchar **m_commands;
+    int length_;
+    gchar **commands_;
 };
 } // namespace fcitx
 

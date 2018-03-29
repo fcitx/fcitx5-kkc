@@ -20,47 +20,41 @@
 #include "adddictdialog.h"
 #include "dictmodel.h"
 #include "shortcutmodel.h"
-#include "ui_dictwidget.h"
 #include <fcitx-utils/i18n.h>
 
 namespace fcitx {
 
 KkcDictWidget::KkcDictWidget(QWidget *parent)
-    : FcitxQtConfigUIWidget(parent), m_ui(new Ui::KkcDictWidget) {
-    m_ui->setupUi(this);
-    m_dictModel = new DictModel(this);
+    : FcitxQtConfigUIWidget(parent), dictModel_(new DictModel(this)) {
+    setupUi(this);
 
-    m_ui->dictionaryView->setModel(m_dictModel);
+    dictionaryView_->setModel(dictModel_);
 
-    connect(m_ui->addDictButton, &QPushButton::clicked, this,
+    connect(addDictButton_, &QPushButton::clicked, this,
             &KkcDictWidget::addDictClicked);
-    connect(m_ui->defaultDictButton, &QPushButton::clicked, this,
+    connect(defaultDictButton_, &QPushButton::clicked, this,
             &KkcDictWidget::defaultDictClicked);
-    connect(m_ui->removeDictButton, &QPushButton::clicked, this,
+    connect(removeDictButton_, &QPushButton::clicked, this,
             &KkcDictWidget::removeDictClicked);
-    connect(m_ui->moveUpDictButton, &QPushButton::clicked, this,
+    connect(moveUpDictButton_, &QPushButton::clicked, this,
             &KkcDictWidget::moveUpDictClicked);
-    connect(m_ui->moveDownDictButton, &QPushButton::clicked, this,
+    connect(moveDownDictButton_, &QPushButton::clicked, this,
             &KkcDictWidget::moveDownClicked);
 
     load();
 }
-
-KkcDictWidget::~KkcDictWidget() { delete m_ui; }
-
-QString KkcDictWidget::addon() { return "fcitx-kkc"; }
 
 QString KkcDictWidget::title() { return _("Dictionary Manager"); }
 
 QString KkcDictWidget::icon() { return "fcitx-kkc"; }
 
 void KkcDictWidget::load() {
-    m_dictModel->load();
+    dictModel_->load();
     Q_EMIT changed(false);
 }
 
 void KkcDictWidget::save() {
-    m_dictModel->save();
+    dictModel_->save();
     Q_EMIT changed(false);
 }
 
@@ -68,37 +62,37 @@ void KkcDictWidget::addDictClicked() {
     AddDictDialog dialog;
     int result = dialog.exec();
     if (result == QDialog::Accepted) {
-        m_dictModel->add(dialog.dictionary());
+        dictModel_->add(dialog.dictionary());
         Q_EMIT changed(true);
     }
 }
 
 void KkcDictWidget::defaultDictClicked() {
-    m_dictModel->defaults();
+    dictModel_->defaults();
     Q_EMIT changed(true);
 }
 
 void KkcDictWidget::removeDictClicked() {
-    if (m_ui->dictionaryView->currentIndex().isValid()) {
-        m_dictModel->removeRow(m_ui->dictionaryView->currentIndex().row());
+    if (dictionaryView_->currentIndex().isValid()) {
+        dictModel_->removeRow(dictionaryView_->currentIndex().row());
         Q_EMIT changed(true);
     }
 }
 
 void KkcDictWidget::moveUpDictClicked() {
-    int row = m_ui->dictionaryView->currentIndex().row();
-    if (m_dictModel->moveUp(m_ui->dictionaryView->currentIndex())) {
-        m_ui->dictionaryView->selectionModel()->setCurrentIndex(
-            m_dictModel->index(row - 1), QItemSelectionModel::ClearAndSelect);
+    int row = dictionaryView_->currentIndex().row();
+    if (dictModel_->moveUp(dictionaryView_->currentIndex())) {
+        dictionaryView_->selectionModel()->setCurrentIndex(
+            dictModel_->index(row - 1), QItemSelectionModel::ClearAndSelect);
         Q_EMIT changed(true);
     }
 }
 
 void KkcDictWidget::moveDownClicked() {
-    int row = m_ui->dictionaryView->currentIndex().row();
-    if (m_dictModel->moveDown(m_ui->dictionaryView->currentIndex())) {
-        m_ui->dictionaryView->selectionModel()->setCurrentIndex(
-            m_dictModel->index(row + 1), QItemSelectionModel::ClearAndSelect);
+    int row = dictionaryView_->currentIndex().row();
+    if (dictModel_->moveDown(dictionaryView_->currentIndex())) {
+        dictionaryView_->selectionModel()->setCurrentIndex(
+            dictModel_->index(row + 1), QItemSelectionModel::ClearAndSelect);
         Q_EMIT changed(true);
     }
 }

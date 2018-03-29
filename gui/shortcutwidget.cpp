@@ -20,7 +20,6 @@
 #include "addshortcutdialog.h"
 #include "rulemodel.h"
 #include "shortcutmodel.h"
-#include "ui_shortcutwidget.h"
 #include <QDebug>
 #include <QFile>
 #include <QMessageBox>
@@ -31,35 +30,28 @@
 namespace fcitx {
 
 KkcShortcutWidget::KkcShortcutWidget(QWidget *parent)
-    : FcitxQtConfigUIWidget(parent), m_ui(new ::Ui::KkcShortcutWidget) {
-    m_ruleModel = new RuleModel(this);
-    m_shortcutModel = new ShortcutModel(this);
-    m_ui->setupUi(this);
-    m_ui->ruleLabel->setText(_("&Rule:"));
-    m_ui->ruleComboBox->setModel(m_ruleModel);
-    m_ui->shortcutView->setModel(m_shortcutModel);
-    m_ui->shortcutView->sortByColumn(3);
+    : FcitxQtConfigUIWidget(parent), ruleModel_(new RuleModel(this)),
+      shortcutModel_(new ShortcutModel(this)) {
+    setupUi(this);
+    ruleComboBox_->setModel(ruleModel_);
+    shortcutView_->setModel(shortcutModel_);
+    shortcutView_->sortByColumn(3);
 
-    connect(m_ui->ruleComboBox, qOverload<int>(&QComboBox::currentIndexChanged),
+    connect(ruleComboBox_, qOverload<int>(&QComboBox::currentIndexChanged),
             this, &KkcShortcutWidget::ruleChanged);
-    connect(m_ui->addShortcutButton, &QPushButton::clicked, this,
+    connect(addShortcutButton_, &QPushButton::clicked, this,
             &KkcShortcutWidget::addShortcutClicked);
-    connect(m_ui->removeShortCutButton, &QPushButton::clicked, this,
+    connect(removeShortCutButton_, &QPushButton::clicked, this,
             &KkcShortcutWidget::removeShortcutClicked);
-    connect(m_shortcutModel, &ShortcutModel::needSaveChanged, this,
+    connect(shortcutModel_, &ShortcutModel::needSaveChanged, this,
             &KkcShortcutWidget::shortcutNeedSaveChanged);
-    connect(m_ui->shortcutView->selectionModel(),
+    connect(shortcutView_->selectionModel(),
             &QItemSelectionModel::currentChanged, this,
             &KkcShortcutWidget::currentShortcutChanged);
 
     load();
     currentShortcutChanged();
 }
-
-KkcShortcutWidget::~KkcShortcutWidget() { delete m_ui; }
-
-QString KkcShortcutWidget::addon() { return "fcitx-kkc"; }
-
 void KkcShortcutWidget::load() {
     auto fd = StandardPath::global().open(StandardPath::Type::PkgConfig,
                                           "kkc/rule", O_RDONLY);
@@ -82,20 +74,20 @@ void KkcShortcutWidget::load() {
             sline = "default";
         }
     } while (0);
-    m_ruleModel->load();
-    int idx = m_ruleModel->findRule(sline);
+    ruleModel_->load();
+    int idx = ruleModel_->findRule(sline);
     idx = idx < 0 ? 0 : idx;
-    m_ui->ruleComboBox->setCurrentIndex(idx);
+    ruleComboBox_->setCurrentIndex(idx);
 
     Q_EMIT changed(false);
 }
 
 void KkcShortcutWidget::save() {
-    m_shortcutModel->save();
+    shortcutModel_->save();
 
     QString name =
-        m_ruleModel
-            ->data(m_ruleModel->index(m_ui->ruleComboBox->currentIndex(), 0),
+        ruleModel_
+            ->data(ruleModel_->index(ruleComboBox_->currentIndex(), 0),
                    Qt::UserRole)
             .toString();
 
@@ -120,33 +112,33 @@ QString KkcShortcutWidget::icon() { return "fcitx-kkc"; }
 
 void KkcShortcutWidget::ruleChanged(int rule) {
     QString name =
-        m_ruleModel->data(m_ruleModel->index(rule, 0), Qt::UserRole).toString();
-    if (m_shortcutModel->needSave()) {
+        ruleModel_->data(ruleModel_->index(rule, 0), Qt::UserRole).toString();
+    if (shortcutModel_->needSave()) {
         int ret = QMessageBox::question(
             this, _("Save Changes"),
             _("The content has changed.\n"
               "Do you want to save the changes or discard them?"),
             QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
         if (ret == QMessageBox::Save) {
-            m_shortcutModel->save();
+            shortcutModel_->save();
         } else if (ret == QMessageBox::Cancel) {
-            int idx = m_ruleModel->findRule(m_name);
+            int idx = ruleModel_->findRule(name_);
             if (idx < 0) {
                 idx = 0;
             }
-            m_ui->ruleComboBox->setCurrentIndex(idx);
+            ruleComboBox_->setCurrentIndex(idx);
             return;
         }
     }
-    m_shortcutModel->load(name);
-    m_name = name;
+    shortcutModel_->load(name);
+    name_ = name;
     Q_EMIT changed(true);
 }
 
 void KkcShortcutWidget::addShortcutClicked() {
     AddShortcutDialog dialog;
     if (dialog.exec() == QDialog::Accepted) {
-        if (!m_shortcutModel->add(dialog.shortcut())) {
+        if (!shortcutModel_->add(dialog.shortcut())) {
             QMessageBox::critical(
                 this, _("Key Conflict"),
                 _("Key to add is conflict with existing shortcut."));
@@ -155,9 +147,9 @@ void KkcShortcutWidget::addShortcutClicked() {
 }
 
 void KkcShortcutWidget::removeShortcutClicked() {
-    QModelIndex idx = m_ui->shortcutView->currentIndex();
+    QModelIndex idx = shortcutView_->currentIndex();
     if (idx.isValid()) {
-        m_shortcutModel->remove(idx);
+        shortcutModel_->remove(idx);
     }
 }
 
@@ -168,8 +160,7 @@ void KkcShortcutWidget::shortcutNeedSaveChanged(bool needSave) {
 }
 
 void KkcShortcutWidget::currentShortcutChanged() {
-    m_ui->removeShortCutButton->setEnabled(
-        m_ui->shortcutView->currentIndex().isValid());
+    removeShortCutButton_->setEnabled(shortcutView_->currentIndex().isValid());
 }
 
 } // namespace fcitx

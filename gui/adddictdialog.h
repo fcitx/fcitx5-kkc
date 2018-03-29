@@ -18,24 +18,18 @@
 #ifndef _GUI_ADDDICTDIALOG_H_
 #define _GUI_ADDDICTDIALOG_H_
 
+#include "ui_adddictdialog.h"
 #include <QDialog>
 #include <QMap>
 
-namespace Ui {
-class AddDictDialog;
-}
-
 namespace fcitx {
 
-class AddDictDialog : public QDialog {
+class AddDictDialog : public QDialog, public Ui::AddDictDialog {
     Q_OBJECT
 public:
     explicit AddDictDialog(QWidget *parent = 0);
-    virtual ~AddDictDialog();
     QMap<QString, QString> dictionary();
 
-private:
-    Ui::AddDictDialog *m_ui;
 public Q_SLOTS:
     void browseClicked();
 };

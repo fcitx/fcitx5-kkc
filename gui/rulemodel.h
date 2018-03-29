@@ -27,15 +27,15 @@ namespace fcitx {
 class Rule {
 public:
     Rule(const QString &name, const QString &label)
-        : m_name(name), m_label(label) {}
+        : name_(name), label_(label) {}
 
-    const QString &name() const { return m_name; }
+    const QString &name() const { return name_; }
 
-    const QString &label() const { return m_label; }
+    const QString &label() const { return label_; }
 
 private:
-    QString m_name;
-    QString m_label;
+    QString name_;
+    QString label_;
 };
 
 class RuleModel : public QAbstractListModel {
@@ -52,7 +52,7 @@ public:
     int findRule(const QString &name);
 
 private:
-    QList<Rule> m_rules;
+    QList<Rule> rules_;
 };
 
 } // namespace fcitx

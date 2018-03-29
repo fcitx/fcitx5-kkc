@@ -24,7 +24,8 @@ target_include_directories(fcitx5-kkc-config PRIVATE ${PROJECT_BINARY_DIR} ${CMA
 set_target_properties(fcitx5-kkc-config PROPERTIES
                       LINK_FLAGS "-Wl,--no-undefined"
                       AUTOMOC TRUE
-)
+                      AUTOUIC TRUE
+                      AUTOUIC_OPTIONS "-tr=fcitx::tr2fcitx;--include=fcitxqti18nhelper.h")
 target_link_libraries(fcitx5-kkc-config
   Qt5::Core
   Qt5::Widgets

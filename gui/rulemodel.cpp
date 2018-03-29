@@ -36,7 +36,7 @@ void RuleModel::load() {
         gchar *name, *label;
         g_object_get(G_OBJECT(rules[i]), "label", &label, "name", &name,
                      nullptr);
-        m_rules << Rule(QString::fromUtf8(name), QString::fromUtf8(label));
+        rules_ << Rule(QString::fromUtf8(name), QString::fromUtf8(label));
         g_object_unref(rules[i]);
         g_free(name);
         g_free(label);
@@ -46,7 +46,7 @@ void RuleModel::load() {
 }
 
 int RuleModel::rowCount(const QModelIndex &parent) const {
-    return parent.isValid() ? 0 : m_rules.size();
+    return parent.isValid() ? 0 : rules_.size();
 }
 
 QVariant RuleModel::data(const QModelIndex &index, int role) const {
@@ -54,22 +54,22 @@ QVariant RuleModel::data(const QModelIndex &index, int role) const {
         return QVariant();
     }
 
-    if (index.row() >= m_rules.size() || index.column() != 0) {
+    if (index.row() >= rules_.size() || index.column() != 0) {
         return QVariant();
     }
 
     switch (role) {
     case Qt::DisplayRole:
-        return m_rules[index.row()].label();
+        return rules_[index.row()].label();
     case Qt::UserRole:
-        return m_rules[index.row()].name();
+        return rules_[index.row()].name();
     }
     return QVariant();
 }
 
 int RuleModel::findRule(const QString &name) {
     int i = 0;
-    Q_FOREACH (const Rule &rule, m_rules) {
+    Q_FOREACH (const Rule &rule, rules_) {
         if (rule.name() == name) {
             return i;
         }

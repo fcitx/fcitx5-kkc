@@ -18,29 +18,24 @@
 #ifndef _GUI_SHORTCUTWIDGET_H_
 #define _GUI_SHORTCUTWIDGET_H_
 
+#include "ui_shortcutwidget.h"
 #include <fcitxqtconfiguiwidget.h>
 #include <libkkc/libkkc.h>
-
-namespace Ui {
-class KkcShortcutWidget;
-}
 
 namespace fcitx {
 
 class RuleModel;
 class ShortcutModel;
 
-class KkcShortcutWidget : public FcitxQtConfigUIWidget {
+class KkcShortcutWidget : public FcitxQtConfigUIWidget, Ui::KkcShortcutWidget {
     Q_OBJECT
 public:
     explicit KkcShortcutWidget(QWidget *parent = 0);
-    virtual ~KkcShortcutWidget();
 
-    virtual void load();
-    virtual void save();
-    virtual QString title();
-    virtual QString addon();
-    virtual QString icon();
+    void load() override;
+    void save() override;
+    QString title() override;
+    QString icon() override;
 public Q_SLOTS:
     void ruleChanged(int);
     void addShortcutClicked();
@@ -49,10 +44,9 @@ public Q_SLOTS:
     void currentShortcutChanged();
 
 private:
-    Ui::KkcShortcutWidget *m_ui;
-    ShortcutModel *m_shortcutModel;
-    RuleModel *m_ruleModel;
-    QString m_name;
+    RuleModel *ruleModel_;
+    ShortcutModel *shortcutModel_;
+    QString name_;
 };
 } // namespace fcitx
 

@@ -26,13 +26,13 @@
 namespace fcitx {
 
 ShortcutModel::ShortcutModel(QObject *parent)
-    : QAbstractTableModel(parent), m_userRule(nullptr, &g_object_unref),
-      m_needSave(false) {}
+    : QAbstractTableModel(parent), userRule_(nullptr, &g_object_unref),
+      needSave_(false) {}
 
 ShortcutModel::~ShortcutModel() {}
 
 int ShortcutModel::rowCount(const QModelIndex &parent) const {
-    return parent.isValid() ? 0 : m_entries.length();
+    return parent.isValid() ? 0 : entries_.length();
 }
 
 int ShortcutModel::columnCount(const QModelIndex &parent) const {
@@ -49,7 +49,7 @@ QVariant ShortcutModel::data(const QModelIndex &index, int role) const {
         return QVariant();
     }
 
-    if (index.row() >= m_entries.size() || index.column() >= 3) {
+    if (index.row() >= entries_.size() || index.column() >= 3) {
         return QVariant();
     }
 
@@ -57,11 +57,11 @@ QVariant ShortcutModel::data(const QModelIndex &index, int role) const {
     case Qt::DisplayRole:
         switch (index.column()) {
         case 0:
-            return _(modeName[m_entries[index.row()].mode()]);
+            return _(modeName[entries_[index.row()].mode()]);
         case 1:
-            return m_entries[index.row()].keyString();
+            return entries_[index.row()].keyString();
         case 2:
-            return m_entries[index.row()].label();
+            return entries_[index.row()].label();
         }
         return QVariant();
     }
@@ -93,8 +93,8 @@ void ShortcutModel::load(const QString &name) {
     beginResetModel();
 
     do {
-        m_userRule.reset();
-        m_entries.clear();
+        userRule_.reset();
+        entries_.clear();
 
         KkcRuleMetadata *ruleMeta =
             kkc_rule_metadata_find(name.toUtf8().constData());
@@ -122,9 +122,10 @@ void ShortcutModel::load(const QString &name) {
                 if (entries[i].command) {
                     gchar *label =
                         kkc_keymap_get_command_label(entries[i].command);
-                    m_entries << ShortcutEntry(
+                    entries_ << ShortcutEntry(
                         QString::fromUtf8(entries[i].command), entries[i].key,
-                        QString::fromUtf8(label), (KkcInputMode)mode);
+                        QString::fromUtf8(label),
+                        static_cast<KkcInputMode>(mode));
                     g_free(label);
                 }
             }
@@ -135,16 +136,16 @@ void ShortcutModel::load(const QString &name) {
             g_free(entries);
         }
 
-        m_userRule = std::move(userRule);
+        userRule_ = std::move(userRule);
     } while (0);
 
     endResetModel();
 }
 
 void ShortcutModel::save() {
-    if (m_userRule && m_needSave) {
+    if (userRule_ && needSave_) {
         for (int mode = 0; mode <= KKC_INPUT_MODE_DIRECT; mode++) {
-            kkc_user_rule_write(m_userRule.get(), (KkcInputMode)mode, nullptr);
+            kkc_user_rule_write(userRule_.get(), (KkcInputMode)mode, nullptr);
         }
     }
 
@@ -153,15 +154,15 @@ void ShortcutModel::save() {
 
 bool ShortcutModel::add(const ShortcutEntry &entry) {
     auto map = makeGObjectUnique(
-        kkc_rule_get_keymap(KKC_RULE(m_userRule.get()), entry.mode()));
+        kkc_rule_get_keymap(KKC_RULE(userRule_.get()), entry.mode()));
     bool result = true;
     if (kkc_keymap_lookup_key(map.get(), entry.event())) {
         result = false;
     }
 
     if (result) {
-        beginInsertRows(QModelIndex(), m_entries.size(), m_entries.size());
-        m_entries << entry;
+        beginInsertRows(QModelIndex(), entries_.size(), entries_.size());
+        entries_ << entry;
         kkc_keymap_set(map.get(), entry.event(),
                        entry.command().toUtf8().constData());
         endInsertRows();
@@ -172,7 +173,7 @@ bool ShortcutModel::add(const ShortcutEntry &entry) {
 }
 
 void ShortcutModel::remove(const QModelIndex &index) {
-    if (!m_userRule) {
+    if (!userRule_) {
         return;
     }
 
@@ -180,28 +181,28 @@ void ShortcutModel::remove(const QModelIndex &index) {
         return;
     }
 
-    if (index.row() >= m_entries.size()) {
+    if (index.row() >= entries_.size()) {
         return;
     }
 
     beginRemoveRows(QModelIndex(), index.row(), index.row());
     auto map = makeGObjectUnique(kkc_rule_get_keymap(
-        KKC_RULE(m_userRule.get()), m_entries[index.row()].mode()));
-    kkc_keymap_set(map.get(), m_entries[index.row()].event(), nullptr);
+        KKC_RULE(userRule_.get()), entries_[index.row()].mode()));
+    kkc_keymap_set(map.get(), entries_[index.row()].event(), nullptr);
 
-    m_entries.removeAt(index.row());
+    entries_.removeAt(index.row());
     endRemoveRows();
 
     setNeedSave(true);
 }
 
 void ShortcutModel::setNeedSave(bool needSave) {
-    if (m_needSave != needSave) {
-        m_needSave = needSave;
-        Q_EMIT needSaveChanged(m_needSave);
+    if (needSave_ != needSave) {
+        needSave_ = needSave;
+        Q_EMIT needSaveChanged(needSave_);
     }
 }
 
-bool ShortcutModel::needSave() { return m_needSave; }
+bool ShortcutModel::needSave() { return needSave_; }
 
 } // namespace fcitx
