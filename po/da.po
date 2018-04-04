@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx5-kkc\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2018-03-29 00:01-0700\n"
+"POT-Creation-Date: 2018-04-04 00:01-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: scootergrisen, 2017\n"
 "Language-Team: Danish (https://www.transifex.com/fcitx/teams/12005/da/)\n"
@@ -24,21 +24,21 @@ msgstr ""
 #: rc.cpp:18
 #, kde-format
 msgid "&Command:"
-msgstr ""
+msgstr "&Kommando:"
 
 #. i18n: file: gui/addshortcutdialog.ui:22
 #. i18n: ectx: property (text), widget (QLabel, inputModeLabel_)
 #: rc.cpp:15
 #, kde-format
 msgid "&Input Mode:"
-msgstr ""
+msgstr "&Inputtilstand:"
 
 #. i18n: file: gui/addshortcutdialog.ui:71
 #. i18n: ectx: property (text), widget (QLabel, keyLabel_)
 #: rc.cpp:21
 #, kde-format
 msgid "&Key:"
-msgstr ""
+msgstr "&Nøgle:"
 
 #. i18n: file: gui/adddictdialog.ui:42
 #. i18n: ectx: property (text), widget (QLabel, pathLabel_)
@@ -85,7 +85,7 @@ msgstr "Markør op"
 #: rc.cpp:12 rc.cpp:24
 #, kde-format
 msgid "Dialog"
-msgstr ""
+msgstr "Dialog"
 
 #: src/kkc.h:96
 msgid "Dictionary"
@@ -185,7 +185,7 @@ msgstr "Tegnsætningsstil"
 #: rc.cpp:9
 #, kde-format
 msgid "R&ule:"
-msgstr ""
+msgstr "&Regel:"
 
 #: src/kkc.h:95
 msgid "Rule"
