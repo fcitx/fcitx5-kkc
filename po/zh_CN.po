@@ -5,13 +5,14 @@
 # Translators:
 # csslayer <wengxt@gmail.com>, 2017
 # Mingcong Bai <jeffbai@aosc.xyz>, 2017
+# wwj402 <wwj402@gmail.com>, 2018
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx5-kkc\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2018-03-29 00:01-0700\n"
+"POT-Creation-Date: 2018-04-23 00:02-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Mingcong Bai <jeffbai@aosc.xyz>, 2017\n"
+"Last-Translator: wwj402 <wwj402@gmail.com>, 2018\n"
 "Language-Team: Chinese (China) (https://www.transifex.com/fcitx/teams/12005/"
 "zh_CN/)\n"
 "Language: zh_CN\n"
@@ -25,21 +26,21 @@ msgstr ""
 #: rc.cpp:18
 #, kde-format
 msgid "&Command:"
-msgstr ""
+msgstr "命令(&C)："
 
 #. i18n: file: gui/addshortcutdialog.ui:22
 #. i18n: ectx: property (text), widget (QLabel, inputModeLabel_)
 #: rc.cpp:15
 #, kde-format
 msgid "&Input Mode:"
-msgstr ""
+msgstr "输入模式(&I)："
 
 #. i18n: file: gui/addshortcutdialog.ui:71
 #. i18n: ectx: property (text), widget (QLabel, keyLabel_)
 #: rc.cpp:21
 #, kde-format
 msgid "&Key:"
-msgstr ""
+msgstr "按键(&K)："
 
 #. i18n: file: gui/adddictdialog.ui:42
 #. i18n: ectx: property (text), widget (QLabel, pathLabel_)
@@ -86,7 +87,7 @@ msgstr "光标向上"
 #: rc.cpp:12 rc.cpp:24
 #, kde-format
 msgid "Dialog"
-msgstr ""
+msgstr "对话框"
 
 #: src/kkc.h:96
 msgid "Dictionary"
@@ -107,7 +108,7 @@ msgstr "直接输入"
 #: rc.cpp:3 rc.cpp:6
 #, kde-format
 msgid "Form"
-msgstr ""
+msgstr "样式"
 
 #: gui/shortcutmodel.cpp:85
 msgid "Function"
@@ -186,7 +187,7 @@ msgstr "标点风格"
 #: rc.cpp:9
 #, kde-format
 msgid "R&ule:"
-msgstr ""
+msgstr "规则(&U)："
 
 #: src/kkc.h:95
 msgid "Rule"
