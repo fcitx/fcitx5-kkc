@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx5-kkc\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2018-04-04 00:01-0700\n"
+"POT-Creation-Date: 2018-05-13 00:02-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: scootergrisen, 2017\n"
 "Language-Team: Danish (https://www.transifex.com/fcitx/teams/12005/da/)\n"
@@ -106,7 +106,7 @@ msgstr "Direkte input"
 #: rc.cpp:3 rc.cpp:6
 #, kde-format
 msgid "Form"
-msgstr ""
+msgstr "Formular"
 
 #: gui/shortcutmodel.cpp:85
 msgid "Function"
