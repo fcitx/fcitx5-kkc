@@ -4,13 +4,14 @@
 #
 # Translators:
 # csslayer <wengxt@gmail.com>, 2017
+# mar well <m.wellendorf@gmx.de>, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx5-kkc\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2018-03-29 00:01-0700\n"
+"POT-Creation-Date: 2018-06-20 00:02-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: csslayer <wengxt@gmail.com>, 2017\n"
+"Last-Translator: mar well <m.wellendorf@gmx.de>, 2017\n"
 "Language-Team: German (https://www.transifex.com/fcitx/teams/12005/de/)\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -23,21 +24,21 @@ msgstr ""
 #: rc.cpp:18
 #, kde-format
 msgid "&Command:"
-msgstr ""
+msgstr "&Befehl:"
 
 #. i18n: file: gui/addshortcutdialog.ui:22
 #. i18n: ectx: property (text), widget (QLabel, inputModeLabel_)
 #: rc.cpp:15
 #, kde-format
 msgid "&Input Mode:"
-msgstr ""
+msgstr "&Eingabemodus:"
 
 #. i18n: file: gui/addshortcutdialog.ui:71
 #. i18n: ectx: property (text), widget (QLabel, keyLabel_)
 #: rc.cpp:21
 #, kde-format
 msgid "&Key:"
-msgstr ""
+msgstr "&Schlüssel"
 
 #. i18n: file: gui/adddictdialog.ui:42
 #. i18n: ectx: property (text), widget (QLabel, pathLabel_)
@@ -55,11 +56,11 @@ msgstr "&Taste:"
 
 #: src/kkc.h:64
 msgid "Auto Correct"
-msgstr ""
+msgstr "Autokorrektur"
 
 #: src/kkc.h:62
 msgid "Candidate Layout"
-msgstr ""
+msgstr "Kandidaten Layout"
 
 #: src/kkc.h:74
 msgid "Candidates Page Down"
@@ -84,7 +85,7 @@ msgstr "Cursor hoch"
 #: rc.cpp:12 rc.cpp:24
 #, kde-format
 msgid "Dialog"
-msgstr ""
+msgstr "Dialog"
 
 #: src/kkc.h:96
 msgid "Dictionary"
@@ -161,11 +162,11 @@ msgstr "Kkc Addon von Fcitx"
 
 #: src/kkc.cpp:101 src/kkc.h:44 src/kkc.h:48 gui/shortcutmodel.cpp:44
 msgid "Latin"
-msgstr "Lateinisch"
+msgstr "Latin"
 
 #: src/kkc.h:40
 msgid "Not set"
-msgstr ""
+msgstr "Nicht ausgewählt"
 
 #: src/kkc.h:93
 msgid "Number candidate of Triggers To Show Candidate Window"
@@ -184,11 +185,11 @@ msgstr "Interpunktionsstil"
 #: rc.cpp:9
 #, kde-format
 msgid "R&ule:"
-msgstr ""
+msgstr "R&ule:"
 
 #: src/kkc.h:95
 msgid "Rule"
-msgstr ""
+msgstr "Regel"
 
 #: gui/shortcutwidget.cpp:118
 msgid "Save Changes"
@@ -204,7 +205,7 @@ msgstr "Wörterbuchdatei auswählen"
 
 #: gui/shortcutwidget.cpp:109
 msgid "Shortcut Manager"
-msgstr "Kurybefehlverwaltung"
+msgstr "Kurzbefehlverwaltung"
 
 #: src/kkc.h:89
 msgid "Show Annotation"
@@ -236,4 +237,4 @@ msgstr "Wide latin"
 
 #: src/kkc.h:45
 msgid "Wide latin Japanese"
-msgstr "Wide latin Japanese"
+msgstr "Wide latin Japanisch"
