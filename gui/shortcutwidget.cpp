@@ -35,7 +35,7 @@ KkcShortcutWidget::KkcShortcutWidget(QWidget *parent)
     setupUi(this);
     ruleComboBox_->setModel(ruleModel_);
     shortcutView_->setModel(shortcutModel_);
-    shortcutView_->sortByColumn(3);
+    shortcutView_->sortByColumn(3, Qt::AscendingOrder);
 
     connect(ruleComboBox_, qOverload<int>(&QComboBox::currentIndexChanged),
             this, &KkcShortcutWidget::ruleChanged);
