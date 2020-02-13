@@ -231,8 +231,8 @@ public:
                 cursorIndex_ = i - pageFirst;
             }
 
-            labels_.push_back(Text(std::to_string(i - pageFirst + 1) + ". "));
-            words_.push_back(std::make_shared<KkcCandidateWord>(
+            labels_.emplace_back(std::to_string(i - pageFirst + 1) + ". ");
+            words_.emplace_back(std::make_unique<KkcCandidateWord>(
                 engine, text, i - page_start));
         }
 
@@ -256,8 +256,8 @@ public:
 
     const Text &label(int idx) const override { return labels_[idx]; }
 
-    std::shared_ptr<const CandidateWord> candidate(int idx) const override {
-        return words_[idx];
+    const CandidateWord &candidate(int idx) const override {
+        return *words_[idx];
     }
 
     int size() const override { return words_.size(); }
@@ -299,7 +299,7 @@ private:
     KkcEngine *engine_;
     InputContext *ic_;
     std::vector<Text> labels_;
-    std::vector<std::shared_ptr<KkcCandidateWord>> words_;
+    std::vector<std::unique_ptr<KkcCandidateWord>> words_;
     int cursorIndex_ = -1;
     bool hasPrev_ = false;
     bool hasNext_ = false;
