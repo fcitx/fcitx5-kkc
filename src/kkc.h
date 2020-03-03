@@ -125,6 +125,7 @@ public:
     void save() override;
     auto &factory() { return factory_; }
     auto dictionaries() { return dictionaries_.get(); }
+    auto dummyEmptyDictionaries() { return dummyEmptyDictionaries_.get(); }
     auto &config() { return config_; }
     auto model() { return model_.get(); }
     auto rule() { return userRule_.get(); }
@@ -146,6 +147,7 @@ private:
     FactoryFor<KkcState> factory_;
     GObjectUniquePtr<KkcLanguageModel> model_;
     GObjectUniquePtr<KkcDictionaryList> dictionaries_;
+    GObjectUniquePtr<KkcDictionaryList> dummyEmptyDictionaries_;
     GObjectUniquePtr<KkcUserRule> userRule_;
 
     std::unique_ptr<Action> modeAction_;

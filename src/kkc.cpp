@@ -51,7 +51,13 @@ public:
         updateInputMode();
     }
 
-    ~KkcState() { g_signal_handler_disconnect(context_.get(), signal_); }
+    ~KkcState() {
+        g_signal_handler_disconnect(context_.get(), signal_);
+        // In order to workaround libkkc context clear the dictionaries upon
+        // context deleting.
+        kkc_context_set_dictionaries(context_.get(),
+                                     parent_->dummyEmptyDictionaries());
+    }
 
     static void inputModeChanged(GObject *, GParamSpec *, gpointer user_data) {
         auto that = static_cast<KkcState *>(user_data);
@@ -343,6 +349,7 @@ KkcEngine::KkcEngine(Instance *instance)
     : instance_(instance),
       factory_([this](InputContext &ic) { return new KkcState(this, ic); }),
       model_(nullptr, &g_object_unref), dictionaries_(nullptr, &g_object_unref),
+      dummyEmptyDictionaries_(nullptr, &g_object_unref),
       userRule_(nullptr, &g_object_unref) {
 #if !GLIB_CHECK_VERSION(2, 36, 0)
     g_type_init();
@@ -359,6 +366,7 @@ KkcEngine::KkcEngine(Instance *instance)
     // We can only create kkc object here after we called kkc_init().
     model_.reset(kkc_language_model_load("sorted3", NULL));
     dictionaries_.reset(kkc_dictionary_list_new());
+    dummyEmptyDictionaries_.reset(kkc_dictionary_list_new());
 
     reloadConfig();
 
