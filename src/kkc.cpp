@@ -335,7 +335,7 @@ Text kkcContextGetPreedit(KkcContext *context) {
     } else {
         gchar *str = kkc_context_get_input(context);
         if (str && str[0]) {
-            preedit.append(str);
+            preedit.append(str, TextFormatFlag::Underline);
             preedit.setCursor(strlen(str));
         }
         g_free(str);
