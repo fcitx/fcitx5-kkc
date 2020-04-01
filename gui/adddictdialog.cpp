@@ -28,6 +28,8 @@
 
 namespace fcitx {
 
+constexpr std::array<const char *, 2> type = {"readonly", "readwrite"};
+
 AddDictDialog::AddDictDialog(QWidget *parent) : QDialog(parent) {
     setupUi(this);
     typeComboBox_->addItem(_("System"));
@@ -40,10 +42,7 @@ AddDictDialog::AddDictDialog(QWidget *parent) : QDialog(parent) {
 QMap<QString, QString> AddDictDialog::dictionary() {
     int idx = typeComboBox_->currentIndex();
     idx = idx < 0 ? 0 : idx;
-    idx = idx > 2 ? 0 : idx;
-
-    const char *type[] = {"readonly", "readwrite"};
-
+    idx = idx >= static_cast<int>(type.size()) ? 0 : idx;
     QMap<QString, QString> dict;
     dict["type"] = "file";
     dict["file"] = urlLineEdit_->text();
