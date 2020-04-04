@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx5-kkc\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2020-03-25 00:01-0700\n"
+"POT-Creation-Date: 2020-04-04 00:01-0700\n"
 "PO-Revision-Date: 2017-12-19 22:05+0000\n"
 "Last-Translator: MarongHappy <daemul72@gmail.com>, 2020\n"
 "Language-Team: Korean (https://www.transifex.com/fcitx/teams/12005/ko/)\n"
@@ -54,7 +54,7 @@ msgstr "경로(&P)"
 #: rc.cpp:27
 #, kde-format
 msgid "&Type:"
-msgstr "형식(&T):"
+msgstr "유형(&T):"
 
 #: src/kkc.h:64
 msgid "Auto Correct"
@@ -197,11 +197,11 @@ msgstr "규칙"
 msgid "Save Changes"
 msgstr "변경 내용 저장"
 
-#: gui/adddictdialog.cpp:79
+#: gui/adddictdialog.cpp:78
 msgid "Select Dictionary Directory"
 msgstr "사전 경로 선택"
 
-#: gui/adddictdialog.cpp:63
+#: gui/adddictdialog.cpp:62
 msgid "Select Dictionary File"
 msgstr "사전 파일 선택"
 
@@ -213,7 +213,7 @@ msgstr "단축키 관리자"
 msgid "Show Annotation"
 msgstr "주석 표시"
 
-#: gui/adddictdialog.cpp:33
+#: gui/adddictdialog.cpp:35
 msgid "System"
 msgstr "시스템"
 
@@ -225,7 +225,7 @@ msgstr ""
 "내용이 변했습니다.\n"
 "변경사항을 저장할까요?"
 
-#: gui/adddictdialog.cpp:34
+#: gui/adddictdialog.cpp:36
 msgid "User"
 msgstr "사용자"
 
