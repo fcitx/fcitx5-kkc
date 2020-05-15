@@ -80,9 +80,10 @@ FCITX_CONFIGURATION(
         this, "NTriggersToShowCandWin",
         _("Number candidate of Triggers To Show Candidate Window"), 0,
         IntConstrain(0, 7)};
-    ExternalOption rule{this, "Rule", _("Rule"), "fcitx://gui/kkc/rule"};
+    ExternalOption rule{this, "Rule", _("Rule"),
+                        "fcitx://config/addon/kkc/rule"};
     ExternalOption dictionary{this, "Dict", _("Dictionary"),
-                              "fcitx://gui/kkc/dictionary_list"};);
+                              "fcitx://config/addon/kkc/dictionary_list"};);
 
 class KkcState;
 
