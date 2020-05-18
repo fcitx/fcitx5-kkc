@@ -626,7 +626,7 @@ void KkcEngine::loadDictionary() {
 
 void KkcEngine::loadRule() {
     auto file = StandardPath::global().open(StandardPath::Type::PkgData,
-                                            "kkc/dictionary_list", O_RDONLY);
+                                            "kkc/rule", O_RDONLY);
     if (file.fd() < 0) {
         return;
     }
