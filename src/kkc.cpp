@@ -27,7 +27,7 @@ class KkcState : public InputContextProperty {
 public:
     KkcState(KkcEngine *parent, InputContext &ic)
         : parent_(parent), ic_(&ic),
-          context_(kkc_context_new(parent->model()), &g_object_unref) {
+          context_(kkc_context_new(parent->model())) {
         kkc_context_set_dictionaries(context_.get(), parent_->dictionaries());
         kkc_context_set_input_mode(context_.get(),
                                    *parent_->config().inputMode);
@@ -73,15 +73,15 @@ public:
 
     KkcEngine *parent_;
     InputContext *ic_;
-    std::unique_ptr<KkcContext, decltype(&g_object_unref)> context_;
+    GObjectUniquePtr<KkcContext> context_;
     gulong signal_;
 };
 
 namespace {
 
 template <typename T>
-std::unique_ptr<T, decltype(&g_object_unref)> makeGObjectUnique(T *p) {
-    return {p, &g_object_unref};
+auto makeGObjectUnique(T *p) {
+    return UniqueCPtr<T, g_object_unref>{p};
 }
 
 struct {
@@ -205,8 +205,8 @@ public:
         int pageLast = std::min(size, static_cast<int>(pageFirst + page_size));
 
         for (int i = pageFirst; i < pageLast; i++) {
-            GObjectUniquePtr<KkcCandidate> kkcCandidate =
-                makeGObjectUnique(kkc_candidate_list_get(kkcCandidates, i));
+            GObjectUniquePtr<KkcCandidate> kkcCandidate(
+                kkc_candidate_list_get(kkcCandidates, i));
             Text text;
             text.append(kkc_candidate_get_text(kkcCandidate.get()));
             if (*engine->config().showAnnotation) {
@@ -305,8 +305,7 @@ Text kkcContextGetPreedit(KkcContext *context) {
     if (kkc_segment_list_get_cursor_pos(segments) >= 0) {
         int offset = 0;
         for (int i = 0; i < kkc_segment_list_get_size(segments); i++) {
-            GObjectUniquePtr<KkcSegment> segment =
-                makeGObjectUnique(kkc_segment_list_get(segments, i));
+            auto segment = makeGObjectUnique(kkc_segment_list_get(segments, i));
             const gchar *str = kkc_segment_get_output(segment.get());
             TextFormatFlags format;
             if (i < kkc_segment_list_get_cursor_pos(segments)) {
@@ -335,10 +334,7 @@ Text kkcContextGetPreedit(KkcContext *context) {
 
 KkcEngine::KkcEngine(Instance *instance)
     : instance_(instance),
-      factory_([this](InputContext &ic) { return new KkcState(this, ic); }),
-      model_(nullptr, &g_object_unref), dictionaries_(nullptr, &g_object_unref),
-      dummyEmptyDictionaries_(nullptr, &g_object_unref),
-      userRule_(nullptr, &g_object_unref) {
+      factory_([this](InputContext &ic) { return new KkcState(this, ic); }) {
 #if !GLIB_CHECK_VERSION(2, 36, 0)
     g_type_init();
 #endif
@@ -469,10 +465,9 @@ void KkcEngine::keyEvent(const InputMethodEntry &, KeyEvent &keyEvent) {
         return;
     }
 
-    GObjectUniquePtr<KkcKeyEvent> key =
-        makeGObjectUnique(kkc_key_event_new_from_x_event(
-            keyEvent.rawKey().sym(), keyEvent.rawKey().code() - 8,
-            static_cast<KkcModifierType>(state)));
+    auto key = makeGObjectUnique(kkc_key_event_new_from_x_event(
+        keyEvent.rawKey().sym(), keyEvent.rawKey().code() - 8,
+        static_cast<KkcModifierType>(state)));
     if (!key) {
         KKC_DEBUG() << "Failed to obtain kkc key event";
         return;

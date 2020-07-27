@@ -7,17 +7,18 @@
 #ifndef _GUI_COMMON_H_
 #define _GUI_COMMON_H_
 
+#include <fcitx-utils/misc.h>
 #include <glib-object.h>
 #include <memory>
 
 namespace fcitx {
 
 template <typename T>
-using GObjectUniquePtr = std::unique_ptr<T, decltype(&g_object_unref)>;
+using GObjectUniquePtr = UniqueCPtr<T, g_object_unref>;
 
 template <typename T>
-GObjectUniquePtr<T> makeGObjectUnique(T *p) {
-    return {p, &g_object_unref};
+auto makeGObjectUnique(T *p) {
+    return GObjectUniquePtr<T>(p);
 }
 
 } // namespace fcitx

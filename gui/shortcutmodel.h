@@ -18,8 +18,7 @@ class ShortcutEntry {
 public:
     ShortcutEntry(const QString &command, KkcKeyEvent *event,
                   const QString &label, KkcInputMode mode)
-        : command_(command),
-          event_(makeGObjectUnique(KKC_KEY_EVENT(g_object_ref(event)))),
+        : command_(command), event_(KKC_KEY_EVENT(g_object_ref(event))),
           label_(label), mode_(mode) {
         gchar *keystr = kkc_key_event_to_string(event_.get());
         keyString_ = QString::fromUtf8(keystr);

@@ -15,8 +15,7 @@
 namespace fcitx {
 
 ShortcutModel::ShortcutModel(QObject *parent)
-    : QAbstractTableModel(parent), userRule_(nullptr, &g_object_unref),
-      needSave_(false) {}
+    : QAbstractTableModel(parent), needSave_(false) {}
 
 ShortcutModel::~ShortcutModel() {}
 

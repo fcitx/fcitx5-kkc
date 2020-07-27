@@ -88,7 +88,7 @@ FCITX_CONFIGURATION(
 class KkcState;
 
 template <typename T>
-using GObjectUniquePtr = std::unique_ptr<T, decltype(&g_object_unref)>;
+using GObjectUniquePtr = UniqueCPtr<T, g_object_unref>;
 
 class KkcEngine final : public InputMethodEngine {
 public:
