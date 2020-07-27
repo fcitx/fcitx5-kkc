@@ -538,20 +538,17 @@ void KkcEngine::loadDictionary() {
     if (file.fd() < 0) {
         return;
     }
-    std::unique_ptr<FILE, decltype(&fclose)> fp(fdopen(file.fd(), "r"),
-                                                &std::fclose);
+    UniqueFilePtr fp(fdopen(file.fd(), "r"));
     if (!fp) {
         return;
     }
     file.release();
 
-    char *buf = nullptr;
+    UniqueCPtr<char> buf;
     size_t len = 0;
 
-    while (getline(&buf, &len, fp.get()) != -1) {
-        auto trimmed = stringutils::trim(buf);
-
-        auto tokens = stringutils::split(stringutils::trim(buf), ",");
+    while (getline(buf, &len, fp.get()) != -1) {
+        auto tokens = stringutils::split(stringutils::trim(buf.get()), ",");
 
         if (tokens.size() < 3) {
             continue;
@@ -615,8 +612,6 @@ void KkcEngine::loadDictionary() {
             }
         }
     }
-
-    free(buf);
 }
 
 void KkcEngine::loadRule() {
@@ -625,23 +620,21 @@ void KkcEngine::loadRule() {
     if (file.fd() < 0) {
         return;
     }
-    std::unique_ptr<FILE, decltype(&fclose)> fp(fdopen(file.fd(), "r"),
-                                                &std::fclose);
+    UniqueFilePtr fp(fdopen(file.fd(), "r"));
     if (!fp) {
         return;
     }
     file.release();
 
-    char *line = nullptr;
+    UniqueCPtr<char> line;
     size_t bufsize = 0;
-    getline(&line, &bufsize, fp.get());
+    getline(line, &bufsize, fp.get());
 
     if (!line) {
         return;
     }
 
-    auto rule = stringutils::trim(line);
-    free(line);
+    auto rule = stringutils::trim(line.get());
 
     auto meta = kkc_rule_metadata_find(rule.c_str());
     if (!meta) {
