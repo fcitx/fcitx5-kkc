@@ -36,8 +36,42 @@ FCITX_CONFIG_ENUM_NAME_WITH_I18N(KkcInputMode, N_("Hiragana"), N_("Katakana"),
                                  N_("Half width Katakana"), N_("Latin"),
                                  N_("Wide latin"), N_("Direct input"));
 
+struct NotEmpty {
+    bool check(const std::string &value) const { return !value.empty(); }
+    void dumpDescription(RawConfig &) const {}
+};
+
+struct RuleAnnotation : public EnumAnnotation {
+    void dumpDescription(RawConfig &config) const {
+        EnumAnnotation::dumpDescription(config);
+        int length;
+        auto rules = kkc_rule_list(&length);
+        FCITX_INFO() << length;
+        int total = 0;
+        for (int i = 0; i < length; i++) {
+            int priority;
+            g_object_get(G_OBJECT(rules[i]), "priority", &priority, nullptr);
+            if (priority < 70) {
+                continue;
+            }
+            gchar *name, *label;
+            g_object_get(G_OBJECT(rules[i]), "label", &label, "name", &name,
+                         nullptr);
+            config.setValueByPath("Enum/" + std::to_string(total), name);
+            config.setValueByPath("EnumI18n/" + std::to_string(total), label);
+            g_object_unref(rules[i]);
+            g_free(name);
+            g_free(label);
+            total += 1;
+        }
+        g_free(rules);
+    }
+};
+
 FCITX_CONFIGURATION(
-    KkcConfig,
+    KkcConfig, Option<std::string, NotEmpty, DefaultMarshaller<std::string>,
+                      RuleAnnotation>
+                   rule{this, "Rule", _("Rule"), "default"};
     OptionWithAnnotation<KkcPunctuationStyle, KkcPunctuationStyleI18NAnnotation>
         punctuationStyle{this, "PunctuationStyle", _("Punctuation Style"),
                          KKC_PUNCTUATION_STYLE_JA_JA};
@@ -80,8 +114,8 @@ FCITX_CONFIGURATION(
         this, "NTriggersToShowCandWin",
         _("Number candidate of Triggers To Show Candidate Window"), 0,
         IntConstrain(0, 7)};
-    ExternalOption rule{this, "Rule", _("Rule"),
-                        "fcitx://config/addon/kkc/rule"};
+    ExternalOption ruleEditor{this, "Rule Editor", _("Rule Editor"),
+                              "fcitx://config/addon/kkc/rule"};
     ExternalOption dictionary{this, "Dict", _("Dictionary"),
                               "fcitx://config/addon/kkc/dictionary_list"};);
 

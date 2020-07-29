@@ -615,28 +615,7 @@ void KkcEngine::loadDictionary() {
 }
 
 void KkcEngine::loadRule() {
-    auto file = StandardPath::global().open(StandardPath::Type::PkgData,
-                                            "kkc/rule", O_RDONLY);
-    if (file.fd() < 0) {
-        return;
-    }
-    UniqueFilePtr fp(fdopen(file.fd(), "r"));
-    if (!fp) {
-        return;
-    }
-    file.release();
-
-    UniqueCPtr<char> line;
-    size_t bufsize = 0;
-    getline(line, &bufsize, fp.get());
-
-    if (!line) {
-        return;
-    }
-
-    auto rule = stringutils::trim(line.get());
-
-    auto meta = kkc_rule_metadata_find(rule.c_str());
+    auto meta = kkc_rule_metadata_find(config_.rule->data());
     if (!meta) {
         meta = kkc_rule_metadata_find("default");
     }

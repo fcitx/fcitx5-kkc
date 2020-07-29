@@ -42,29 +42,8 @@ KkcShortcutWidget::KkcShortcutWidget(QWidget *parent)
     currentShortcutChanged();
 }
 void KkcShortcutWidget::load() {
-    auto fd = StandardPath::global().open(StandardPath::Type::PkgConfig,
-                                          "kkc/rule", O_RDONLY);
-    QString sline;
-    do {
-        if (fd.fd() >= 0) {
-            break;
-        }
-
-        QFile f;
-        QByteArray line;
-        if (f.open(fd.fd(), QIODevice::ReadOnly)) {
-            line = f.readLine();
-            f.close();
-        }
-
-        sline = QString::fromUtf8(line).trimmed();
-
-        if (sline.isEmpty()) {
-            sline = "default";
-        }
-    } while (0);
     ruleModel_->load();
-    int idx = ruleModel_->findRule(sline);
+    int idx = ruleModel_->findRule("default");
     idx = idx < 0 ? 0 : idx;
     ruleComboBox_->setCurrentIndex(idx);
 
@@ -73,25 +52,6 @@ void KkcShortcutWidget::load() {
 
 void KkcShortcutWidget::save() {
     shortcutModel_->save();
-
-    QString name =
-        ruleModel_
-            ->data(ruleModel_->index(ruleComboBox_->currentIndex(), 0),
-                   Qt::UserRole)
-            .toString();
-
-    StandardPath::global().safeSave(StandardPath::Type::PkgData, "kkc/rule",
-                                    [name](int fd) {
-                                        QFile f;
-                                        if (f.open(fd, QIODevice::WriteOnly)) {
-                                            f.write(name.toUtf8());
-                                            f.close();
-                                        } else {
-                                            return false;
-                                        }
-                                        return true;
-                                    });
-
     Q_EMIT changed(false);
 }
 
@@ -121,7 +81,6 @@ void KkcShortcutWidget::ruleChanged(int rule) {
     }
     shortcutModel_->load(name);
     name_ = name;
-    Q_EMIT changed(true);
 }
 
 void KkcShortcutWidget::addShortcutClicked() {
