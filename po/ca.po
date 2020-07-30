@@ -3,15 +3,16 @@
 # This file is distributed under the same license as the fcitx5-kkc package.
 #
 # Translators:
-# Robert Antoni Buj Gelonch <rbuj@fedoraproject.org>, 2017
 # csslayer <wengxt@gmail.com>, 2017
+# Robert Antoni Buj Gelonch <rbuj@fedoraproject.org>, 2017
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx5-kkc\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2018-03-29 00:01-0700\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: csslayer <wengxt@gmail.com>, 2017\n"
+"POT-Creation-Date: 2020-07-30 00:01-0700\n"
+"PO-Revision-Date: 2017-12-19 22:05+0000\n"
+"Last-Translator: Robert Antoni Buj Gelonch <rbuj@fedoraproject.org>, 2017\n"
 "Language-Team: Catalan (https://www.transifex.com/fcitx/teams/12005/ca/)\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
@@ -54,27 +55,27 @@ msgstr "&Camí:"
 msgid "&Type:"
 msgstr "&Escriptura:"
 
-#: src/kkc.h:64
+#: src/kkc.h:86
 msgid "Auto Correct"
 msgstr "Correcció automàtica"
 
-#: src/kkc.h:62
+#: src/kkc.h:84
 msgid "Candidate Layout"
 msgstr ""
 
-#: src/kkc.h:74
+#: src/kkc.h:96
 msgid "Candidates Page Down"
 msgstr "Av Pàg de candidates"
 
-#: src/kkc.h:68
+#: src/kkc.h:90
 msgid "Candidates Page Up"
 msgstr "Re Pàg de candidates"
 
-#: src/kkc.h:86
+#: src/kkc.h:108
 msgid "Cursor Down"
 msgstr "Cursor avall"
 
-#: src/kkc.h:80
+#: src/kkc.h:102
 msgid "Cursor Up"
 msgstr "Cursor amunt"
 
@@ -87,15 +88,15 @@ msgstr "Cursor amunt"
 msgid "Dialog"
 msgstr ""
 
-#: src/kkc.h:96
+#: src/kkc.h:119
 msgid "Dictionary"
 msgstr "Diccionari"
 
-#: gui/dictwidget.cpp:47
+#: gui/dictwidget.cpp:36
 msgid "Dictionary Manager"
 msgstr "Gestor del diccionari"
 
-#: src/kkc.cpp:103 src/kkc.h:49 gui/shortcutmodel.cpp:44
+#: src/kkc.cpp:97 src/kkc.h:37 gui/shortcutmodel.cpp:32
 msgid "Direct input"
 msgstr "Entrada directa"
 
@@ -108,31 +109,31 @@ msgstr "Entrada directa"
 msgid "Form"
 msgstr ""
 
-#: gui/shortcutmodel.cpp:85
+#: gui/shortcutmodel.cpp:73
 msgid "Function"
 msgstr "Funció"
 
-#: src/kkc.cpp:100 src/kkc.h:48 gui/shortcutmodel.cpp:43
+#: src/kkc.cpp:94 src/kkc.h:36 gui/shortcutmodel.cpp:31
 msgid "Half width Katakana"
 msgstr "Katakana d'ample mig"
 
-#: src/kkc.cpp:98 src/kkc.h:47 gui/shortcutmodel.cpp:43
+#: src/kkc.cpp:92 src/kkc.h:35 gui/shortcutmodel.cpp:31
 msgid "Hiragana"
 msgstr "Hiragana"
 
-#: src/kkc.h:41
+#: src/kkc.h:29
 msgid "Horizontal"
 msgstr "Horitzontal"
 
-#: src/kkc.h:57
+#: src/kkc.h:79
 msgid "Initial Input Mode"
 msgstr "Mode inicial d'entrada"
 
-#: gui/shortcutmodel.cpp:81
+#: gui/shortcutmodel.cpp:69
 msgid "Input Mode"
 msgstr "Mode d'entrada"
 
-#: src/kkc.h:43
+#: src/kkc.h:31
 msgid "Japanese"
 msgstr "Japonès"
 
@@ -140,19 +141,19 @@ msgstr "Japonès"
 msgid "Kana Kanji"
 msgstr "Kana kanji"
 
-#: src/kkc.cpp:99 src/kkc.h:47 gui/shortcutmodel.cpp:43
+#: src/kkc.cpp:93 src/kkc.h:35 gui/shortcutmodel.cpp:31
 msgid "Katakana"
 msgstr "Katakana"
 
-#: gui/shortcutmodel.cpp:83
+#: gui/shortcutmodel.cpp:71
 msgid "Key"
 msgstr "Tecla"
 
-#: gui/shortcutwidget.cpp:143
+#: gui/shortcutwidget.cpp:91
 msgid "Key Conflict"
 msgstr "Conflicte de tecla"
 
-#: gui/shortcutwidget.cpp:144
+#: gui/shortcutwidget.cpp:92
 msgid "Key to add is conflict with existing shortcut."
 msgstr "La tecla a afegir està en conflicte amb una drecera existent."
 
@@ -160,24 +161,24 @@ msgstr "La tecla a afegir està en conflicte amb una drecera existent."
 msgid "Kkc Addon of Fcitx"
 msgstr "Complement kkc de fcitx"
 
-#: src/kkc.cpp:101 src/kkc.h:44 src/kkc.h:48 gui/shortcutmodel.cpp:44
+#: src/kkc.cpp:95 src/kkc.h:32 src/kkc.h:36 gui/shortcutmodel.cpp:32
 msgid "Latin"
 msgstr "Llatí"
 
-#: src/kkc.h:40
+#: src/kkc.h:28
 msgid "Not set"
 msgstr "Sense establir"
 
-#: src/kkc.h:93
+#: src/kkc.h:115
 msgid "Number candidate of Triggers To Show Candidate Window"
 msgstr ""
 "Nombre de candidats dels activadors per mostrar la finestra de candidats"
 
-#: src/kkc.h:59
+#: src/kkc.h:81
 msgid "Page size"
 msgstr "Mida de pàgina"
 
-#: src/kkc.h:54
+#: src/kkc.h:76
 msgid "Punctuation Style"
 msgstr "Estil de puntuació"
 
@@ -188,35 +189,39 @@ msgstr "Estil de puntuació"
 msgid "R&ule:"
 msgstr ""
 
-#: src/kkc.h:95
+#: src/kkc.h:74
 msgid "Rule"
 msgstr "Regla"
 
-#: gui/shortcutwidget.cpp:118
+#: src/kkc.h:117
+msgid "Rule Editor"
+msgstr ""
+
+#: gui/shortcutwidget.cpp:67
 msgid "Save Changes"
 msgstr "Desa els canvis"
 
-#: gui/adddictdialog.cpp:79
+#: gui/adddictdialog.cpp:67
 msgid "Select Dictionary Directory"
 msgstr "Seleccioneu el directori del diccionari"
 
-#: gui/adddictdialog.cpp:63
+#: gui/adddictdialog.cpp:51
 msgid "Select Dictionary File"
 msgstr "Seleccioneu el fitxer de diccionari"
 
-#: gui/shortcutwidget.cpp:109
+#: gui/shortcutwidget.cpp:58
 msgid "Shortcut Manager"
 msgstr "Gestor de dreceres"
 
-#: src/kkc.h:89
+#: src/kkc.h:111
 msgid "Show Annotation"
 msgstr "Mostra l'annotació"
 
-#: gui/adddictdialog.cpp:33
+#: gui/adddictdialog.cpp:24
 msgid "System"
 msgstr "Sistema"
 
-#: gui/shortcutwidget.cpp:119
+#: gui/shortcutwidget.cpp:68
 msgid ""
 "The content has changed.\n"
 "Do you want to save the changes or discard them?"
@@ -224,18 +229,18 @@ msgstr ""
 "El contingut ha canviat.\n"
 "Voleu desar els canvis o descartar-los?"
 
-#: gui/adddictdialog.cpp:34
+#: gui/adddictdialog.cpp:25
 msgid "User"
 msgstr "Usuari"
 
-#: src/kkc.h:41
+#: src/kkc.h:29
 msgid "Vertical"
 msgstr "Vertical"
 
-#: src/kkc.cpp:102 src/kkc.h:44 src/kkc.h:49 gui/shortcutmodel.cpp:44
+#: src/kkc.cpp:96 src/kkc.h:32 src/kkc.h:37 gui/shortcutmodel.cpp:32
 msgid "Wide latin"
 msgstr "Llatí ample"
 
-#: src/kkc.h:45
+#: src/kkc.h:33
 msgid "Wide latin Japanese"
 msgstr "Japònes llatí ample"

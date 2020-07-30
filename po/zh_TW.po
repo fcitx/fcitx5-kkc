@@ -4,14 +4,15 @@
 #
 # Translators:
 # csslayer <wengxt@gmail.com>, 2017
-# Jeff Huang <s8321414@gmail.com>, 2017
+# 黃柏諺 <s8321414@gmail.com>, 2017
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx5-kkc\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2018-03-29 00:01-0700\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Jeff Huang <s8321414@gmail.com>, 2017\n"
+"POT-Creation-Date: 2020-07-30 00:01-0700\n"
+"PO-Revision-Date: 2017-12-19 22:05+0000\n"
+"Last-Translator: 黃柏諺 <s8321414@gmail.com>, 2017\n"
 "Language-Team: Chinese (Taiwan) (https://www.transifex.com/fcitx/teams/12005/"
 "zh_TW/)\n"
 "Language: zh_TW\n"
@@ -55,27 +56,27 @@ msgstr "路徑(&P)："
 msgid "&Type:"
 msgstr "&類型:"
 
-#: src/kkc.h:64
+#: src/kkc.h:86
 msgid "Auto Correct"
 msgstr "自動校正"
 
-#: src/kkc.h:62
+#: src/kkc.h:84
 msgid "Candidate Layout"
 msgstr ""
 
-#: src/kkc.h:74
+#: src/kkc.h:96
 msgid "Candidates Page Down"
 msgstr "候選詞下一頁"
 
-#: src/kkc.h:68
+#: src/kkc.h:90
 msgid "Candidates Page Up"
 msgstr "候選詞上一頁"
 
-#: src/kkc.h:86
+#: src/kkc.h:108
 msgid "Cursor Down"
 msgstr "游標向下"
 
-#: src/kkc.h:80
+#: src/kkc.h:102
 msgid "Cursor Up"
 msgstr "游標向上"
 
@@ -88,15 +89,15 @@ msgstr "游標向上"
 msgid "Dialog"
 msgstr ""
 
-#: src/kkc.h:96
+#: src/kkc.h:119
 msgid "Dictionary"
 msgstr "字典"
 
-#: gui/dictwidget.cpp:47
+#: gui/dictwidget.cpp:36
 msgid "Dictionary Manager"
 msgstr "字典管理"
 
-#: src/kkc.cpp:103 src/kkc.h:49 gui/shortcutmodel.cpp:44
+#: src/kkc.cpp:97 src/kkc.h:37 gui/shortcutmodel.cpp:32
 msgid "Direct input"
 msgstr "直接輸入"
 
@@ -109,31 +110,31 @@ msgstr "直接輸入"
 msgid "Form"
 msgstr ""
 
-#: gui/shortcutmodel.cpp:85
+#: gui/shortcutmodel.cpp:73
 msgid "Function"
 msgstr "功能"
 
-#: src/kkc.cpp:100 src/kkc.h:48 gui/shortcutmodel.cpp:43
+#: src/kkc.cpp:94 src/kkc.h:36 gui/shortcutmodel.cpp:31
 msgid "Half width Katakana"
 msgstr "半形片假名"
 
-#: src/kkc.cpp:98 src/kkc.h:47 gui/shortcutmodel.cpp:43
+#: src/kkc.cpp:92 src/kkc.h:35 gui/shortcutmodel.cpp:31
 msgid "Hiragana"
 msgstr "平假名"
 
-#: src/kkc.h:41
+#: src/kkc.h:29
 msgid "Horizontal"
 msgstr "橫向"
 
-#: src/kkc.h:57
+#: src/kkc.h:79
 msgid "Initial Input Mode"
 msgstr "初始輸入模式"
 
-#: gui/shortcutmodel.cpp:81
+#: gui/shortcutmodel.cpp:69
 msgid "Input Mode"
 msgstr "輸入模式"
 
-#: src/kkc.h:43
+#: src/kkc.h:31
 msgid "Japanese"
 msgstr "日語"
 
@@ -141,19 +142,19 @@ msgstr "日語"
 msgid "Kana Kanji"
 msgstr "假名漢字"
 
-#: src/kkc.cpp:99 src/kkc.h:47 gui/shortcutmodel.cpp:43
+#: src/kkc.cpp:93 src/kkc.h:35 gui/shortcutmodel.cpp:31
 msgid "Katakana"
 msgstr "片假名"
 
-#: gui/shortcutmodel.cpp:83
+#: gui/shortcutmodel.cpp:71
 msgid "Key"
 msgstr "按鍵"
 
-#: gui/shortcutwidget.cpp:143
+#: gui/shortcutwidget.cpp:91
 msgid "Key Conflict"
 msgstr "按鍵衝突"
 
-#: gui/shortcutwidget.cpp:144
+#: gui/shortcutwidget.cpp:92
 msgid "Key to add is conflict with existing shortcut."
 msgstr "新增的按鍵和現有的快捷鍵衝突。"
 
@@ -161,23 +162,23 @@ msgstr "新增的按鍵和現有的快捷鍵衝突。"
 msgid "Kkc Addon of Fcitx"
 msgstr "Fcitx 的 Kkc 附加元件"
 
-#: src/kkc.cpp:101 src/kkc.h:44 src/kkc.h:48 gui/shortcutmodel.cpp:44
+#: src/kkc.cpp:95 src/kkc.h:32 src/kkc.h:36 gui/shortcutmodel.cpp:32
 msgid "Latin"
 msgstr "拉丁文"
 
-#: src/kkc.h:40
+#: src/kkc.h:28
 msgid "Not set"
 msgstr "未設定"
 
-#: src/kkc.h:93
+#: src/kkc.h:115
 msgid "Number candidate of Triggers To Show Candidate Window"
 msgstr "觸發顯示候選詞視窗的按鍵次數"
 
-#: src/kkc.h:59
+#: src/kkc.h:81
 msgid "Page size"
 msgstr "頁面大小"
 
-#: src/kkc.h:54
+#: src/kkc.h:76
 msgid "Punctuation Style"
 msgstr "標點風格"
 
@@ -188,35 +189,39 @@ msgstr "標點風格"
 msgid "R&ule:"
 msgstr ""
 
-#: src/kkc.h:95
+#: src/kkc.h:74
 msgid "Rule"
 msgstr "規則"
 
-#: gui/shortcutwidget.cpp:118
+#: src/kkc.h:117
+msgid "Rule Editor"
+msgstr ""
+
+#: gui/shortcutwidget.cpp:67
 msgid "Save Changes"
 msgstr "儲存變更"
 
-#: gui/adddictdialog.cpp:79
+#: gui/adddictdialog.cpp:67
 msgid "Select Dictionary Directory"
 msgstr "選擇字典目錄"
 
-#: gui/adddictdialog.cpp:63
+#: gui/adddictdialog.cpp:51
 msgid "Select Dictionary File"
 msgstr "選擇字典檔案"
 
-#: gui/shortcutwidget.cpp:109
+#: gui/shortcutwidget.cpp:58
 msgid "Shortcut Manager"
 msgstr "快捷鍵管理"
 
-#: src/kkc.h:89
+#: src/kkc.h:111
 msgid "Show Annotation"
 msgstr "顯示注釋"
 
-#: gui/adddictdialog.cpp:33
+#: gui/adddictdialog.cpp:24
 msgid "System"
 msgstr "系統"
 
-#: gui/shortcutwidget.cpp:119
+#: gui/shortcutwidget.cpp:68
 msgid ""
 "The content has changed.\n"
 "Do you want to save the changes or discard them?"
@@ -224,18 +229,18 @@ msgstr ""
 "內容已更改。\n"
 "您想要儲存還是放棄修改？"
 
-#: gui/adddictdialog.cpp:34
+#: gui/adddictdialog.cpp:25
 msgid "User"
 msgstr "使用者"
 
-#: src/kkc.h:41
+#: src/kkc.h:29
 msgid "Vertical"
 msgstr "縱向"
 
-#: src/kkc.cpp:102 src/kkc.h:44 src/kkc.h:49 gui/shortcutmodel.cpp:44
+#: src/kkc.cpp:96 src/kkc.h:32 src/kkc.h:37 gui/shortcutmodel.cpp:32
 msgid "Wide latin"
 msgstr "全形英文"
 
-#: src/kkc.h:45
+#: src/kkc.h:33
 msgid "Wide latin Japanese"
 msgstr "全形拉丁日語"
