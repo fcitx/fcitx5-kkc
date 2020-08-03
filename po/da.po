@@ -4,15 +4,15 @@
 #
 # Translators:
 # csslayer <wengxt@gmail.com>, 2017
-# scootergrisen, 2018
+# scootergrisen, 2020
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx5-kkc\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2020-07-30 00:01-0700\n"
+"POT-Creation-Date: 2020-08-03 00:01-0700\n"
 "PO-Revision-Date: 2017-12-19 22:05+0000\n"
-"Last-Translator: scootergrisen, 2018\n"
+"Last-Translator: scootergrisen, 2020\n"
 "Language-Team: Danish (https://www.transifex.com/fcitx/teams/12005/da/)\n"
 "Language: da\n"
 "MIME-Version: 1.0\n"
@@ -194,7 +194,7 @@ msgstr "Regel"
 
 #: src/kkc.h:117
 msgid "Rule Editor"
-msgstr ""
+msgstr "Regelredigering"
 
 #: gui/shortcutwidget.cpp:67
 msgid "Save Changes"

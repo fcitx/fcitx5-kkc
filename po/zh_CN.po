@@ -3,17 +3,17 @@
 # This file is distributed under the same license as the fcitx5-kkc package.
 #
 # Translators:
-# csslayer <wengxt@gmail.com>, 2017
 # Mingcong Bai <jeffbai@aosc.xyz>, 2017
 # wwj402 <wwj402@gmail.com>, 2018
+# csslayer <wengxt@gmail.com>, 2020
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx5-kkc\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2020-07-30 00:01-0700\n"
+"POT-Creation-Date: 2020-08-03 00:01-0700\n"
 "PO-Revision-Date: 2017-12-19 22:05+0000\n"
-"Last-Translator: wwj402 <wwj402@gmail.com>, 2018\n"
+"Last-Translator: csslayer <wengxt@gmail.com>, 2020\n"
 "Language-Team: Chinese (China) (https://www.transifex.com/fcitx/teams/12005/"
 "zh_CN/)\n"
 "Language: zh_CN\n"
@@ -196,7 +196,7 @@ msgstr "规则"
 
 #: src/kkc.h:117
 msgid "Rule Editor"
-msgstr ""
+msgstr "按键规则编辑器"
 
 #: gui/shortcutwidget.cpp:67
 msgid "Save Changes"
