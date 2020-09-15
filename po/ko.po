@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx5-kkc\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2020-08-02 00:01-0700\n"
+"POT-Creation-Date: 2020-09-15 00:03-0700\n"
 "PO-Revision-Date: 2017-12-19 22:05+0000\n"
 "Last-Translator: JungHee Lee <daemul72@gmail.com>, 2020\n"
 "Language-Team: Korean (https://www.transifex.com/fcitx/teams/12005/ko/)\n"
@@ -168,7 +168,7 @@ msgstr "로마자"
 
 #: src/kkc.h:28
 msgid "Not set"
-msgstr "설정되지 않음"
+msgstr "지정되지 않음"
 
 #: src/kkc.h:115
 msgid "Number candidate of Triggers To Show Candidate Window"
