@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx5-kkc\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2020-11-02 15:55-0800\n"
+"POT-Creation-Date: 2020-11-02 16:11-0800\n"
 "PO-Revision-Date: 2017-12-19 22:05+0000\n"
 "Last-Translator: csslayer <wengxt@gmail.com>, 2020\n"
 "Language-Team: Chinese (China) (https://www.transifex.com/fcitx/teams/12005/"
@@ -149,7 +149,7 @@ msgstr "日语"
 
 #: org.fcitx.fcitx5-kkc.metainfo.xml.in:8
 msgid "Japanese input method"
-msgstr ""
+msgstr "日语输入法"
 
 #: src/kkc.conf.in:3
 msgid "Kana Kanji"
@@ -173,7 +173,7 @@ msgstr "要添加的按键和已存在的快捷键冲突。"
 
 #: org.fcitx.fcitx5-kkc.metainfo.xml.in:7
 msgid "Kkc"
-msgstr ""
+msgstr "Kkc"
 
 #: src/kkc-addon.conf.in:3
 msgid "Kkc Addon of Fcitx"
