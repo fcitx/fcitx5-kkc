@@ -31,6 +31,7 @@ endif ()
 include("${FCITX_INSTALL_CMAKECONFIG_DIR}/Fcitx5Utils/Fcitx5CompilerSettings.cmake")
 
 add_definitions(-DFCITX_GETTEXT_DOMAIN=\"fcitx5-kkc\" -D_GNU_SOURCE)
+fcitx5_add_i18n_definition()
 
 configure_file(config.h.in config.h
   IMMEDIATE @ONLY)
@@ -40,9 +41,9 @@ add_subdirectory(src)
 add_subdirectory(gui)
 add_subdirectory(data)
 
-fcitx5_translate_desktop_file(org.fcitx.fcitx5-kkc.metainfo.xml.in
-                              org.fcitx.fcitx5-kkc.metainfo.xml XML)
+fcitx5_translate_desktop_file(org.fcitx.Fcitx5.Addon.Kkc.metainfo.xml.in
+                              org.fcitx.Fcitx5.Addon.Kkc.metainfo.xml XML)
 
-install(FILES "${CMAKE_CURRENT_BINARY_DIR}/org.fcitx.fcitx5-kkc.metainfo.xml" DESTINATION ${CMAKE_INSTALL_DATADIR}/metainfo)
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/org.fcitx.Fcitx5.Addon.Kkc.metainfo.xml" DESTINATION ${CMAKE_INSTALL_DATADIR}/metainfo)
 
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)

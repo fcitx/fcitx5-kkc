@@ -181,6 +181,7 @@ private:
 class KkcFactory : public AddonFactory {
 public:
     AddonInstance *create(AddonManager *manager) override {
+        registerDomain("fcitx5-kkc", FCITX_INSTALL_LOCALEDIR);
         return new KkcEngine(manager->instance());
     }
 };

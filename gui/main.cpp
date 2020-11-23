@@ -9,6 +9,7 @@
 #include "dictwidget.h"
 #include "shortcutwidget.h"
 #include <QApplication>
+#include <fcitx-utils/i18n.h>
 #include <libkkc/libkkc.h>
 #include <qplugin.h>
 
@@ -20,6 +21,7 @@ KkcConfigPlugin::KkcConfigPlugin(QObject *parent)
     g_type_init();
 #endif
     kkc_init();
+    registerDomain("fcitx5-kkc", FCITX_INSTALL_LOCALEDIR);
 }
 
 FcitxQtConfigUIWidget *KkcConfigPlugin::create(const QString &key) {
