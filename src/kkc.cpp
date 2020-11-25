@@ -397,8 +397,6 @@ void KkcEngine::activate(const InputMethodEntry &, InputContextEvent &event) {
 
 void KkcEngine::deactivate(const InputMethodEntry &entry,
                            InputContextEvent &event) {
-    auto &statusArea = event.inputContext()->statusArea();
-    statusArea.clearGroup(StatusGroup::InputMethod);
     if (event.type() == EventType::InputContextSwitchInputMethod) {
         auto kkcstate = this->state(event.inputContext());
         auto context = kkcstate->context_.get();
