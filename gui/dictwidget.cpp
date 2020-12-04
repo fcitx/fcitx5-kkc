@@ -44,7 +44,6 @@ void KkcDictWidget::load() {
 
 void KkcDictWidget::save() {
     dictModel_->save();
-    saveSubConfig("fcitx://addon/config/kkc/reload_dictionary");
     Q_EMIT changed(false);
 }
 
