@@ -137,6 +137,13 @@ public:
         reloadConfig();
     }
 
+    void setSubConfig(const std::string &path,
+                      const fcitx::RawConfig &) override {
+        if (path == "reload_dictionary") {
+            reloadConfig();
+        }
+    }
+
     void activate(const InputMethodEntry &entry,
                   InputContextEvent &event) override;
     void keyEvent(const InputMethodEntry &entry, KeyEvent &keyEvent) override;
