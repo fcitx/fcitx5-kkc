@@ -5,14 +5,15 @@
 # Translators:
 # csslayer <wengxt@gmail.com>, 2017
 # Takuro Onoue <kusanaginoturugi@gmail.com>, 2020
+# あわしろいくや <ikunya@gmail.com>, 2020
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx5-kkc\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2020-12-05 00:03+0100\n"
+"POT-Creation-Date: 2020-12-07 00:02+0100\n"
 "PO-Revision-Date: 2017-12-19 22:05+0000\n"
-"Last-Translator: Takuro Onoue <kusanaginoturugi@gmail.com>, 2020\n"
+"Last-Translator: あわしろいくや <ikunya@gmail.com>, 2020\n"
 "Language-Team: Japanese (https://www.transifex.com/fcitx/teams/12005/ja/)\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -25,21 +26,21 @@ msgstr ""
 #: rc.cpp:9
 #, kde-format
 msgid "&Command:"
-msgstr "コマンド&C:"
+msgstr "コマンド(&C):"
 
 #. i18n: file: gui/addshortcutdialog.ui:22
 #. i18n: ectx: property (text), widget (QLabel, inputModeLabel_)
 #: rc.cpp:6
 #, kde-format
 msgid "&Input Mode:"
-msgstr "入力モード&I:"
+msgstr "入力モード(&I):"
 
 #. i18n: file: gui/addshortcutdialog.ui:71
 #. i18n: ectx: property (text), widget (QLabel, keyLabel_)
 #: rc.cpp:12
 #, kde-format
 msgid "&Key:"
-msgstr "キー&K:"
+msgstr "キー(&K):"
 
 #. i18n: file: gui/adddictdialog.ui:42
 #. i18n: ectx: property (text), widget (QLabel, pathLabel_)
@@ -194,7 +195,7 @@ msgstr "句読点スタイル"
 #: rc.cpp:30
 #, kde-format
 msgid "R&ule:"
-msgstr "ルール&R:"
+msgstr "ルール(&R):"
 
 #: src/kkc.h:74
 msgid "Rule"
