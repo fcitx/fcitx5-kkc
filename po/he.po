@@ -1,0 +1,251 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the fcitx5-kkc package.
+#
+# Translators:
+# Omer I.S. <omeritzicschwartz@gmail.com>, 2020
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: fcitx5-kkc\n"
+"Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
+"POT-Creation-Date: 2020-12-10 01:10+0000\n"
+"PO-Revision-Date: 2017-12-19 22:05+0000\n"
+"Last-Translator: Omer I.S. <omeritzicschwartz@gmail.com>, 2020\n"
+"Language-Team: Hebrew (https://www.transifex.com/fcitx/teams/12005/he/)\n"
+"Language: he\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % "
+"1 == 0) ? 1: (n % 10 == 0 && n % 1 == 0 && n > 10) ? 2 : 3;\n"
+
+#. i18n: file: gui/addshortcutdialog.ui:42
+#. i18n: ectx: property (text), widget (QLabel, commandLabel_)
+#: rc.cpp:9
+#, kde-format
+msgid "&Command:"
+msgstr ""
+
+#. i18n: file: gui/addshortcutdialog.ui:22
+#. i18n: ectx: property (text), widget (QLabel, inputModeLabel_)
+#: rc.cpp:6
+#, kde-format
+msgid "&Input Mode:"
+msgstr ""
+
+#. i18n: file: gui/addshortcutdialog.ui:71
+#. i18n: ectx: property (text), widget (QLabel, keyLabel_)
+#: rc.cpp:12
+#, kde-format
+msgid "&Key:"
+msgstr ""
+
+#. i18n: file: gui/adddictdialog.ui:42
+#. i18n: ectx: property (text), widget (QLabel, pathLabel_)
+#: rc.cpp:24
+#, kde-format
+msgid "&Path:"
+msgstr ""
+
+#. i18n: file: gui/adddictdialog.ui:22
+#. i18n: ectx: property (text), widget (QLabel, typeLabel_)
+#: rc.cpp:21
+#, kde-format
+msgid "&Type:"
+msgstr ""
+
+#: src/kkc.h:86
+msgid "Auto Correct"
+msgstr ""
+
+#: src/kkc.h:84
+msgid "Candidate Layout"
+msgstr ""
+
+#: src/kkc.h:96
+msgid "Candidates Page Down"
+msgstr ""
+
+#: src/kkc.h:90
+msgid "Candidates Page Up"
+msgstr ""
+
+#: src/kkc.h:108
+msgid "Cursor Down"
+msgstr ""
+
+#: src/kkc.h:102
+msgid "Cursor Up"
+msgstr ""
+
+#. i18n: file: gui/addshortcutdialog.ui:14
+#. i18n: ectx: property (windowTitle), widget (QDialog, AddShortcutDialog)
+#. i18n: file: gui/adddictdialog.ui:14
+#. i18n: ectx: property (windowTitle), widget (QDialog, AddDictDialog)
+#: rc.cpp:3 rc.cpp:18
+#, kde-format
+msgid "Dialog"
+msgstr ""
+
+#: src/kkc.h:119
+msgid "Dictionary"
+msgstr ""
+
+#: gui/dictwidget.cpp:36
+msgid "Dictionary Manager"
+msgstr ""
+
+#: gui/shortcutmodel.cpp:32 src/kkc.cpp:97 src/kkc.h:37
+msgid "Direct input"
+msgstr ""
+
+#. i18n: file: gui/dictwidget.ui:14
+#. i18n: ectx: property (windowTitle), widget (QWidget, KkcDictWidget)
+#. i18n: file: gui/shortcutwidget.ui:20
+#. i18n: ectx: property (windowTitle), widget (QWidget, KkcShortcutWidget)
+#: rc.cpp:15 rc.cpp:27
+#, kde-format
+msgid "Form"
+msgstr ""
+
+#: gui/shortcutmodel.cpp:73
+msgid "Function"
+msgstr ""
+
+#: gui/shortcutmodel.cpp:31 src/kkc.cpp:94 src/kkc.h:36
+msgid "Half width Katakana"
+msgstr ""
+
+#: gui/shortcutmodel.cpp:31 src/kkc.cpp:92 src/kkc.h:35
+msgid "Hiragana"
+msgstr ""
+
+#: src/kkc.h:29
+msgid "Horizontal"
+msgstr ""
+
+#: src/kkc.h:79
+msgid "Initial Input Mode"
+msgstr ""
+
+#: gui/shortcutmodel.cpp:69
+msgid "Input Mode"
+msgstr ""
+
+#: src/kkc.h:31
+msgid "Japanese"
+msgstr "יפנית"
+
+#: org.fcitx.Fcitx5.Addon.Kkc.metainfo.xml.in:8
+msgid "Japanese input method"
+msgstr ""
+
+#: src/kkc.conf.in:3
+msgid "Kana Kanji"
+msgstr ""
+
+#: gui/shortcutmodel.cpp:31 src/kkc.cpp:93 src/kkc.h:35
+msgid "Katakana"
+msgstr ""
+
+#: gui/shortcutmodel.cpp:71
+msgid "Key"
+msgstr "מפתח"
+
+#: gui/shortcutwidget.cpp:91
+msgid "Key Conflict"
+msgstr ""
+
+#: gui/shortcutwidget.cpp:92
+msgid "Key to add is conflict with existing shortcut."
+msgstr ""
+
+#: org.fcitx.Fcitx5.Addon.Kkc.metainfo.xml.in:7
+msgid "Kkc"
+msgstr ""
+
+#: src/kkc-addon.conf.in:3
+msgid "Kkc Addon of Fcitx"
+msgstr ""
+
+#: gui/shortcutmodel.cpp:32 src/kkc.cpp:95 src/kkc.h:32 src/kkc.h:36
+msgid "Latin"
+msgstr ""
+
+#: src/kkc.h:28
+msgid "Not set"
+msgstr ""
+
+#: src/kkc.h:115
+msgid "Number candidate of Triggers To Show Candidate Window"
+msgstr ""
+
+#: src/kkc.h:81
+msgid "Page size"
+msgstr ""
+
+#: src/kkc.h:76
+msgid "Punctuation Style"
+msgstr ""
+
+#. i18n: file: gui/shortcutwidget.ui:28
+#. i18n: ectx: property (text), widget (QLabel, ruleLabel_)
+#: rc.cpp:30
+#, kde-format
+msgid "R&ule:"
+msgstr ""
+
+#: src/kkc.h:74
+msgid "Rule"
+msgstr ""
+
+#: src/kkc.h:117
+msgid "Rule Editor"
+msgstr ""
+
+#: gui/shortcutwidget.cpp:67
+msgid "Save Changes"
+msgstr "שמירת השינויים"
+
+#: gui/adddictdialog.cpp:67
+msgid "Select Dictionary Directory"
+msgstr ""
+
+#: gui/adddictdialog.cpp:51
+msgid "Select Dictionary File"
+msgstr ""
+
+#: gui/shortcutwidget.cpp:58
+msgid "Shortcut Manager"
+msgstr ""
+
+#: src/kkc.h:111
+msgid "Show Annotation"
+msgstr ""
+
+#: gui/adddictdialog.cpp:24
+msgid "System"
+msgstr "מערכת"
+
+#: gui/shortcutwidget.cpp:68
+msgid ""
+"The content has changed.\n"
+"Do you want to save the changes or discard them?"
+msgstr ""
+
+#: gui/adddictdialog.cpp:25
+msgid "User"
+msgstr "משתמש"
+
+#: src/kkc.h:29
+msgid "Vertical"
+msgstr ""
+
+#: gui/shortcutmodel.cpp:32 src/kkc.cpp:96 src/kkc.h:32 src/kkc.h:37
+msgid "Wide latin"
+msgstr ""
+
+#: src/kkc.h:33
+msgid "Wide latin Japanese"
+msgstr ""
