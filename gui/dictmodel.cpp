@@ -152,7 +152,7 @@ QVariant DictModel::data(const QModelIndex &index, int role) const {
 bool DictModel::moveUp(const QModelIndex &currentIndex) {
     if (currentIndex.row() > 0 && currentIndex.row() < dicts_.size()) {
         beginResetModel();
-#if (QT_VERSION < QT_VERSION_CHECK(5,13,0))
+#if (QT_VERSION < QT_VERSION_CHECK(5, 13, 0))
         dicts_.swap(currentIndex.row() - 1, currentIndex.row());
 #else
         dicts_.swapItemsAt(currentIndex.row() - 1, currentIndex.row());
@@ -166,7 +166,7 @@ bool DictModel::moveUp(const QModelIndex &currentIndex) {
 bool DictModel::moveDown(const QModelIndex &currentIndex) {
     if (currentIndex.row() >= 0 && currentIndex.row() + 1 < dicts_.size()) {
         beginResetModel();
-#if (QT_VERSION < QT_VERSION_CHECK(5,13,0))
+#if (QT_VERSION < QT_VERSION_CHECK(5, 13, 0))
         dicts_.swap(currentIndex.row() + 1, currentIndex.row());
 #else
         dicts_.swapItemsAt(currentIndex.row() + 1, currentIndex.row());
