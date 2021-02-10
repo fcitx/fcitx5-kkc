@@ -5,15 +5,15 @@
 # Translators:
 # csslayer <wengxt@gmail.com>, 2017
 # Bon Keun Seo <scobyseo@gmail.com>, 2017
-# JungHee Lee <daemul72@gmail.com>, 2020
+# Bruce Lee <daemul72@gmail.com>, 2021
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx5-kkc\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2020-11-02 15:55-0800\n"
+"POT-Creation-Date: 2021-02-10 20:24+0000\n"
 "PO-Revision-Date: 2017-12-19 22:05+0000\n"
-"Last-Translator: JungHee Lee <daemul72@gmail.com>, 2020\n"
+"Last-Translator: Bruce Lee <daemul72@gmail.com>, 2021\n"
 "Language-Team: Korean (https://www.transifex.com/fcitx/teams/12005/ko/)\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
@@ -23,35 +23,35 @@ msgstr ""
 
 #. i18n: file: gui/addshortcutdialog.ui:42
 #. i18n: ectx: property (text), widget (QLabel, commandLabel_)
-#: rc.cpp:18 rc.cpp:48
+#: rc.cpp:9
 #, kde-format
 msgid "&Command:"
 msgstr "명령(&C):"
 
 #. i18n: file: gui/addshortcutdialog.ui:22
 #. i18n: ectx: property (text), widget (QLabel, inputModeLabel_)
-#: rc.cpp:15 rc.cpp:45
+#: rc.cpp:6
 #, kde-format
 msgid "&Input Mode:"
 msgstr "입력 모드(&I):"
 
 #. i18n: file: gui/addshortcutdialog.ui:71
 #. i18n: ectx: property (text), widget (QLabel, keyLabel_)
-#: rc.cpp:21 rc.cpp:51
+#: rc.cpp:12
 #, kde-format
 msgid "&Key:"
 msgstr "키(&K):"
 
 #. i18n: file: gui/adddictdialog.ui:42
 #. i18n: ectx: property (text), widget (QLabel, pathLabel_)
-#: rc.cpp:30 rc.cpp:60
+#: rc.cpp:24
 #, kde-format
 msgid "&Path:"
 msgstr "경로(&P)"
 
 #. i18n: file: gui/adddictdialog.ui:22
 #. i18n: ectx: property (text), widget (QLabel, typeLabel_)
-#: rc.cpp:27 rc.cpp:57
+#: rc.cpp:21
 #, kde-format
 msgid "&Type:"
 msgstr "유형(&T):"
@@ -84,11 +84,7 @@ msgstr "커서를 위로"
 #. i18n: ectx: property (windowTitle), widget (QDialog, AddShortcutDialog)
 #. i18n: file: gui/adddictdialog.ui:14
 #. i18n: ectx: property (windowTitle), widget (QDialog, AddDictDialog)
-#. i18n: file: gui/addshortcutdialog.ui:14
-#. i18n: ectx: property (windowTitle), widget (QDialog, AddShortcutDialog)
-#. i18n: file: gui/adddictdialog.ui:14
-#. i18n: ectx: property (windowTitle), widget (QDialog, AddDictDialog)
-#: rc.cpp:12 rc.cpp:24 rc.cpp:42 rc.cpp:54
+#: rc.cpp:3 rc.cpp:18
 #, kde-format
 msgid "Dialog"
 msgstr "대화창"
@@ -101,7 +97,7 @@ msgstr "사전"
 msgid "Dictionary Manager"
 msgstr "사전 관리자"
 
-#: src/kkc.cpp:97 src/kkc.h:37 gui/shortcutmodel.cpp:32
+#: gui/shortcutmodel.cpp:32 src/kkc.cpp:97 src/kkc.h:37
 msgid "Direct input"
 msgstr "직접 입력"
 
@@ -109,11 +105,7 @@ msgstr "직접 입력"
 #. i18n: ectx: property (windowTitle), widget (QWidget, KkcDictWidget)
 #. i18n: file: gui/shortcutwidget.ui:20
 #. i18n: ectx: property (windowTitle), widget (QWidget, KkcShortcutWidget)
-#. i18n: file: gui/dictwidget.ui:14
-#. i18n: ectx: property (windowTitle), widget (QWidget, KkcDictWidget)
-#. i18n: file: gui/shortcutwidget.ui:20
-#. i18n: ectx: property (windowTitle), widget (QWidget, KkcShortcutWidget)
-#: rc.cpp:3 rc.cpp:6 rc.cpp:33 rc.cpp:36
+#: rc.cpp:15 rc.cpp:27
 #, kde-format
 msgid "Form"
 msgstr "Form"
@@ -122,11 +114,11 @@ msgstr "Form"
 msgid "Function"
 msgstr "기능"
 
-#: src/kkc.cpp:94 src/kkc.h:36 gui/shortcutmodel.cpp:31
+#: gui/shortcutmodel.cpp:31 src/kkc.cpp:94 src/kkc.h:36
 msgid "Half width Katakana"
 msgstr "반각 가타가나"
 
-#: src/kkc.cpp:92 src/kkc.h:35 gui/shortcutmodel.cpp:31
+#: gui/shortcutmodel.cpp:31 src/kkc.cpp:92 src/kkc.h:35
 msgid "Hiragana"
 msgstr "히라가나"
 
@@ -146,7 +138,7 @@ msgstr "입력 모드"
 msgid "Japanese"
 msgstr "일본어"
 
-#: org.fcitx.fcitx5-kkc.metainfo.xml.in:8
+#: org.fcitx.Fcitx5.Addon.Kkc.metainfo.xml.in:8
 msgid "Japanese input method"
 msgstr ""
 
@@ -154,7 +146,7 @@ msgstr ""
 msgid "Kana Kanji"
 msgstr "가나 한자"
 
-#: src/kkc.cpp:93 src/kkc.h:35 gui/shortcutmodel.cpp:31
+#: gui/shortcutmodel.cpp:31 src/kkc.cpp:93 src/kkc.h:35
 msgid "Katakana"
 msgstr "가타가나"
 
@@ -170,15 +162,15 @@ msgstr "키 충돌"
 msgid "Key to add is conflict with existing shortcut."
 msgstr "추가하려는 키가 기존 단축기와 겹칩니다."
 
-#: org.fcitx.fcitx5-kkc.metainfo.xml.in:7
+#: org.fcitx.Fcitx5.Addon.Kkc.metainfo.xml.in:7
 msgid "Kkc"
 msgstr ""
 
 #: src/kkc-addon.conf.in:3
 msgid "Kkc Addon of Fcitx"
-msgstr "Fcitx를 위한 KKC 부가기능"
+msgstr "Fcitx를 위한 KKC 애드온"
 
-#: src/kkc.cpp:95 src/kkc.h:32 src/kkc.h:36 gui/shortcutmodel.cpp:32
+#: gui/shortcutmodel.cpp:32 src/kkc.cpp:95 src/kkc.h:32 src/kkc.h:36
 msgid "Latin"
 msgstr "로마자"
 
@@ -200,7 +192,7 @@ msgstr "문장부호 스타일"
 
 #. i18n: file: gui/shortcutwidget.ui:28
 #. i18n: ectx: property (text), widget (QLabel, ruleLabel_)
-#: rc.cpp:9 rc.cpp:39
+#: rc.cpp:30
 #, kde-format
 msgid "R&ule:"
 msgstr "규칙(&U):"
@@ -253,7 +245,7 @@ msgstr "사용자"
 msgid "Vertical"
 msgstr "세로"
 
-#: src/kkc.cpp:96 src/kkc.h:32 src/kkc.h:37 gui/shortcutmodel.cpp:32
+#: gui/shortcutmodel.cpp:32 src/kkc.cpp:96 src/kkc.h:32 src/kkc.h:37
 msgid "Wide latin"
 msgstr "전각 로마자"
 
