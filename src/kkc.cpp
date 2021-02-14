@@ -31,11 +31,13 @@ public:
         kkc_context_set_dictionaries(context_.get(), parent_->dictionaries());
         kkc_context_set_input_mode(context_.get(),
                                    *parent_->config().inputMode);
+        lastMode_ = kkc_context_get_input_mode(context_.get());
         applyConfig();
 
         signal_ =
             g_signal_connect(context_.get(), "notify::input-mode",
                              G_CALLBACK(&KkcState::inputModeChanged), this);
+
         updateInputMode();
     }
 
@@ -52,7 +54,14 @@ public:
         that->updateInputMode();
     }
 
-    void updateInputMode() { parent_->updateInputMode(ic_); }
+    void updateInputMode() {
+        parent_->updateInputMode(ic_);
+        auto newMode = kkc_context_get_input_mode(context_.get());
+        if (newMode != lastMode_) {
+            lastMode_ = newMode;
+            modeChanged_ = true;
+        }
+    }
 
     void applyConfig() {
         KkcCandidateList *kkcCandidates =
@@ -75,6 +84,8 @@ public:
     InputContext *ic_;
     GObjectUniquePtr<KkcContext> context_;
     gulong signal_;
+    bool modeChanged_ = false;
+    KkcInputMode lastMode_ = KKC_INPUT_MODE_HIRAGANA;
 };
 
 namespace {
@@ -473,6 +484,7 @@ void KkcEngine::keyEvent(const InputMethodEntry &, KeyEvent &keyEvent) {
         KKC_DEBUG() << "Failed to obtain kkc key event";
         return;
     }
+    kkcstate->modeChanged_ = false;
     if (kkc_context_process_key_event(context, key.get())) {
         keyEvent.filterAndAccept();
         updateUI(keyEvent.inputContext());
@@ -525,6 +537,11 @@ void KkcEngine::updateUI(InputContext *inputContext) {
         gchar *str = kkc_context_poll_output(context);
         inputContext->commitString(str);
         g_free(str);
+    }
+
+    // Ensure we are not composing any text.
+    if (state->modeChanged_ && preedit.empty() && !inputPanel.candidateList()) {
+        instance_->showInputMethodInformation(inputContext);
     }
 
     inputContext->updateUserInterface(UserInterfaceComponent::InputPanel);
