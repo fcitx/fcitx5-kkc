@@ -124,7 +124,7 @@ class KkcState;
 template <typename T>
 using GObjectUniquePtr = UniqueCPtr<T, g_object_unref>;
 
-class KkcEngine final : public InputMethodEngine {
+class KkcEngine final : public InputMethodEngineV2 {
 public:
     KkcEngine(Instance *instance);
     ~KkcEngine();
@@ -163,6 +163,8 @@ public:
     void updateUI(InputContext *inputContext);
 
     std::string subMode(const InputMethodEntry &, InputContext &) override;
+    std::string subModeLabelImpl(const fcitx::InputMethodEntry &,
+                                 fcitx::InputContext &) override;
 
     KkcState *state(InputContext *ic);
 

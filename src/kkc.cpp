@@ -654,9 +654,16 @@ std::string KkcEngine::subMode(const InputMethodEntry &, InputContext &ic) {
     return "";
 }
 
-KkcState *KkcEngine::state(InputContext *ic) {
-    return ic->propertyFor(&factory_);
-}
+std::string KkcEngine::subModeLabelImpl(const InputMethodEntry &,
+                                        InputContext &ic) {
+    if (auto status = inputModeStatus(this, &ic)) {
+        return _(status->label);
+    }
+    return "";
+
+    KkcState *KkcEngine::state(InputContext * ic) {
+        return ic->propertyFor(&factory_);
+    }
 } // namespace fcitx
 
 FCITX_ADDON_FACTORY(fcitx::KkcFactory);
