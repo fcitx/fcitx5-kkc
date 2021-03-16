@@ -660,10 +660,11 @@ std::string KkcEngine::subModeLabelImpl(const InputMethodEntry &,
         return _(status->label);
     }
     return "";
+}
 
-    KkcState *KkcEngine::state(InputContext * ic) {
-        return ic->propertyFor(&factory_);
-    }
+KkcState *KkcEngine::state(InputContext *ic) {
+    return ic->propertyFor(&factory_);
+}
 } // namespace fcitx
 
 FCITX_ADDON_FACTORY(fcitx::KkcFactory);

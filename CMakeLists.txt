@@ -12,7 +12,7 @@ include(ECMUninstallTarget)
 option(ENABLE_QT "Enable Qt for GUI configuration" On)
 
 find_package(PkgConfig REQUIRED)
-find_package(Fcitx5Core REQUIRED)
+find_package(Fcitx5Core 5.0.6 REQUIRED)
 find_package(LibKKC REQUIRED)
 find_package(Gettext REQUIRED)
 pkg_check_modules(Gee IMPORTED_TARGET "gee-0.8" REQUIRED)
