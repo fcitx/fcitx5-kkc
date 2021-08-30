@@ -5,15 +5,15 @@
 # Translators:
 # csslayer <wengxt@gmail.com>, 2017
 # Bon Keun Seo <scobyseo@gmail.com>, 2017
-# Bruce Lee <daemul72@gmail.com>, 2021
+# JungHee Lee <daemul72@gmail.com>, 2021
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx5-kkc\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2021-02-10 20:24+0000\n"
+"POT-Creation-Date: 2021-08-30 20:24+0000\n"
 "PO-Revision-Date: 2017-12-19 22:05+0000\n"
-"Last-Translator: Bruce Lee <daemul72@gmail.com>, 2021\n"
+"Last-Translator: JungHee Lee <daemul72@gmail.com>, 2021\n"
 "Language-Team: Korean (https://www.transifex.com/fcitx/teams/12005/ko/)\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
@@ -97,7 +97,7 @@ msgstr "사전"
 msgid "Dictionary Manager"
 msgstr "사전 관리자"
 
-#: gui/shortcutmodel.cpp:32 src/kkc.cpp:97 src/kkc.h:37
+#: gui/shortcutmodel.cpp:32 src/kkc.cpp:108 src/kkc.h:37
 msgid "Direct input"
 msgstr "직접 입력"
 
@@ -114,11 +114,11 @@ msgstr "Form"
 msgid "Function"
 msgstr "기능"
 
-#: gui/shortcutmodel.cpp:31 src/kkc.cpp:94 src/kkc.h:36
+#: gui/shortcutmodel.cpp:31 src/kkc.cpp:105 src/kkc.h:36
 msgid "Half width Katakana"
 msgstr "반각 가타가나"
 
-#: gui/shortcutmodel.cpp:31 src/kkc.cpp:92 src/kkc.h:35
+#: gui/shortcutmodel.cpp:31 src/kkc.cpp:103 src/kkc.h:35
 msgid "Hiragana"
 msgstr "히라가나"
 
@@ -146,7 +146,7 @@ msgstr ""
 msgid "Kana Kanji"
 msgstr "가나 한자"
 
-#: gui/shortcutmodel.cpp:31 src/kkc.cpp:93 src/kkc.h:35
+#: gui/shortcutmodel.cpp:31 src/kkc.cpp:104 src/kkc.h:35
 msgid "Katakana"
 msgstr "가타가나"
 
@@ -164,13 +164,13 @@ msgstr "추가하려는 키가 기존 단축기와 겹칩니다."
 
 #: org.fcitx.Fcitx5.Addon.Kkc.metainfo.xml.in:7
 msgid "Kkc"
-msgstr ""
+msgstr "Kkc"
 
-#: src/kkc-addon.conf.in:3
+#: src/kkc-addon.conf.in.in:3
 msgid "Kkc Addon of Fcitx"
 msgstr "Fcitx를 위한 KKC 애드온"
 
-#: gui/shortcutmodel.cpp:32 src/kkc.cpp:95 src/kkc.h:32 src/kkc.h:36
+#: gui/shortcutmodel.cpp:32 src/kkc.cpp:106 src/kkc.h:32 src/kkc.h:36
 msgid "Latin"
 msgstr "로마자"
 
@@ -245,7 +245,7 @@ msgstr "사용자"
 msgid "Vertical"
 msgstr "세로"
 
-#: gui/shortcutmodel.cpp:32 src/kkc.cpp:96 src/kkc.h:32 src/kkc.h:37
+#: gui/shortcutmodel.cpp:32 src/kkc.cpp:107 src/kkc.h:32 src/kkc.h:37
 msgid "Wide latin"
 msgstr "전각 로마자"
 
