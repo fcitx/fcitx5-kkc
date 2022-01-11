@@ -7,8 +7,8 @@
 
 #include "adddictdialog.h"
 #include "config.h"
-#include <QDebug>
 #include <QFileDialog>
+#include <array>
 #include <fcitx-utils/i18n.h>
 #include <fcitx-utils/standardpath.h>
 #include <fcitx-utils/stringutils.h>
@@ -62,7 +62,6 @@ void AddDictDialog::browseClicked() {
             QDir dir(basePath);
             path = dir.filePath(path.mid(sizeof(configDir) - 1));
         }
-        qDebug() << path;
         path = QFileDialog::getExistingDirectory(
             this, _("Select Dictionary Directory"), path);
         if (path.startsWith(basePath + "/")) {
