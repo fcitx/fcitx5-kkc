@@ -5,15 +5,15 @@
 # Translators:
 # csslayer <wengxt@gmail.com>, 2017
 # Bon Keun Seo <scobyseo@gmail.com>, 2017
-# JungHee Lee <daemul72@gmail.com>, 2022
+# Junghee Lee <daemul72@gmail.com>, 2022
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx5-kkc\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2022-03-01 20:24+0000\n"
+"POT-Creation-Date: 2022-04-10 20:24+0000\n"
 "PO-Revision-Date: 2017-12-19 22:05+0000\n"
-"Last-Translator: JungHee Lee <daemul72@gmail.com>, 2022\n"
+"Last-Translator: Junghee Lee <daemul72@gmail.com>, 2022\n"
 "Language-Team: Korean (https://www.transifex.com/fcitx/teams/12005/ko/)\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
@@ -116,7 +116,7 @@ msgstr "기능"
 
 #: gui/shortcutmodel.cpp:31 src/kkc.cpp:105 src/kkc.h:36
 msgid "Half width Katakana"
-msgstr "반각 가타가나"
+msgstr "반각 가타카나"
 
 #: gui/shortcutmodel.cpp:31 src/kkc.cpp:103 src/kkc.h:35
 msgid "Hiragana"
@@ -144,11 +144,11 @@ msgstr "일본어 입력기"
 
 #: src/kkc.conf.in:3
 msgid "Kana Kanji"
-msgstr "가나 한자"
+msgstr "카나 한자"
 
 #: gui/shortcutmodel.cpp:31 src/kkc.cpp:104 src/kkc.h:35
 msgid "Katakana"
-msgstr "가타가나"
+msgstr "가타카나"
 
 #: gui/shortcutmodel.cpp:71
 msgid "Key"
@@ -180,7 +180,7 @@ msgstr "지정되지 않음"
 
 #: src/kkc.h:115
 msgid "Number candidate of Triggers To Show Candidate Window"
-msgstr "후보 창을 표시할 트리거 후보 수"
+msgstr "후보 단어 창의 표시를 트리거한 키 입력 수"
 
 #: src/kkc.h:81
 msgid "Page size"
