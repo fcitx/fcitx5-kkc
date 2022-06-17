@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx5-kkc\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2020-11-02 15:55-0800\n"
+"POT-Creation-Date: 2022-06-17 20:25+0000\n"
 "PO-Revision-Date: 2017-12-19 22:05+0000\n"
 "Last-Translator: Robert Antoni Buj Gelonch <rbuj@fedoraproject.org>, 2017\n"
 "Language-Team: Catalan (https://www.transifex.com/fcitx/teams/12005/ca/)\n"
@@ -22,35 +22,35 @@ msgstr ""
 
 #. i18n: file: gui/addshortcutdialog.ui:42
 #. i18n: ectx: property (text), widget (QLabel, commandLabel_)
-#: rc.cpp:18 rc.cpp:48
+#: rc.cpp:9
 #, kde-format
 msgid "&Command:"
 msgstr ""
 
 #. i18n: file: gui/addshortcutdialog.ui:22
 #. i18n: ectx: property (text), widget (QLabel, inputModeLabel_)
-#: rc.cpp:15 rc.cpp:45
+#: rc.cpp:6
 #, kde-format
 msgid "&Input Mode:"
 msgstr ""
 
 #. i18n: file: gui/addshortcutdialog.ui:71
 #. i18n: ectx: property (text), widget (QLabel, keyLabel_)
-#: rc.cpp:21 rc.cpp:51
+#: rc.cpp:12
 #, kde-format
 msgid "&Key:"
 msgstr ""
 
 #. i18n: file: gui/adddictdialog.ui:42
 #. i18n: ectx: property (text), widget (QLabel, pathLabel_)
-#: rc.cpp:30 rc.cpp:60
+#: rc.cpp:24
 #, kde-format
 msgid "&Path:"
 msgstr "&Camí:"
 
 #. i18n: file: gui/adddictdialog.ui:22
 #. i18n: ectx: property (text), widget (QLabel, typeLabel_)
-#: rc.cpp:27 rc.cpp:57
+#: rc.cpp:21
 #, kde-format
 msgid "&Type:"
 msgstr "&Escriptura:"
@@ -83,11 +83,7 @@ msgstr "Cursor amunt"
 #. i18n: ectx: property (windowTitle), widget (QDialog, AddShortcutDialog)
 #. i18n: file: gui/adddictdialog.ui:14
 #. i18n: ectx: property (windowTitle), widget (QDialog, AddDictDialog)
-#. i18n: file: gui/addshortcutdialog.ui:14
-#. i18n: ectx: property (windowTitle), widget (QDialog, AddShortcutDialog)
-#. i18n: file: gui/adddictdialog.ui:14
-#. i18n: ectx: property (windowTitle), widget (QDialog, AddDictDialog)
-#: rc.cpp:12 rc.cpp:24 rc.cpp:42 rc.cpp:54
+#: rc.cpp:3 rc.cpp:18
 #, kde-format
 msgid "Dialog"
 msgstr ""
@@ -100,7 +96,7 @@ msgstr "Diccionari"
 msgid "Dictionary Manager"
 msgstr "Gestor del diccionari"
 
-#: src/kkc.cpp:97 src/kkc.h:37 gui/shortcutmodel.cpp:32
+#: gui/shortcutmodel.cpp:32 src/kkc.cpp:108 src/kkc.h:37
 msgid "Direct input"
 msgstr "Entrada directa"
 
@@ -108,11 +104,7 @@ msgstr "Entrada directa"
 #. i18n: ectx: property (windowTitle), widget (QWidget, KkcDictWidget)
 #. i18n: file: gui/shortcutwidget.ui:20
 #. i18n: ectx: property (windowTitle), widget (QWidget, KkcShortcutWidget)
-#. i18n: file: gui/dictwidget.ui:14
-#. i18n: ectx: property (windowTitle), widget (QWidget, KkcDictWidget)
-#. i18n: file: gui/shortcutwidget.ui:20
-#. i18n: ectx: property (windowTitle), widget (QWidget, KkcShortcutWidget)
-#: rc.cpp:3 rc.cpp:6 rc.cpp:33 rc.cpp:36
+#: rc.cpp:15 rc.cpp:27
 #, kde-format
 msgid "Form"
 msgstr ""
@@ -121,11 +113,11 @@ msgstr ""
 msgid "Function"
 msgstr "Funció"
 
-#: src/kkc.cpp:94 src/kkc.h:36 gui/shortcutmodel.cpp:31
+#: gui/shortcutmodel.cpp:31 src/kkc.cpp:105 src/kkc.h:36
 msgid "Half width Katakana"
 msgstr "Katakana d'ample mig"
 
-#: src/kkc.cpp:92 src/kkc.h:35 gui/shortcutmodel.cpp:31
+#: gui/shortcutmodel.cpp:31 src/kkc.cpp:103 src/kkc.h:35
 msgid "Hiragana"
 msgstr "Hiragana"
 
@@ -145,15 +137,23 @@ msgstr "Mode d'entrada"
 msgid "Japanese"
 msgstr "Japonès"
 
-#: org.fcitx.fcitx5-kkc.metainfo.xml.in:8
+#: org.fcitx.Fcitx5.Addon.Kkc.metainfo.xml.in:8
 msgid "Japanese input method"
+msgstr ""
+
+#: org.fcitx.Fcitx5.Addon.Kkc.metainfo.xml.in:7
+msgid "KKC"
+msgstr ""
+
+#: src/kkc-addon.conf.in.in:3
+msgid "KKC Addon of Fcitx"
 msgstr ""
 
 #: src/kkc.conf.in:3
 msgid "Kana Kanji"
 msgstr "Kana kanji"
 
-#: src/kkc.cpp:93 src/kkc.h:35 gui/shortcutmodel.cpp:31
+#: gui/shortcutmodel.cpp:31 src/kkc.cpp:104 src/kkc.h:35
 msgid "Katakana"
 msgstr "Katakana"
 
@@ -169,15 +169,7 @@ msgstr "Conflicte de tecla"
 msgid "Key to add is conflict with existing shortcut."
 msgstr "La tecla a afegir està en conflicte amb una drecera existent."
 
-#: org.fcitx.fcitx5-kkc.metainfo.xml.in:7
-msgid "Kkc"
-msgstr ""
-
-#: src/kkc-addon.conf.in:3
-msgid "Kkc Addon of Fcitx"
-msgstr "Complement kkc de fcitx"
-
-#: src/kkc.cpp:95 src/kkc.h:32 src/kkc.h:36 gui/shortcutmodel.cpp:32
+#: gui/shortcutmodel.cpp:32 src/kkc.cpp:106 src/kkc.h:32 src/kkc.h:36
 msgid "Latin"
 msgstr "Llatí"
 
@@ -200,7 +192,7 @@ msgstr "Estil de puntuació"
 
 #. i18n: file: gui/shortcutwidget.ui:28
 #. i18n: ectx: property (text), widget (QLabel, ruleLabel_)
-#: rc.cpp:9 rc.cpp:39
+#: rc.cpp:30
 #, kde-format
 msgid "R&ule:"
 msgstr ""
@@ -217,7 +209,7 @@ msgstr ""
 msgid "Save Changes"
 msgstr "Desa els canvis"
 
-#: gui/adddictdialog.cpp:67
+#: gui/adddictdialog.cpp:66
 msgid "Select Dictionary Directory"
 msgstr "Seleccioneu el directori del diccionari"
 
@@ -253,7 +245,7 @@ msgstr "Usuari"
 msgid "Vertical"
 msgstr "Vertical"
 
-#: src/kkc.cpp:96 src/kkc.h:32 src/kkc.h:37 gui/shortcutmodel.cpp:32
+#: gui/shortcutmodel.cpp:32 src/kkc.cpp:107 src/kkc.h:32 src/kkc.h:37
 msgid "Wide latin"
 msgstr "Llatí ample"
 

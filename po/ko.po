@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx5-kkc\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2022-04-10 20:24+0000\n"
+"POT-Creation-Date: 2022-06-17 20:25+0000\n"
 "PO-Revision-Date: 2017-12-19 22:05+0000\n"
 "Last-Translator: Junghee Lee <daemul72@gmail.com>, 2022\n"
 "Language-Team: Korean (https://www.transifex.com/fcitx/teams/12005/ko/)\n"
@@ -142,6 +142,14 @@ msgstr "일본어"
 msgid "Japanese input method"
 msgstr "일본어 입력기"
 
+#: org.fcitx.Fcitx5.Addon.Kkc.metainfo.xml.in:7
+msgid "KKC"
+msgstr ""
+
+#: src/kkc-addon.conf.in.in:3
+msgid "KKC Addon of Fcitx"
+msgstr ""
+
 #: src/kkc.conf.in:3
 msgid "Kana Kanji"
 msgstr "카나 한자"
@@ -161,14 +169,6 @@ msgstr "키 충돌"
 #: gui/shortcutwidget.cpp:92
 msgid "Key to add is conflict with existing shortcut."
 msgstr "추가하려는 키가 기존 단축기와 겹칩니다."
-
-#: org.fcitx.Fcitx5.Addon.Kkc.metainfo.xml.in:7
-msgid "Kkc"
-msgstr "Kkc"
-
-#: src/kkc-addon.conf.in.in:3
-msgid "Kkc Addon of Fcitx"
-msgstr "Fcitx를 위한 KKC 애드온"
 
 #: gui/shortcutmodel.cpp:32 src/kkc.cpp:106 src/kkc.h:32 src/kkc.h:36
 msgid "Latin"

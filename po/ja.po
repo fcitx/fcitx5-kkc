@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx5-kkc\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2020-12-07 00:02+0100\n"
+"POT-Creation-Date: 2022-06-17 20:25+0000\n"
 "PO-Revision-Date: 2017-12-19 22:05+0000\n"
 "Last-Translator: あわしろいくや <ikunya@gmail.com>, 2020\n"
 "Language-Team: Japanese (https://www.transifex.com/fcitx/teams/12005/ja/)\n"
@@ -97,7 +97,7 @@ msgstr "辞書"
 msgid "Dictionary Manager"
 msgstr "辞書マネージャー"
 
-#: gui/shortcutmodel.cpp:32 src/kkc.cpp:97 src/kkc.h:37
+#: gui/shortcutmodel.cpp:32 src/kkc.cpp:108 src/kkc.h:37
 msgid "Direct input"
 msgstr "直接入力"
 
@@ -114,11 +114,11 @@ msgstr "フォーム"
 msgid "Function"
 msgstr "ファンクション"
 
-#: gui/shortcutmodel.cpp:31 src/kkc.cpp:94 src/kkc.h:36
+#: gui/shortcutmodel.cpp:31 src/kkc.cpp:105 src/kkc.h:36
 msgid "Half width Katakana"
 msgstr "半角カタカナ"
 
-#: gui/shortcutmodel.cpp:31 src/kkc.cpp:92 src/kkc.h:35
+#: gui/shortcutmodel.cpp:31 src/kkc.cpp:103 src/kkc.h:35
 msgid "Hiragana"
 msgstr "ひらがな"
 
@@ -142,11 +142,19 @@ msgstr "日本語"
 msgid "Japanese input method"
 msgstr "日本語入力メソッド"
 
+#: org.fcitx.Fcitx5.Addon.Kkc.metainfo.xml.in:7
+msgid "KKC"
+msgstr ""
+
+#: src/kkc-addon.conf.in.in:3
+msgid "KKC Addon of Fcitx"
+msgstr ""
+
 #: src/kkc.conf.in:3
 msgid "Kana Kanji"
 msgstr "かな漢字"
 
-#: gui/shortcutmodel.cpp:31 src/kkc.cpp:93 src/kkc.h:35
+#: gui/shortcutmodel.cpp:31 src/kkc.cpp:104 src/kkc.h:35
 msgid "Katakana"
 msgstr "カタカナ"
 
@@ -162,15 +170,7 @@ msgstr "競合するキー"
 msgid "Key to add is conflict with existing shortcut."
 msgstr "追加したキーは存在するショートカットキーと競合しています。"
 
-#: org.fcitx.Fcitx5.Addon.Kkc.metainfo.xml.in:7
-msgid "Kkc"
-msgstr "Kkc"
-
-#: src/kkc-addon.conf.in:3
-msgid "Kkc Addon of Fcitx"
-msgstr "Fcitx 用 Kkc アドオン"
-
-#: gui/shortcutmodel.cpp:32 src/kkc.cpp:95 src/kkc.h:32 src/kkc.h:36
+#: gui/shortcutmodel.cpp:32 src/kkc.cpp:106 src/kkc.h:32 src/kkc.h:36
 msgid "Latin"
 msgstr "英数"
 
@@ -209,7 +209,7 @@ msgstr "ルールエディタ"
 msgid "Save Changes"
 msgstr "変更を保存"
 
-#: gui/adddictdialog.cpp:67
+#: gui/adddictdialog.cpp:66
 msgid "Select Dictionary Directory"
 msgstr "辞書のディレクトリを選択"
 
@@ -245,7 +245,7 @@ msgstr "ユーザー"
 msgid "Vertical"
 msgstr "縦"
 
-#: gui/shortcutmodel.cpp:32 src/kkc.cpp:96 src/kkc.h:32 src/kkc.h:37
+#: gui/shortcutmodel.cpp:32 src/kkc.cpp:107 src/kkc.h:32 src/kkc.h:37
 msgid "Wide latin"
 msgstr "全角英数"
 
