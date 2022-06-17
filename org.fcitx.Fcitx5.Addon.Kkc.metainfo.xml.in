@@ -4,7 +4,7 @@
   <extends>org.fcitx.Fcitx5</extends>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0+</project_license>
-  <name>Kkc</name>
+  <name>KKC</name>
   <summary>Japanese input method</summary>
   <url type="homepage">https://fcitx-im.org</url>
   <url type="bugtracker">https://github.com/fcitx/fcitx5-kkc/issues</url>
