@@ -6,14 +6,15 @@
 # csslayer <wengxt@gmail.com>, 2017
 # Takuro Onoue <kusanaginoturugi@gmail.com>, 2020
 # あわしろいくや <ikunya@gmail.com>, 2020
+# UTUMI Hirosi <utuhiro78@yahoo.co.jp>, 2022
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx5-kkc\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2022-06-17 20:25+0000\n"
+"POT-Creation-Date: 2022-06-18 20:24+0000\n"
 "PO-Revision-Date: 2017-12-19 22:05+0000\n"
-"Last-Translator: あわしろいくや <ikunya@gmail.com>, 2020\n"
+"Last-Translator: UTUMI Hirosi <utuhiro78@yahoo.co.jp>, 2022\n"
 "Language-Team: Japanese (https://www.transifex.com/fcitx/teams/12005/ja/)\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -144,11 +145,11 @@ msgstr "日本語入力メソッド"
 
 #: org.fcitx.Fcitx5.Addon.Kkc.metainfo.xml.in:7
 msgid "KKC"
-msgstr ""
+msgstr "KKC"
 
 #: src/kkc-addon.conf.in.in:3
 msgid "KKC Addon of Fcitx"
-msgstr ""
+msgstr "Fcitx 用の KKC アドオン"
 
 #: src/kkc.conf.in:3
 msgid "Kana Kanji"

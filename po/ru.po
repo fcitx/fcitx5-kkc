@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx5-kkc\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2022-06-17 20:25+0000\n"
+"POT-Creation-Date: 2022-06-18 20:24+0000\n"
 "PO-Revision-Date: 2017-12-19 22:05+0000\n"
 "Last-Translator: Dmitry <dmitrydmitry761@gmail.com>, 2022\n"
 "Language-Team: Russian (https://www.transifex.com/fcitx/teams/12005/ru/)\n"
@@ -145,11 +145,11 @@ msgstr "Японский метод ввода"
 
 #: org.fcitx.Fcitx5.Addon.Kkc.metainfo.xml.in:7
 msgid "KKC"
-msgstr ""
+msgstr "KKC"
 
 #: src/kkc-addon.conf.in.in:3
 msgid "KKC Addon of Fcitx"
-msgstr ""
+msgstr "Дополнение KKC для Fcitx"
 
 #: src/kkc.conf.in:3
 msgid "Kana Kanji"
