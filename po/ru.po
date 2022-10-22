@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx5-kkc\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2022-06-18 20:24+0000\n"
+"POT-Creation-Date: 2022-10-22 20:24+0000\n"
 "PO-Revision-Date: 2017-12-19 22:05+0000\n"
 "Last-Translator: Dmitry <dmitrydmitry761@gmail.com>, 2022\n"
 "Language-Team: Russian (https://www.transifex.com/fcitx/teams/12005/ru/)\n"
@@ -63,7 +63,7 @@ msgstr "Автокоррекция"
 
 #: src/kkc.h:84
 msgid "Candidate Layout"
-msgstr "Макет кандидата"
+msgstr "Раскладка слов-кандидатов"
 
 #: src/kkc.h:96
 msgid "Candidates Page Down"
