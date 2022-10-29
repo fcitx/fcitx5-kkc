@@ -5,15 +5,15 @@
 # Translators:
 # csslayer <wengxt@gmail.com>, 2017
 # Bon Keun Seo <scobyseo@gmail.com>, 2017
-# Junghee Lee <daemul72@gmail.com>, 2022
+# JungHee Lee <daemul72@gmail.com>, 2022
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx5-kkc\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2022-06-20 20:24+0000\n"
+"POT-Creation-Date: 2022-10-29 20:24+0000\n"
 "PO-Revision-Date: 2017-12-19 22:05+0000\n"
-"Last-Translator: Junghee Lee <daemul72@gmail.com>, 2022\n"
+"Last-Translator: JungHee Lee <daemul72@gmail.com>, 2022\n"
 "Language-Team: Korean (https://www.transifex.com/fcitx/teams/12005/ko/)\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
@@ -176,7 +176,7 @@ msgstr "로마자"
 
 #: src/kkc.h:28
 msgid "Not set"
-msgstr "지정되지 않음"
+msgstr "설정되지 않음"
 
 #: src/kkc.h:115
 msgid "Number candidate of Triggers To Show Candidate Window"
