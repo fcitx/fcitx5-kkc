@@ -6,14 +6,15 @@
 # csslayer <wengxt@gmail.com>, 2017
 # 黃柏諺 <s8321414@gmail.com>, 2017
 # bruh, 2020
+# Neko ◣ 0xFF, 2022
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx5-kkc\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2022-06-17 20:25+0000\n"
+"POT-Creation-Date: 2022-12-16 20:25+0000\n"
 "PO-Revision-Date: 2017-12-19 22:05+0000\n"
-"Last-Translator: bruh, 2020\n"
+"Last-Translator: Neko ◣ 0xFF, 2022\n"
 "Language-Team: Chinese (Taiwan) (https://www.transifex.com/fcitx/teams/12005/"
 "zh_TW/)\n"
 "Language: zh_TW\n"
@@ -145,11 +146,11 @@ msgstr "日語輸入法"
 
 #: org.fcitx.Fcitx5.Addon.Kkc.metainfo.xml.in:7
 msgid "KKC"
-msgstr ""
+msgstr "KKC"
 
 #: src/kkc-addon.conf.in.in:3
 msgid "KKC Addon of Fcitx"
-msgstr ""
+msgstr "Fcitx5 的 KKC 附加元件"
 
 #: src/kkc.conf.in:3
 msgid "Kana Kanji"
