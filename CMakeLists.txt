@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.6)
 
 # The Project Name
-project(fcitx5-kkc VERSION 5.0.11)
+project(fcitx5-kkc VERSION 5.0.12)
 
 find_package(ECM REQUIRED 1.0.0)
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
