@@ -17,7 +17,7 @@ qt5_wrap_ui(KKC_CONFIG_SRCS dictwidget.ui adddictdialog.ui shortcutwidget.ui add
 add_library(fcitx5-kkc-config
   MODULE ${KKC_CONFIG_SRCS})
 
-add_definitions(-DQT_NO_KEYWORDS -std=c++11)
+add_definitions(-DQT_NO_KEYWORDS)
 
 target_include_directories(fcitx5-kkc-config PRIVATE ${PROJECT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR})
 
