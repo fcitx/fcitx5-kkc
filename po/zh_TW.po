@@ -7,15 +7,16 @@
 # 黃柏諺 <s8321414@gmail.com>, 2017
 # bruh, 2020
 # Neko ◣ 0xFF, 2022
+# Haowei Hsu, 2023
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx5-kkc\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2022-12-16 20:25+0000\n"
+"POT-Creation-Date: 2023-08-07 20:24+0000\n"
 "PO-Revision-Date: 2017-12-19 22:05+0000\n"
-"Last-Translator: Neko ◣ 0xFF, 2022\n"
-"Language-Team: Chinese (Taiwan) (https://www.transifex.com/fcitx/teams/12005/"
+"Last-Translator: Haowei Hsu, 2023\n"
+"Language-Team: Chinese (Taiwan) (https://app.transifex.com/fcitx/teams/12005/"
 "zh_TW/)\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
@@ -64,7 +65,7 @@ msgstr "自動校正"
 
 #: src/kkc.h:84
 msgid "Candidate Layout"
-msgstr "候選佈局"
+msgstr "候選配置"
 
 #: src/kkc.h:96
 msgid "Candidates Page Down"
