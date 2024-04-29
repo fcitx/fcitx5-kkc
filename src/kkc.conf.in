@@ -1,6 +1,6 @@
 [InputMethod]
 Name=Kana Kanji
-Icon=fcitx-kkc
+Icon=fcitx_kkc
 Label=あ
 LangCode=ja
 Addon=kkc
