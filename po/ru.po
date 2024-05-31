@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx5-kkc\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2024-04-16 20:26+0000\n"
+"POT-Creation-Date: 2024-05-31 20:24+0000\n"
 "PO-Revision-Date: 2017-12-19 22:05+0000\n"
 "Last-Translator: Dmitry <dmitrydmitry761@gmail.com>, 2024\n"
 "Language-Team: Russian (https://app.transifex.com/fcitx/teams/12005/ru/)\n"
@@ -67,11 +67,11 @@ msgstr "Расположение слов-кандидатов"
 
 #: src/kkc.h:96
 msgid "Candidates Page Down"
-msgstr "Страница кандидатов вниз"
+msgstr "Слово-кандидат на следующей странице"
 
 #: src/kkc.h:90
 msgid "Candidates Page Up"
-msgstr "Страница кандидатов вверх"
+msgstr "Слово-кандидат на предыдущей странице"
 
 #: src/kkc.h:108
 msgid "Cursor Down"
@@ -181,7 +181,8 @@ msgstr "Не задано"
 
 #: src/kkc.h:115
 msgid "Number candidate of Triggers To Show Candidate Window"
-msgstr "Число переключений кандидатов для отображения окна кандидатов"
+msgstr ""
+"Количество нажатий клавиш, которые запускают отображение окна слова-кандидата"
 
 #: src/kkc.h:81
 msgid "Page size"
