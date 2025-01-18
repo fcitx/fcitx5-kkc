@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.6)
 # The Project Name
 project(fcitx5-kkc VERSION 5.1.5)
 
+set(REQUIRED_FCITX_VERSION 5.1.12)
 find_package(ECM REQUIRED 1.0.0)
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 include(FeatureSummary)
@@ -13,7 +14,7 @@ option(ENABLE_QT "Enable Qt for GUI configuration" On)
 option(USE_QT6 "Build against Qt6" On)
 
 find_package(PkgConfig REQUIRED)
-find_package(Fcitx5Core 5.0.6 REQUIRED)
+find_package(Fcitx5Core ${REQUIRED_FCITX_VERSION} REQUIRED)
 find_package(LibKKC REQUIRED)
 find_package(Gettext REQUIRED)
 pkg_check_modules(Gee IMPORTED_TARGET "gee-0.8" REQUIRED)

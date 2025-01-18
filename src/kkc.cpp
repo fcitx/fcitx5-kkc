@@ -7,17 +7,51 @@
  */
 
 #include "kkc.h"
+#include <algorithm>
+#include <cstddef>
+#include <cstdint>
+#include <cstdio>
+#include <cstring>
+#include <fcitx-config/iniparser.h>
+#include <fcitx-utils/capabilityflags.h>
 #include <fcitx-utils/fs.h>
+#include <fcitx-utils/i18n.h>
+#include <fcitx-utils/key.h>
+#include <fcitx-utils/keysym.h>
+#include <fcitx-utils/keysymgen.h>
 #include <fcitx-utils/log.h>
+#include <fcitx-utils/macros.h>
+#include <fcitx-utils/misc.h>
 #include <fcitx-utils/standardpath.h>
+#include <fcitx-utils/stringutils.h>
+#include <fcitx-utils/textformatflags.h>
 #include <fcitx/action.h>
+#include <fcitx/addoninstance.h>
+#include <fcitx/candidatelist.h>
+#include <fcitx/event.h>
 #include <fcitx/inputcontextmanager.h>
+#include <fcitx/inputmethodentry.h>
 #include <fcitx/inputpanel.h>
 #include <fcitx/menu.h>
+#include <fcitx/statusarea.h>
+#include <fcitx/text.h>
+#include <fcitx/userinterface.h>
 #include <fcitx/userinterfacemanager.h>
 #include <fcntl.h>
+#include <glib-object.h>
+#include <glib.h>
+#include <libkkc/libkkc.h>
+#include <memory>
+#include <stdexcept>
+#include <string>
+#include <utility>
+#include <vector>
+
+namespace {
 
 FCITX_DEFINE_LOG_CATEGORY(kkc_logcategory, "kkc");
+
+}
 
 #define KKC_DEBUG() FCITX_LOGC(kkc_logcategory, Debug)
 
@@ -49,8 +83,9 @@ public:
                                      parent_->dummyEmptyDictionaries());
     }
 
-    static void inputModeChanged(GObject *, GParamSpec *, gpointer user_data) {
-        auto that = static_cast<KkcState *>(user_data);
+    static void inputModeChanged(GObject * /*unused*/, GParamSpec * /*unused*/,
+                                 gpointer user_data) {
+        auto *that = static_cast<KkcState *>(user_data);
         that->updateInputMode();
     }
 
@@ -63,7 +98,7 @@ public:
         }
     }
 
-    void applyConfig() {
+    void applyConfig() const {
         KkcCandidateList *kkcCandidates =
             kkc_context_get_candidates(context_.get());
         kkc_candidate_list_set_page_start(
@@ -109,7 +144,7 @@ struct {
 };
 
 auto inputModeStatus(KkcEngine *engine, InputContext *ic) {
-    auto state = engine->state(ic);
+    auto *state = engine->state(ic);
     auto mode = kkc_context_get_input_mode(state->context_.get());
     return (mode >= 0 && mode < FCITX_ARRAY_SIZE(input_mode_status))
                ? &input_mode_status[mode]
@@ -121,20 +156,20 @@ public:
     KkcModeAction(KkcEngine *engine) : engine_(engine) {}
 
     std::string shortText(InputContext *ic) const override {
-        if (auto status = inputModeStatus(engine_, ic)) {
+        if (auto *status = inputModeStatus(engine_, ic)) {
             return stringutils::concat(status->label, " - ",
                                        _(status->description));
         }
         return "";
     }
     std::string longText(InputContext *ic) const override {
-        if (auto status = inputModeStatus(engine_, ic)) {
+        if (auto *status = inputModeStatus(engine_, ic)) {
             return _(status->description);
         }
         return "";
     }
     std::string icon(InputContext *ic) const override {
-        if (auto status = inputModeStatus(engine_, ic)) {
+        if (auto *status = inputModeStatus(engine_, ic)) {
             return status->icon;
         }
         return "";
@@ -156,11 +191,11 @@ public:
         setCheckable(true);
     }
     bool isChecked(InputContext *ic) const override {
-        auto state = engine_->state(ic);
+        auto *state = engine_->state(ic);
         return mode_ == kkc_context_get_input_mode(state->context_.get());
     }
     void activate(InputContext *ic) override {
-        auto state = engine_->state(ic);
+        auto *state = engine_->state(ic);
         kkc_context_set_input_mode(state->context_.get(), mode_);
     }
 
@@ -172,13 +207,13 @@ private:
 class KkcCandidateWord : public CandidateWord {
 public:
     KkcCandidateWord(KkcEngine *engine, Text text, int idx)
-        : CandidateWord(), engine_(engine), idx_(idx) {
+        : engine_(engine), idx_(idx) {
         setText(std::move(text));
     }
 
     void select(InputContext *inputContext) const override {
-        auto state = engine_->state(inputContext);
-        auto context = state->context_.get();
+        auto *state = engine_->state(inputContext);
+        auto *context = state->context_.get();
         KkcCandidateList *kkcCandidates = kkc_context_get_candidates(context);
         if (kkc_candidate_list_select_at(
                 kkcCandidates,
@@ -200,8 +235,8 @@ public:
         : engine_(engine), ic_(ic) {
         setPageable(this);
         setCursorMovable(this);
-        auto kkcstate = engine_->state(ic_);
-        auto context = kkcstate->context_.get();
+        auto *kkcstate = engine_->state(ic_);
+        auto *context = kkcstate->context_.get();
         KkcCandidateList *kkcCandidates = kkc_context_get_candidates(context);
         gint size = kkc_candidate_list_get_size(kkcCandidates);
         gint cursor_pos = kkc_candidate_list_get_cursor_pos(kkcCandidates);
@@ -215,7 +250,7 @@ public:
         // 24~26 3nd page
         int currentPage = (cursor_pos - page_start) / page_size;
         int totalPage = (size - page_start + page_size - 1) / page_size;
-        int pageFirst = currentPage * page_size + page_start;
+        int pageFirst = (currentPage * page_size) + page_start;
         int pageLast = std::min(size, static_cast<int>(pageFirst + page_size));
 
         for (int i = pageFirst; i < pageLast; i++) {
@@ -224,7 +259,7 @@ public:
             Text text;
             text.append(kkc_candidate_get_text(kkcCandidate.get()));
             if (*engine->config().showAnnotation) {
-                auto annotation =
+                const auto *annotation =
                     kkc_candidate_get_annotation(kkcCandidate.get());
                 // Make sure annotation is not null, empty, or equal to "?".
                 // ? seems to be a special debug purpose value.
@@ -252,15 +287,15 @@ public:
 
     bool hasNext() const override { return hasNext_; }
 
-    void prev() override { return paging(true); }
+    void prev() override { paging(true); }
 
-    void next() override { return paging(false); }
+    void next() override { paging(false); }
 
     bool usedNextBefore() const override { return true; }
 
-    void prevCandidate() override { return moveCursor(true); }
+    void prevCandidate() override { moveCursor(true); }
 
-    void nextCandidate() override { return moveCursor(false); }
+    void nextCandidate() override { moveCursor(false); }
 
     const Text &label(int idx) const override { return labels_[idx]; }
 
@@ -278,8 +313,8 @@ public:
 
 private:
     void paging(bool prev) {
-        auto kkcstate = engine_->state(ic_);
-        auto context = kkcstate->context_.get();
+        auto *kkcstate = engine_->state(ic_);
+        auto *context = kkcstate->context_.get();
         KkcCandidateList *kkcCandidates = kkc_context_get_candidates(context);
         if (kkc_candidate_list_get_page_visible(kkcCandidates)) {
             if (prev) {
@@ -291,8 +326,8 @@ private:
         }
     }
     void moveCursor(bool prev) {
-        auto kkcstate = engine_->state(ic_);
-        auto context = kkcstate->context_.get();
+        auto *kkcstate = engine_->state(ic_);
+        auto *context = kkcstate->context_.get();
         KkcCandidateList *kkcCandidates = kkc_context_get_candidates(context);
         if (kkc_candidate_list_get_page_visible(kkcCandidates)) {
             if (prev) {
@@ -396,7 +431,7 @@ KkcEngine::KkcEngine(Instance *instance)
     }
     instance_->inputContextManager().registerProperty("kkcState", &factory_);
     instance_->inputContextManager().foreach([this](InputContext *ic) {
-        auto state = this->state(ic);
+        auto *state = this->state(ic);
         kkc_context_set_input_mode(state->context_.get(), *config_.inputMode);
         return true;
     });
@@ -404,7 +439,8 @@ KkcEngine::KkcEngine(Instance *instance)
 
 KkcEngine::~KkcEngine() {}
 
-void KkcEngine::activate(const InputMethodEntry &, InputContextEvent &event) {
+void KkcEngine::activate(const InputMethodEntry & /*entry*/,
+                         InputContextEvent &event) {
     auto &statusArea = event.inputContext()->statusArea();
     statusArea.addAction(StatusGroup::InputMethod, modeAction_.get());
 }
@@ -412,8 +448,8 @@ void KkcEngine::activate(const InputMethodEntry &, InputContextEvent &event) {
 void KkcEngine::deactivate(const InputMethodEntry &entry,
                            InputContextEvent &event) {
     if (event.type() == EventType::InputContextSwitchInputMethod) {
-        auto kkcstate = this->state(event.inputContext());
-        auto context = kkcstate->context_.get();
+        auto *kkcstate = this->state(event.inputContext());
+        auto *context = kkcstate->context_.get();
         auto text = kkcContextGetPreedit(context);
         auto str = text.toString();
         if (!str.empty()) {
@@ -423,7 +459,8 @@ void KkcEngine::deactivate(const InputMethodEntry &entry,
     reset(entry, event);
 }
 
-void KkcEngine::keyEvent(const InputMethodEntry &, KeyEvent &keyEvent) {
+void KkcEngine::keyEvent(const InputMethodEntry & /*entry*/,
+                         KeyEvent &keyEvent) {
     auto state = static_cast<uint32_t>(keyEvent.rawKey().states());
     state &= static_cast<uint32_t>(KeyState::SimpleMask);
     if (keyEvent.isRelease()) {
@@ -434,8 +471,8 @@ void KkcEngine::keyEvent(const InputMethodEntry &, KeyEvent &keyEvent) {
                 << " isRelease: " << keyEvent.isRelease()
                 << " keycode: " << keyEvent.rawKey().code();
 
-    auto kkcstate = this->state(keyEvent.inputContext());
-    auto context = kkcstate->context_.get();
+    auto *kkcstate = this->state(keyEvent.inputContext());
+    auto *context = kkcstate->context_.get();
     KkcCandidateList *kkcCandidates = kkc_context_get_candidates(context);
     if (kkc_candidate_list_get_page_visible(kkcCandidates) &&
         !keyEvent.isRelease()) {
@@ -499,23 +536,24 @@ void KkcEngine::reloadConfig() {
 
     if (factory_.registered()) {
         instance_->inputContextManager().foreach([this](InputContext *ic) {
-            auto state = this->state(ic);
+            auto *state = this->state(ic);
             state->applyConfig();
             return true;
         });
     }
 }
-void KkcEngine::reset(const InputMethodEntry &, InputContextEvent &event) {
-    auto state = this->state(event.inputContext());
-    auto context = state->context_.get();
+void KkcEngine::reset(const InputMethodEntry & /*entry*/,
+                      InputContextEvent &event) {
+    auto *state = this->state(event.inputContext());
+    auto *context = state->context_.get();
     kkc_context_reset(context);
     updateUI(event.inputContext());
 }
 void KkcEngine::save() { kkc_dictionary_list_save(dictionaries_.get()); }
 
 void KkcEngine::updateUI(InputContext *inputContext) {
-    auto state = this->state(inputContext);
-    auto context = state->context_.get();
+    auto *state = this->state(inputContext);
+    auto *context = state->context_.get();
 
     auto &inputPanel = inputContext->inputPanel();
     inputPanel.reset();
@@ -633,7 +671,7 @@ void KkcEngine::loadDictionary() {
 }
 
 void KkcEngine::loadRule() {
-    auto meta = kkc_rule_metadata_find(config_.rule->data());
+    auto *meta = kkc_rule_metadata_find(config_.rule->data());
     if (!meta) {
         meta = kkc_rule_metadata_find("default");
     }
@@ -647,16 +685,17 @@ void KkcEngine::loadRule() {
         kkc_user_rule_new(meta, basePath.c_str(), "fcitx-kkc", NULL));
 }
 
-std::string KkcEngine::subMode(const InputMethodEntry &, InputContext &ic) {
-    if (auto status = inputModeStatus(this, &ic)) {
+std::string KkcEngine::subMode(const InputMethodEntry & /*entry*/,
+                               InputContext &ic) {
+    if (auto *status = inputModeStatus(this, &ic)) {
         return _(status->description);
     }
     return "";
 }
 
-std::string KkcEngine::subModeLabelImpl(const InputMethodEntry &,
+std::string KkcEngine::subModeLabelImpl(const InputMethodEntry & /*unused*/,
                                         InputContext &ic) {
-    if (auto status = inputModeStatus(this, &ic)) {
+    if (auto *status = inputModeStatus(this, &ic)) {
         return _(status->label);
     }
     return "";
@@ -667,4 +706,4 @@ KkcState *KkcEngine::state(InputContext *ic) {
 }
 } // namespace fcitx
 
-FCITX_ADDON_FACTORY(fcitx::KkcFactory);
+FCITX_ADDON_FACTORY_V2(kkc, fcitx::KkcFactory);

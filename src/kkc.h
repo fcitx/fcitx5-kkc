@@ -8,21 +8,32 @@
 #ifndef _FCITX_KKC_H_
 #define _FCITX_KKC_H_
 
-#include "config.h"
-
 #include <fcitx-config/configuration.h>
 #include <fcitx-config/enum.h>
 #include <fcitx-config/iniparser.h>
+#include <fcitx-config/option.h>
+#include <fcitx-config/rawconfig.h>
 #include <fcitx-utils/i18n.h>
+#include <fcitx-utils/key.h>
+#include <fcitx-utils/keysymgen.h>
+#include <fcitx-utils/log.h>
+#include <fcitx-utils/misc.h>
 #include <fcitx/action.h>
 #include <fcitx/addonfactory.h>
+#include <fcitx/addoninstance.h>
 #include <fcitx/addonmanager.h>
 #include <fcitx/candidatelist.h>
+#include <fcitx/event.h>
 #include <fcitx/inputcontextproperty.h>
 #include <fcitx/inputmethodengine.h>
 #include <fcitx/instance.h>
+#include <glib-object.h>
+#include <glib.h>
 #include <libkkc/libkkc.h>
 #include <memory>
+#include <string>
+#include <vector>
+
 namespace fcitx {
 
 FCITX_CONFIG_ENUM_NAME_WITH_I18N(CandidateLayoutHint, N_("Not set"),
@@ -38,14 +49,14 @@ FCITX_CONFIG_ENUM_NAME_WITH_I18N(KkcInputMode, N_("Hiragana"), N_("Katakana"),
 
 struct NotEmpty {
     bool check(const std::string &value) const { return !value.empty(); }
-    void dumpDescription(RawConfig &) const {}
+    void dumpDescription(RawConfig & /*unused*/) const {}
 };
 
 struct RuleAnnotation : public EnumAnnotation {
     void dumpDescription(RawConfig &config) const {
         EnumAnnotation::dumpDescription(config);
         int length;
-        auto rules = kkc_rule_list(&length);
+        auto *rules = kkc_rule_list(&length);
         FCITX_INFO() << length;
         int total = 0;
         for (int i = 0; i < length; i++) {
@@ -54,7 +65,8 @@ struct RuleAnnotation : public EnumAnnotation {
             if (priority < 70) {
                 continue;
             }
-            gchar *name, *label;
+            gchar *name;
+            gchar *label;
             g_object_get(G_OBJECT(rules[i]), "label", &label, "name", &name,
                          nullptr);
             config.setValueByPath("Enum/" + std::to_string(total), name);
@@ -138,7 +150,7 @@ public:
     }
 
     void setSubConfig(const std::string &path,
-                      const fcitx::RawConfig &) override {
+                      const fcitx::RawConfig & /*unused*/) override {
         if (path == "dictionary_list") {
             reloadConfig();
         }
@@ -150,7 +162,7 @@ public:
     void reloadConfig() override;
     void reset(const InputMethodEntry &entry,
                InputContextEvent &event) override;
-    void deactivate(const fcitx::InputMethodEntry &,
+    void deactivate(const fcitx::InputMethodEntry & /*entry*/,
                     fcitx::InputContextEvent &event) override;
     void save() override;
     auto &factory() { return factory_; }
@@ -162,9 +174,10 @@ public:
 
     void updateUI(InputContext *inputContext);
 
-    std::string subMode(const InputMethodEntry &, InputContext &) override;
-    std::string subModeLabelImpl(const fcitx::InputMethodEntry &,
-                                 fcitx::InputContext &) override;
+    std::string subMode(const InputMethodEntry & /*entry*/,
+                        InputContext & /*inputContext*/) override;
+    std::string subModeLabelImpl(const fcitx::InputMethodEntry & /*unused*/,
+                                 fcitx::InputContext & /*unused*/) override;
 
     KkcState *state(InputContext *ic);
 

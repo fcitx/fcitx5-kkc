@@ -1,7 +1,7 @@
 set(KKC_SOURCES
     kkc.cpp
 )
-add_library(kkc MODULE ${KKC_SOURCES})
+add_fcitx5_addon(kkc ${KKC_SOURCES})
 target_link_libraries(kkc Fcitx5::Core Fcitx5::Config LibKKC::LibKKC PkgConfig::GObject2 PkgConfig::JSonGlib PkgConfig::Gee)
 target_include_directories(kkc PRIVATE ${PROJECT_BINARY_DIR})
 set_target_properties(kkc PROPERTIES PREFIX "")
