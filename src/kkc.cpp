@@ -14,6 +14,7 @@
 #include <cstring>
 #include <fcitx-config/iniparser.h>
 #include <fcitx-utils/capabilityflags.h>
+#include <fcitx-utils/fdstreambuf.h>
 #include <fcitx-utils/fs.h>
 #include <fcitx-utils/i18n.h>
 #include <fcitx-utils/key.h>
@@ -39,6 +40,7 @@
 #include <fcntl.h>
 #include <glib-object.h>
 #include <glib.h>
+#include <istream>
 #include <libkkc/libkkc.h>
 #include <memory>
 #include <stdexcept>
@@ -590,20 +592,16 @@ void KkcEngine::loadDictionary() {
     kkc_dictionary_list_clear(dictionaries_.get());
     auto file = StandardPath::global().open(StandardPath::Type::PkgData,
                                             "kkc/dictionary_list", O_RDONLY);
-    if (file.fd() < 0) {
+    if (!file.isValid()) {
         return;
     }
-    UniqueFilePtr fp(fdopen(file.fd(), "r"));
-    if (!fp) {
-        return;
-    }
-    file.release();
 
-    UniqueCPtr<char> buf;
-    size_t len = 0;
+    IFDStreamBuf buf(file.fd());
+    std::istream in(&buf);
+    std::string line;
 
-    while (getline(buf, &len, fp.get()) != -1) {
-        auto tokens = stringutils::split(stringutils::trim(buf.get()), ",");
+    while (std::getline(in, line)) {
+        auto tokens = stringutils::split(stringutils::trimView(line), ",");
 
         if (tokens.size() < 3) {
             continue;
