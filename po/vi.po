@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx5-kkc\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2025-03-22 20:24+0000\n"
+"POT-Creation-Date: 2025-04-22 20:24+0000\n"
 "PO-Revision-Date: 2017-12-19 22:05+0000\n"
 "Last-Translator: hoanghuy309 <hoanghuy309@gmail.com>, 2025\n"
 "Language-Team: Vietnamese (https://app.transifex.com/fcitx/teams/12005/vi/)\n"
@@ -38,7 +38,7 @@ msgstr ""
 #: rc.cpp:12
 #, kde-format
 msgid "&Key:"
-msgstr ""
+msgstr "Phím:"
 
 #. i18n: file: gui/adddictdialog.ui:42
 #. i18n: ectx: property (text), widget (QLabel, pathLabel_)
@@ -97,7 +97,7 @@ msgstr ""
 
 #: gui/shortcutmodel.cpp:32 src/kkc.cpp:144 src/kkc.h:48
 msgid "Direct input"
-msgstr ""
+msgstr "Nhập trực tiếp"
 
 #. i18n: file: gui/dictwidget.ui:14
 #. i18n: ectx: property (windowTitle), widget (QWidget, KkcDictWidget)
@@ -126,7 +126,7 @@ msgstr ""
 
 #: src/kkc.h:91
 msgid "Initial Input Mode"
-msgstr ""
+msgstr "Kiểu Gõ Ban Đầu"
 
 #: gui/shortcutmodel.cpp:69
 msgid "Input Mode"
@@ -158,15 +158,15 @@ msgstr ""
 
 #: gui/shortcutmodel.cpp:71
 msgid "Key"
-msgstr ""
+msgstr "Phím"
 
 #: gui/shortcutwidget.cpp:91
 msgid "Key Conflict"
-msgstr ""
+msgstr "Xung Đột Phím"
 
 #: gui/shortcutwidget.cpp:92
 msgid "Key to add is conflict with existing shortcut."
-msgstr ""
+msgstr "Phím để thêm là xung đột với phím tắt hiện có."
 
 #: gui/shortcutmodel.cpp:32 src/kkc.cpp:142 src/kkc.h:43 src/kkc.h:47
 msgid "Latin"
@@ -205,15 +205,15 @@ msgstr ""
 
 #: gui/shortcutwidget.cpp:67
 msgid "Save Changes"
-msgstr ""
+msgstr "Lưu Thay Đổi"
 
 #: gui/adddictdialog.cpp:66
 msgid "Select Dictionary Directory"
-msgstr ""
+msgstr "Chọn Thư Mục Từ Điển"
 
 #: gui/adddictdialog.cpp:51
 msgid "Select Dictionary File"
-msgstr ""
+msgstr "Chọn Tệp Từ Điển"
 
 #: gui/shortcutwidget.cpp:58
 msgid "Shortcut Manager"
@@ -232,6 +232,8 @@ msgid ""
 "The content has changed.\n"
 "Do you want to save the changes or discard them?"
 msgstr ""
+"Nội dung đã thay đổi.\n"
+"Bạn có muốn lưu các thay đổi hoặc loại bỏ chúng?"
 
 #: gui/adddictdialog.cpp:25
 msgid "User"
