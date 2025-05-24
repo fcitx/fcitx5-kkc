@@ -7,10 +7,17 @@
 
 #include "adddictdialog.h"
 #include "config.h"
+#include <QDialog>
+#include <QDir>
 #include <QFileDialog>
+#include <QFileInfo>
+#include <QMap>
+#include <QPushButton>
+#include <QString>
+#include <QWidget>
 #include <array>
 #include <fcitx-utils/i18n.h>
-#include <fcitx-utils/standardpath.h>
+#include <fcitx-utils/standardpaths.h>
 #include <fcitx-utils/stringutils.h>
 
 #define FCITX_CONFIG_DIR_STR "$FCITX_CONFIG_DIR"
@@ -52,10 +59,10 @@ void AddDictDialog::browseClicked() {
                                             info.path());
     } else {
         constexpr char configDir[] = FCITX_CONFIG_DIR_STR "/";
-        auto fcitxBasePath = stringutils::joinPath(
-            StandardPath::global().userDirectory(StandardPath::Type::PkgData));
+        auto fcitxBasePath =
+            StandardPaths::global().userDirectory(StandardPathsType::PkgData);
         QString basePath =
-            QDir::cleanPath(QString::fromLocal8Bit(fcitxBasePath.data()));
+            QDir::cleanPath(QString::fromStdString(fcitxBasePath.string()));
         if (path.isEmpty()) {
             path = basePath;
         } else if (path.startsWith(configDir)) {

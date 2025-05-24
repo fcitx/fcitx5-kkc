@@ -9,17 +9,25 @@
 
 #include "common.h"
 #include <QAbstractTableModel>
+#include <QList>
+#include <QObject>
+#include <QString>
+#include <QVariant>
+#include <Qt>
+#include <glib-object.h>
+#include <glib.h>
 #include <libkkc/libkkc.h>
-#include <memory>
+#include <utility>
 
 namespace fcitx {
 
 class ShortcutEntry {
 public:
-    ShortcutEntry(const QString &command, KkcKeyEvent *event,
-                  const QString &label, KkcInputMode mode)
-        : command_(command), event_(KKC_KEY_EVENT(g_object_ref(event))),
-          label_(label), mode_(mode) {
+    ShortcutEntry(QString command, KkcKeyEvent *event, QString label,
+                  KkcInputMode mode)
+        : command_(std::move(command)),
+          event_(KKC_KEY_EVENT(g_object_ref(event))), label_(std::move(label)),
+          mode_(mode) {
         gchar *keystr = kkc_key_event_to_string(event_.get());
         keyString_ = QString::fromUtf8(keystr);
         g_free(keystr);
@@ -72,13 +80,13 @@ public:
     void remove(const QModelIndex &index);
     void load(const QString &name);
     void save();
-    bool needSave();
+    bool needSave() const;
 
 Q_SIGNALS:
     void needSaveChanged(bool needSave);
 
 private:
-    void setNeedSave(bool arg1);
+    void setNeedSave(bool needSave);
 
 private:
     QList<ShortcutEntry> entries_;

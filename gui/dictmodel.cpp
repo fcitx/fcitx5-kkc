@@ -6,12 +6,19 @@
  */
 
 #include "dictmodel.h"
+#include <QAbstractListModel>
 #include <QFile>
+#include <QIODevice>
+#include <QMap>
+#include <QObject>
 #include <QSet>
+#include <QString>
 #include <QStringList>
+#include <QVariant>
+#include <Qt>
 #include <QtGlobal>
-#include <fcitx-utils/standardpath.h>
-#include <fcntl.h>
+#include <fcitx-utils/standardpaths.h>
+
 namespace fcitx {
 
 DictModel::DictModel(QObject *parent) : QAbstractListModel(parent) {
@@ -23,17 +30,16 @@ DictModel::DictModel(QObject *parent) : QAbstractListModel(parent) {
 DictModel::~DictModel() {}
 
 void DictModel::defaults() {
-    auto path =
-        StandardPath::global().fcitxPath("pkgdatadir", "kkc/dictionary_list");
-    QFile f(path.data());
+    auto path = StandardPaths::fcitxPath("pkgdatadir", "kkc/dictionary_list");
+    QFile f(path);
     if (f.open(QIODevice::ReadOnly)) {
         load(f);
     }
 }
 
 void DictModel::load() {
-    auto file = StandardPath::global().open(StandardPath::Type::PkgData,
-                                            "kkc/dictionary_list", O_RDONLY);
+    auto file = StandardPaths::global().open(StandardPathsType::PkgData,
+                                             "kkc/dictionary_list");
     if (file.fd() < 0) {
         return;
     }
@@ -60,7 +66,7 @@ void DictModel::load(QFile &file) {
 
         bool failed = false;
         QMap<QString, QString> dict;
-        Q_FOREACH (const QString &item, items) {
+        for (const QString &item : items) {
             if (!item.contains('=')) {
                 failed = true;
                 break;
@@ -83,18 +89,18 @@ void DictModel::load(QFile &file) {
 }
 
 bool DictModel::save() {
-    return StandardPath::global().safeSave(
-        StandardPath::Type::PkgData, "kkc/dictionary_list", [this](int fd) {
+    return StandardPaths::global().safeSave(
+        StandardPathsType::PkgData, "kkc/dictionary_list", [this](int fd) {
             QFile tempFile;
             if (!tempFile.open(fd, QIODevice::WriteOnly)) {
                 return false;
             }
 
-            typedef QMap<QString, QString> DictType;
+            using DictType = QMap<QString, QString>;
 
-            Q_FOREACH (const DictType &dict, dicts_) {
+            for (const DictType &dict : dicts_) {
                 bool first = true;
-                Q_FOREACH (const QString &key, dict.keys()) {
+                for (const QString &key : dict.keys()) {
                     if (first) {
                         first = false;
                     } else {
@@ -135,28 +141,26 @@ bool DictModel::removeRows(int row, int count, const QModelIndex &parent) {
 
 QVariant DictModel::data(const QModelIndex &index, int role) const {
     if (!index.isValid()) {
-        return QVariant();
+        return {};
     }
 
     if (index.row() >= dicts_.size() || index.column() != 0) {
-        return QVariant();
+        return {};
     }
 
     switch (role) {
     case Qt::DisplayRole:
         return dicts_[index.row()]["file"];
+    default:
+        return {};
     }
-    return QVariant();
+    return {};
 }
 
 bool DictModel::moveUp(const QModelIndex &currentIndex) {
     if (currentIndex.row() > 0 && currentIndex.row() < dicts_.size()) {
         beginResetModel();
-#if (QT_VERSION < QT_VERSION_CHECK(5, 13, 0))
-        dicts_.swap(currentIndex.row() - 1, currentIndex.row());
-#else
         dicts_.swapItemsAt(currentIndex.row() - 1, currentIndex.row());
-#endif
         endResetModel();
         return true;
     }
@@ -166,11 +170,7 @@ bool DictModel::moveUp(const QModelIndex &currentIndex) {
 bool DictModel::moveDown(const QModelIndex &currentIndex) {
     if (currentIndex.row() >= 0 && currentIndex.row() + 1 < dicts_.size()) {
         beginResetModel();
-#if (QT_VERSION < QT_VERSION_CHECK(5, 13, 0))
-        dicts_.swap(currentIndex.row() + 1, currentIndex.row());
-#else
         dicts_.swapItemsAt(currentIndex.row() + 1, currentIndex.row());
-#endif
         endResetModel();
         return true;
     }

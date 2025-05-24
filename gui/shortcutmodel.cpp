@@ -7,10 +7,16 @@
 
 #include "shortcutmodel.h"
 #include "common.h"
+#include <QAbstractTableModel>
+#include <QObject>
+#include <QVariant>
+#include <Qt>
 #include <fcitx-utils/i18n.h>
-#include <fcitx-utils/standardpath.h>
+#include <fcitx-utils/standardpaths.h>
 #include <fcitx-utils/stringutils.h>
+#include <glib.h>
 #include <libkkc/libkkc.h>
+#include <utility>
 
 namespace fcitx {
 
@@ -34,11 +40,11 @@ const char *modeName[] = {
 
 QVariant ShortcutModel::data(const QModelIndex &index, int role) const {
     if (!index.isValid()) {
-        return QVariant();
+        return {};
     }
 
     if (index.row() >= entries_.size() || index.column() >= 3) {
-        return QVariant();
+        return {};
     }
 
     switch (role) {
@@ -50,10 +56,14 @@ QVariant ShortcutModel::data(const QModelIndex &index, int role) const {
             return entries_[index.row()].keyString();
         case 2:
             return entries_[index.row()].label();
+        default:
+            break;
         }
-        return QVariant();
+        break;
+    default:
+        break;
     }
-    return QVariant();
+    return {};
 }
 
 QVariant ShortcutModel::headerData(int section, Qt::Orientation orientation,
@@ -71,7 +81,12 @@ QVariant ShortcutModel::headerData(int section, Qt::Orientation orientation,
             return _("Key");
         case 2:
             return _("Function");
+        default:
+            break;
         }
+        break;
+    default:
+        break;
     }
     return QAbstractItemModel::headerData(section, orientation, role);
 }
@@ -90,12 +105,12 @@ void ShortcutModel::load(const QString &name) {
             return;
         }
 
-        std::string basePath = stringutils::joinPath(
-            StandardPath::global().userDirectory(StandardPath::Type::PkgData),
-            "kkc/rules");
+        const auto basePath =
+            StandardPaths::global().userDirectory(StandardPathsType::PkgData) /
+            "kkc/rules";
 
-        auto userRule = makeGObjectUnique(
-            kkc_user_rule_new(ruleMeta, basePath.data(), "fcitx-kkc", nullptr));
+        auto userRule = makeGObjectUnique(kkc_user_rule_new(
+            ruleMeta, basePath.string().c_str(), "fcitx-kkc", nullptr));
         if (!userRule) {
             break;
         }
@@ -191,6 +206,6 @@ void ShortcutModel::setNeedSave(bool needSave) {
     }
 }
 
-bool ShortcutModel::needSave() { return needSave_; }
+bool ShortcutModel::needSave() const { return needSave_; }
 
 } // namespace fcitx

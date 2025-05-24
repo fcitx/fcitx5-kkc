@@ -11,7 +11,6 @@ include(GNUInstallDirs)
 include(ECMUninstallTarget)
 
 option(ENABLE_QT "Enable Qt for GUI configuration" On)
-option(USE_QT6 "Build against Qt6" On)
 
 find_package(PkgConfig REQUIRED)
 find_package(Fcitx5Core ${REQUIRED_FCITX_VERSION} REQUIRED)
@@ -22,14 +21,9 @@ pkg_check_modules(JSonGlib IMPORTED_TARGET "json-glib-1.0" REQUIRED)
 pkg_check_modules(GObject2 IMPORTED_TARGET "gobject-2.0" REQUIRED)
 
 if (ENABLE_QT)
-if (USE_QT6)
     set(QT_MAJOR_VERSION 6)
     find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets)
-else()
-    set(QT_MAJOR_VERSION 5)
-    find_package(Qt5 5.7 REQUIRED COMPONENTS Core Gui Widgets)
-endif()
-find_package(Fcitx5Qt${QT_MAJOR_VERSION}WidgetsAddons REQUIRED)
+    find_package(Fcitx5Qt${QT_MAJOR_VERSION}WidgetsAddons REQUIRED)
 endif ()
 
 if (NOT SKK_DEFAULT_PATH)

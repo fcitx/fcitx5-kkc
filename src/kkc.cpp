@@ -22,7 +22,7 @@
 #include <fcitx-utils/log.h>
 #include <fcitx-utils/macros.h>
 #include <fcitx-utils/misc.h>
-#include <fcitx-utils/standardpath.h>
+#include <fcitx-utils/standardpaths.h>
 #include <fcitx-utils/stringutils.h>
 #include <fcitx-utils/textformatflags.h>
 #include <fcitx/action.h>
@@ -390,12 +390,12 @@ KkcEngine::KkcEngine(Instance *instance)
 #endif
     kkc_init();
 
-    fs::makePath(stringutils::joinPath(
-        StandardPath::global().userDirectory(StandardPath::Type::PkgData),
-        "kkc/dictionary"));
-    fs::makePath(stringutils::joinPath(
-        StandardPath::global().userDirectory(StandardPath::Type::PkgData),
-        "kkc/rules"));
+    fs::makePath(
+        StandardPaths::global().userDirectory(StandardPathsType::PkgData) /
+        "kkc/dictionary");
+    fs::makePath(
+        StandardPaths::global().userDirectory(StandardPathsType::PkgData) /
+        "kkc/rules");
 
     // We can only create kkc object here after we called kkc_init().
     model_.reset(kkc_language_model_load("sorted3", NULL));
@@ -590,8 +590,8 @@ void KkcEngine::updateInputMode(InputContext *ic) { modeAction_->update(ic); }
 
 void KkcEngine::loadDictionary() {
     kkc_dictionary_list_clear(dictionaries_.get());
-    auto file = StandardPath::global().open(StandardPath::Type::PkgData,
-                                            "kkc/dictionary_list", O_RDONLY);
+    auto file = StandardPaths::global().open(StandardPathsType::PkgData,
+                                             "kkc/dictionary_list");
     if (!file.isValid()) {
         return;
     }
@@ -650,10 +650,9 @@ void KkcEngine::loadDictionary() {
             constexpr auto len = sizeof(configDir) - 1;
             std::string realpath = path;
             if (stringutils::startsWith(path, "$FCITX_CONFIG_DIR/")) {
-                realpath =
-                    stringutils::joinPath(StandardPath::global().userDirectory(
-                                              StandardPath::Type::PkgData),
-                                          path.substr(len));
+                realpath = StandardPaths::global().userDirectory(
+                               StandardPathsType::PkgData) /
+                           path.substr(len);
             }
 
             auto userdict = makeGObjectUnique(reinterpret_cast<KkcDictionary *>(
@@ -675,11 +674,11 @@ void KkcEngine::loadRule() {
     if (!meta) {
         return;
     }
-    std::string basePath = stringutils::joinPath(
-        StandardPath::global().userDirectory(StandardPath::Type::PkgData),
-        "kkc/rules");
+    const auto basePath =
+        StandardPaths::global().userDirectory(StandardPathsType::PkgData) /
+        "kkc/rules";
     userRule_.reset(
-        kkc_user_rule_new(meta, basePath.c_str(), "fcitx-kkc", NULL));
+        kkc_user_rule_new(meta, basePath.string().c_str(), "fcitx-kkc", NULL));
 }
 
 std::string KkcEngine::subMode(const InputMethodEntry & /*entry*/,
