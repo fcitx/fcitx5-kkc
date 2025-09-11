@@ -1,0 +1,251 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the fcitx5-kkc package.
+#
+# Translators:
+# Popolon_Github, 2025
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: fcitx5-kkc\n"
+"Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
+"POT-Creation-Date: 2025-09-11 20:24+0000\n"
+"PO-Revision-Date: 2017-12-19 22:05+0000\n"
+"Last-Translator: Popolon_Github, 2025\n"
+"Language-Team: French (https://app.transifex.com/fcitx/teams/12005/fr/)\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % "
+"1000000 == 0 ? 1 : 2;\n"
+
+#. i18n: file: gui/addshortcutdialog.ui:42
+#. i18n: ectx: property (text), widget (QLabel, commandLabel_)
+#: rc.cpp:9
+#, kde-format
+msgid "&Command:"
+msgstr "&Commande :"
+
+#. i18n: file: gui/addshortcutdialog.ui:22
+#. i18n: ectx: property (text), widget (QLabel, inputModeLabel_)
+#: rc.cpp:6
+#, kde-format
+msgid "&Input Mode:"
+msgstr "&Mode de saisie :"
+
+#. i18n: file: gui/addshortcutdialog.ui:71
+#. i18n: ectx: property (text), widget (QLabel, keyLabel_)
+#: rc.cpp:12
+#, kde-format
+msgid "&Key:"
+msgstr "&Touche :"
+
+#. i18n: file: gui/adddictdialog.ui:42
+#. i18n: ectx: property (text), widget (QLabel, pathLabel_)
+#: rc.cpp:24
+#, kde-format
+msgid "&Path:"
+msgstr "&Chemin :"
+
+#. i18n: file: gui/adddictdialog.ui:22
+#. i18n: ectx: property (text), widget (QLabel, typeLabel_)
+#: rc.cpp:21
+#, kde-format
+msgid "&Type:"
+msgstr "&Type :"
+
+#: src/kkc.h:98
+msgid "Auto Correct"
+msgstr "Correction automatique"
+
+#: src/kkc.h:96
+msgid "Candidate Layout"
+msgstr "Disposition des propositions"
+
+#: src/kkc.h:108
+msgid "Candidates Page Down"
+msgstr "Page bas propositions"
+
+#: src/kkc.h:102
+msgid "Candidates Page Up"
+msgstr "Page haut propositions"
+
+#: src/kkc.h:120
+msgid "Cursor Down"
+msgstr "Curseur bas"
+
+#: src/kkc.h:114
+msgid "Cursor Up"
+msgstr "Curseur haut"
+
+#. i18n: file: gui/addshortcutdialog.ui:14
+#. i18n: ectx: property (windowTitle), widget (QDialog, AddShortcutDialog)
+#. i18n: file: gui/adddictdialog.ui:14
+#. i18n: ectx: property (windowTitle), widget (QDialog, AddDictDialog)
+#: rc.cpp:3 rc.cpp:18
+#, kde-format
+msgid "Dialog"
+msgstr "Dialogue"
+
+#: src/kkc.h:131
+msgid "Dictionary"
+msgstr "Dictionnaire"
+
+#: gui/dictwidget.cpp:36
+msgid "Dictionary Manager"
+msgstr "Gestionnaire de dictionnaires"
+
+#: gui/shortcutmodel.cpp:38 src/kkc.cpp:144 src/kkc.h:48
+msgid "Direct input"
+msgstr "Saisie directe"
+
+#. i18n: file: gui/dictwidget.ui:14
+#. i18n: ectx: property (windowTitle), widget (QWidget, KkcDictWidget)
+#. i18n: file: gui/shortcutwidget.ui:20
+#. i18n: ectx: property (windowTitle), widget (QWidget, KkcShortcutWidget)
+#: rc.cpp:15 rc.cpp:27
+#, kde-format
+msgid "Form"
+msgstr "Formulaire"
+
+#: gui/shortcutmodel.cpp:83
+msgid "Function"
+msgstr "Fonction"
+
+#: gui/shortcutmodel.cpp:37 src/kkc.cpp:141 src/kkc.h:47
+msgid "Half width Katakana"
+msgstr "Katakana demi-largeur"
+
+#: gui/shortcutmodel.cpp:37 src/kkc.cpp:139 src/kkc.h:46
+msgid "Hiragana"
+msgstr "Hiragana"
+
+#: src/kkc.h:40
+msgid "Horizontal"
+msgstr "Horizontal"
+
+#: src/kkc.h:91
+msgid "Initial Input Mode"
+msgstr "Mode de saisie initial"
+
+#: gui/shortcutmodel.cpp:79
+msgid "Input Mode"
+msgstr "Mode de saisie"
+
+#: src/kkc.h:42
+msgid "Japanese"
+msgstr "Japonais"
+
+#: org.fcitx.Fcitx5.Addon.Kkc.metainfo.xml.in:8
+msgid "Japanese input method"
+msgstr "Méthode de saisie du japonais"
+
+#: org.fcitx.Fcitx5.Addon.Kkc.metainfo.xml.in:7
+msgid "KKC"
+msgstr "KKC"
+
+#: src/kkc-addon.conf.in.in:2
+msgid "KKC Addon of Fcitx"
+msgstr "Extension KKC de Fcitx"
+
+#: src/kkc.conf.in:2
+msgid "Kana Kanji"
+msgstr "Kana Kanji"
+
+#: gui/shortcutmodel.cpp:37 src/kkc.cpp:140 src/kkc.h:46
+msgid "Katakana"
+msgstr "Katakana"
+
+#: gui/shortcutmodel.cpp:81
+msgid "Key"
+msgstr "Touche"
+
+#: gui/shortcutwidget.cpp:91
+msgid "Key Conflict"
+msgstr "Conflit de touches"
+
+#: gui/shortcutwidget.cpp:92
+msgid "Key to add is conflict with existing shortcut."
+msgstr "La touche à ajouter est en conflit avec un raccourci clavier existant"
+
+#: gui/shortcutmodel.cpp:38 src/kkc.cpp:142 src/kkc.h:43 src/kkc.h:47
+msgid "Latin"
+msgstr "Latin"
+
+#: src/kkc.h:39
+msgid "Not set"
+msgstr "Non définit"
+
+#: src/kkc.h:127
+msgid "Number candidate of Triggers To Show Candidate Window"
+msgstr ""
+
+#: src/kkc.h:93
+msgid "Page size"
+msgstr "Taille de page"
+
+#: src/kkc.h:88
+msgid "Punctuation Style"
+msgstr ""
+
+#. i18n: file: gui/shortcutwidget.ui:28
+#. i18n: ectx: property (text), widget (QLabel, ruleLabel_)
+#: rc.cpp:30
+#, kde-format
+msgid "R&ule:"
+msgstr "&Règle :"
+
+#: src/kkc.h:86
+msgid "Rule"
+msgstr "Règle"
+
+#: src/kkc.h:129
+msgid "Rule Editor"
+msgstr "Éditeur de règles"
+
+#: gui/shortcutwidget.cpp:67
+msgid "Save Changes"
+msgstr "Sauvegarder les changements"
+
+#: gui/adddictdialog.cpp:73
+msgid "Select Dictionary Directory"
+msgstr "Sélectionner le dossier des dictionnaires"
+
+#: gui/adddictdialog.cpp:58
+msgid "Select Dictionary File"
+msgstr "Sélectionner le fichier de dictionnaire"
+
+#: gui/shortcutwidget.cpp:58
+msgid "Shortcut Manager"
+msgstr "Gestionnaire de raccourcis clavier"
+
+#: src/kkc.h:123
+msgid "Show Annotation"
+msgstr "Afficher les annotations"
+
+#: gui/adddictdialog.cpp:31
+msgid "System"
+msgstr "Système"
+
+#: gui/shortcutwidget.cpp:68
+msgid ""
+"The content has changed.\n"
+"Do you want to save the changes or discard them?"
+msgstr ""
+
+#: gui/adddictdialog.cpp:32
+msgid "User"
+msgstr "Utilisateur"
+
+#: src/kkc.h:40
+msgid "Vertical"
+msgstr "Vertical"
+
+#: gui/shortcutmodel.cpp:38 src/kkc.cpp:143 src/kkc.h:43 src/kkc.h:48
+msgid "Wide latin"
+msgstr "Latin large"
+
+#: src/kkc.h:44
+msgid "Wide latin Japanese"
+msgstr ""
