@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx5-kkc\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2025-09-11 20:24+0000\n"
+"POT-Creation-Date: 2025-09-12 20:24+0000\n"
 "PO-Revision-Date: 2017-12-19 22:05+0000\n"
 "Last-Translator: Popolon_Github, 2025\n"
 "Language-Team: French (https://app.transifex.com/fcitx/teams/12005/fr/)\n"
@@ -180,6 +180,7 @@ msgstr "Non définit"
 #: src/kkc.h:127
 msgid "Number candidate of Triggers To Show Candidate Window"
 msgstr ""
+"Nombre de propositions à déclencher pour afficher la fenêtre de propositions"
 
 #: src/kkc.h:93
 msgid "Page size"
@@ -187,7 +188,7 @@ msgstr "Taille de page"
 
 #: src/kkc.h:88
 msgid "Punctuation Style"
-msgstr ""
+msgstr "Style de ponctuation"
 
 #. i18n: file: gui/shortcutwidget.ui:28
 #. i18n: ectx: property (text), widget (QLabel, ruleLabel_)
@@ -233,6 +234,8 @@ msgid ""
 "The content has changed.\n"
 "Do you want to save the changes or discard them?"
 msgstr ""
+"Le contenu à été modifié\n"
+"Désirez-vous sauvegarder les changements ou les abandonner ?"
 
 #: gui/adddictdialog.cpp:32
 msgid "User"
@@ -248,4 +251,4 @@ msgstr "Latin large"
 
 #: src/kkc.h:44
 msgid "Wide latin Japanese"
-msgstr ""
+msgstr "Japonais latin large"
