@@ -637,6 +637,11 @@ void KkcEngine::loadDictionary() {
         }
 
         if (mode == 1) {
+            std::string_view partialpath = path;
+            if (stringutils::consumePrefix(partialpath, "$XDG_DATA_DIRS/")) {
+                path = StandardPaths::global().locate(StandardPathsType::Data,
+                                                      partialpath);
+            }
             auto dict = makeGObjectUnique(reinterpret_cast<KkcDictionary *>(
                 kkc_system_segment_dictionary_new(path.c_str(), "EUC-JP",
                                                   NULL)));
@@ -646,19 +651,17 @@ void KkcEngine::loadDictionary() {
                                         KKC_DICTIONARY(dict.get()));
             }
         } else {
-            constexpr char configDir[] = "$FCITX_CONFIG_DIR/";
-            constexpr auto len = sizeof(configDir) - 1;
-            std::string realpath = path;
-            if (stringutils::startsWith(path, "$FCITX_CONFIG_DIR/")) {
-                realpath = StandardPaths::global().userDirectory(
-                               StandardPathsType::PkgData) /
-                           path.substr(len);
+            std::string_view partialpath = path;
+            if (stringutils::consumePrefix(partialpath, "$FCITX_CONFIG_DIR/")) {
+                path = StandardPaths::global().userDirectory(
+                           StandardPathsType::PkgData) /
+                       partialpath;
             }
 
             auto userdict = makeGObjectUnique(reinterpret_cast<KkcDictionary *>(
-                kkc_user_dictionary_new(realpath.c_str(), NULL)));
+                kkc_user_dictionary_new(path.c_str(), NULL)));
             if (userdict) {
-                KKC_DEBUG() << "Loaded user dict: " << realpath;
+                KKC_DEBUG() << "Loaded user dict: " << path;
                 kkc_dictionary_list_add(dictionaries_.get(),
                                         KKC_DICTIONARY(userdict.get()));
             }
