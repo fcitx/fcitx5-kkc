@@ -28,7 +28,7 @@ target_link_libraries(fcitx5-kkc-config
   Qt${QT_MAJOR_VERSION}::Core
   Qt${QT_MAJOR_VERSION}::Widgets
   Fcitx5Qt${QT_MAJOR_VERSION}::WidgetsAddons
-  LibKKC::LibKKC PkgConfig::GObject2 PkgConfig::JSonGlib PkgConfig::Gee
+  LibKKC::LibKKC
   )
 
 install(TARGETS fcitx5-kkc-config DESTINATION ${CMAKE_INSTALL_LIBDIR}/fcitx5/qt${QT_MAJOR_VERSION})
