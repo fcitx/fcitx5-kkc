@@ -45,6 +45,7 @@
 #include <memory>
 #include <stdexcept>
 #include <string>
+#include <string_view>
 #include <utility>
 #include <vector>
 
@@ -66,23 +67,36 @@ public:
         kkc_context_set_dictionaries(context_.get(), parent_->dictionaries());
         kkc_context_set_input_mode(context_.get(),
                                    *parent_->config().inputMode);
-        lastMode_ = kkc_context_get_input_mode(context_.get());
         applyConfig();
 
-        signal_ =
-            g_signal_connect(context_.get(), "notify::input-mode",
-                             G_CALLBACK(&KkcState::inputModeChanged), this);
-
-        updateInputMode();
+        g_signal_connect(context_.get(), "notify::input-mode",
+                         G_CALLBACK(&KkcState::inputModeChanged), this);
+        g_signal_connect(context_.get(), "notify::input",
+                         G_CALLBACK(&KkcState::input_changed_cb), this);
+        g_signal_connect(kkc_context_get_candidates(context_.get()),
+                         "populated",
+                         G_CALLBACK(&KkcState::candidates_populated), this);
+        g_signal_connect(
+            kkc_context_get_candidates(context_.get()), "notify::cursor-pos",
+            G_CALLBACK(&KkcState::candidates_cursor_pos_changed), this);
+        g_signal_connect(kkc_context_get_candidates(context_.get()), "selected",
+                         G_CALLBACK(&KkcState::candidates_selected), this);
     }
 
     ~KkcState() {
-        g_signal_handler_disconnect(context_.get(), signal_);
+        g_signal_handlers_disconnect_by_data(
+            kkc_context_get_candidates(context_.get()), this);
+        g_signal_handlers_disconnect_by_data(context_.get(), this);
         // In order to workaround libkkc context clear the dictionaries upon
         // context deleting.
         kkc_context_set_dictionaries(context_.get(),
                                      parent_->dummyEmptyDictionaries());
     }
+
+    void keyEvent(KeyEvent &keyEvent);
+    void updateUI();
+    void doUpdateUI();
+    void reset();
 
     static void inputModeChanged(GObject * /*unused*/, GParamSpec * /*unused*/,
                                  gpointer user_data) {
@@ -90,14 +104,32 @@ public:
         that->updateInputMode();
     }
 
-    void updateInputMode() {
-        parent_->updateInputMode(ic_);
-        auto newMode = kkc_context_get_input_mode(context_.get());
-        if (newMode != lastMode_) {
-            lastMode_ = newMode;
-            modeChanged_ = true;
-        }
+    static void input_changed_cb(GObject * /*unused*/, GParamSpec * /*unused*/,
+                                 gpointer user_data) {
+        auto *that = static_cast<KkcState *>(user_data);
+        that->updateUI();
     }
+
+    static void candidates_populated(GObject * /*unused*/, gpointer user_data) {
+        auto *that = static_cast<KkcState *>(user_data);
+        that->updateUI();
+    }
+
+    static void candidates_cursor_pos_changed(GObject * /*unused*/,
+                                              GParamSpec * /*unused*/,
+                                              gpointer user_data) {
+        auto *that = static_cast<KkcState *>(user_data);
+        that->updateUI();
+    }
+
+    static void candidates_selected(GObject * /*unused*/,
+                                    KkcCandidate * /*unused*/,
+                                    gpointer user_data) {
+        auto *that = static_cast<KkcState *>(user_data);
+        that->updateUI();
+    }
+
+    void updateInputMode() { parent_->updateInputMode(ic_); }
 
     void applyConfig() const {
         KkcCandidateList *kkcCandidates =
@@ -116,12 +148,30 @@ public:
         }
     }
 
+    auto *context() { return context_.get(); }
+
+private:
+    struct KeyEventScope {
+        KeyEventScope(KkcState &self) : self_(self) {
+            self_.inKeyEventScope_ = true;
+            self_.pendingUpdateUI_ = false;
+        }
+        ~KeyEventScope() {
+            self_.inKeyEventScope_ = false;
+            if (self_.pendingUpdateUI_) {
+                self_.doUpdateUI();
+            }
+        }
+
+    private:
+        KkcState &self_;
+    };
+
+    bool inKeyEventScope_ = false;
+    bool pendingUpdateUI_ = false;
     KkcEngine *parent_;
     InputContext *ic_;
     GObjectUniquePtr<KkcContext> context_;
-    gulong signal_;
-    bool modeChanged_ = false;
-    KkcInputMode lastMode_ = KKC_INPUT_MODE_HIRAGANA;
 };
 
 namespace {
@@ -146,7 +196,7 @@ struct {
 
 auto inputModeStatus(KkcEngine *engine, InputContext *ic) {
     auto *state = engine->state(ic);
-    auto mode = kkc_context_get_input_mode(state->context_.get());
+    auto mode = kkc_context_get_input_mode(state->context());
     return (mode >= 0 && mode < FCITX_ARRAY_SIZE(input_mode_status))
                ? &input_mode_status[mode]
                : nullptr;
@@ -193,11 +243,11 @@ public:
     }
     bool isChecked(InputContext *ic) const override {
         auto *state = engine_->state(ic);
-        return mode_ == kkc_context_get_input_mode(state->context_.get());
+        return mode_ == kkc_context_get_input_mode(state->context());
     }
     void activate(InputContext *ic) override {
         auto *state = engine_->state(ic);
-        kkc_context_set_input_mode(state->context_.get(), mode_);
+        kkc_context_set_input_mode(state->context(), mode_);
     }
 
 private:
@@ -214,13 +264,11 @@ public:
 
     void select(InputContext *inputContext) const override {
         auto *state = engine_->state(inputContext);
-        auto *context = state->context_.get();
+        auto *context = state->context();
         KkcCandidateList *kkcCandidates = kkc_context_get_candidates(context);
-        if (kkc_candidate_list_select_at(
-                kkcCandidates,
-                idx_ % kkc_candidate_list_get_page_size(kkcCandidates))) {
-            engine_->updateUI(inputContext);
-        }
+        kkc_candidate_list_select_at(
+            kkcCandidates,
+            idx_ % kkc_candidate_list_get_page_size(kkcCandidates));
     }
 
 private:
@@ -237,7 +285,7 @@ public:
         setPageable(this);
         setCursorMovable(this);
         auto *kkcstate = engine_->state(ic_);
-        auto *context = kkcstate->context_.get();
+        auto *context = kkcstate->context();
         KkcCandidateList *kkcCandidates = kkc_context_get_candidates(context);
         gint size = kkc_candidate_list_get_size(kkcCandidates);
         gint cursor_pos = kkc_candidate_list_get_cursor_pos(kkcCandidates);
@@ -315,7 +363,7 @@ public:
 private:
     void paging(bool prev) {
         auto *kkcstate = engine_->state(ic_);
-        auto *context = kkcstate->context_.get();
+        auto *context = kkcstate->context();
         KkcCandidateList *kkcCandidates = kkc_context_get_candidates(context);
         if (kkc_candidate_list_get_page_visible(kkcCandidates)) {
             if (prev) {
@@ -323,12 +371,11 @@ private:
             } else {
                 kkc_candidate_list_page_down(kkcCandidates);
             }
-            engine_->updateUI(ic_);
         }
     }
     void moveCursor(bool prev) {
         auto *kkcstate = engine_->state(ic_);
-        auto *context = kkcstate->context_.get();
+        auto *context = kkcstate->context();
         KkcCandidateList *kkcCandidates = kkc_context_get_candidates(context);
         if (kkc_candidate_list_get_page_visible(kkcCandidates)) {
             if (prev) {
@@ -336,7 +383,6 @@ private:
             } else {
                 kkc_candidate_list_cursor_down(kkcCandidates);
             }
-            engine_->updateUI(ic_);
         }
     }
 
@@ -381,6 +427,115 @@ Text kkcContextGetPreedit(KkcContext *context) {
 }
 
 } // namespace
+
+void KkcState::keyEvent(KeyEvent &keyEvent) {
+    auto state = static_cast<uint32_t>(keyEvent.rawKey().states());
+    state &= static_cast<uint32_t>(KeyState::SimpleMask);
+    if (keyEvent.isRelease()) {
+        state |= KKC_MODIFIER_TYPE_RELEASE_MASK;
+    }
+
+    KKC_DEBUG() << "Kkc received key: " << keyEvent.rawKey()
+                << " isRelease: " << keyEvent.isRelease()
+                << " keycode: " << keyEvent.rawKey().code();
+
+    auto *context = context_.get();
+    KkcCandidateList *kkcCandidates = kkc_context_get_candidates(context);
+    if (kkc_candidate_list_get_page_visible(kkcCandidates) &&
+        !keyEvent.isRelease()) {
+        if (keyEvent.key().checkKeyList(*parent_->config().cursorUpKey)) {
+            kkc_candidate_list_cursor_up(kkcCandidates);
+            keyEvent.filterAndAccept();
+        } else if (keyEvent.key().checkKeyList(
+                       *parent_->config().cursorDownKey)) {
+            kkc_candidate_list_cursor_down(kkcCandidates);
+            keyEvent.filterAndAccept();
+        } else if (keyEvent.key().checkKeyList(
+                       *parent_->config().prevPageKey)) {
+            kkc_candidate_list_page_up(kkcCandidates);
+            keyEvent.filterAndAccept();
+        } else if (keyEvent.key().checkKeyList(
+                       *parent_->config().nextPageKey)) {
+            kkc_candidate_list_page_down(kkcCandidates);
+            keyEvent.filterAndAccept();
+        } else if (keyEvent.key().isDigit()) {
+            KeySym syms[] = {
+                FcitxKey_1, FcitxKey_2, FcitxKey_3, FcitxKey_4, FcitxKey_5,
+                FcitxKey_6, FcitxKey_7, FcitxKey_8, FcitxKey_9, FcitxKey_0,
+            };
+
+            KeyList selectionKey;
+            KeyStates states;
+            for (auto sym : syms) {
+                selectionKey.emplace_back(sym, states);
+            }
+            auto idx = keyEvent.key().keyListIndex(selectionKey);
+            if (idx >= 0) {
+                kkc_candidate_list_select_at(
+                    kkcCandidates,
+                    idx % kkc_candidate_list_get_page_size(kkcCandidates));
+                keyEvent.filterAndAccept();
+            }
+        }
+    }
+
+    if (keyEvent.filtered()) {
+        return;
+    }
+
+    auto key = makeGObjectUnique(kkc_key_event_new_from_x_event(
+        keyEvent.rawKey().sym(), keyEvent.rawKey().code() - 8,
+        static_cast<KkcModifierType>(state)));
+    if (!key) {
+        KKC_DEBUG() << "Failed to obtain kkc key event";
+        return;
+    }
+    if (kkc_context_process_key_event(context, key.get())) {
+        keyEvent.filterAndAccept();
+    }
+    KKC_DEBUG() << "Key event filtered: " << keyEvent.filtered();
+}
+
+void KkcState::reset() {
+    kkc_context_reset(context_.get());
+    updateUI();
+}
+
+void KkcState::updateUI() {
+    if (inKeyEventScope_) {
+        pendingUpdateUI_ = true;
+    } else {
+        doUpdateUI();
+    }
+}
+
+void KkcState::doUpdateUI() {
+    auto *context = this->context();
+
+    auto &inputPanel = ic_->inputPanel();
+    inputPanel.reset();
+    Text preedit = kkcContextGetPreedit(context);
+    if (ic_->capabilityFlags().test(CapabilityFlag::Preedit)) {
+        inputPanel.setClientPreedit(preedit);
+        ic_->updatePreedit();
+    } else {
+        inputPanel.setPreedit(preedit);
+    }
+
+    KkcCandidateList *kkcCandidates = kkc_context_get_candidates(context);
+    if (kkc_candidate_list_get_page_visible(kkcCandidates)) {
+        inputPanel.setCandidateList(
+            std::make_unique<KkcFcitxCandidateList>(parent_, ic_));
+    }
+
+    if (kkc_context_has_output(context)) {
+        gchar *str = kkc_context_poll_output(context);
+        ic_->commitString(str);
+        g_free(str);
+    }
+
+    ic_->updateUserInterface(UserInterfaceComponent::InputPanel);
+}
 
 KkcEngine::KkcEngine(Instance *instance)
     : instance_(instance),
@@ -433,9 +588,11 @@ KkcEngine::KkcEngine(Instance *instance)
     instance_->inputContextManager().registerProperty("kkcState", &factory_);
     instance_->inputContextManager().foreach([this](InputContext *ic) {
         auto *state = this->state(ic);
-        kkc_context_set_input_mode(state->context_.get(), *config_.inputMode);
+        kkc_context_set_input_mode(state->context(), *config_.inputMode);
         return true;
     });
+
+    constructed_ = true;
 }
 
 KkcEngine::~KkcEngine() {}
@@ -450,7 +607,7 @@ void KkcEngine::deactivate(const InputMethodEntry &entry,
                            InputContextEvent &event) {
     if (event.type() == EventType::InputContextSwitchInputMethod) {
         auto *kkcstate = this->state(event.inputContext());
-        auto *context = kkcstate->context_.get();
+        auto *context = kkcstate->context();
         auto text = kkcContextGetPreedit(context);
         auto str = text.toString();
         if (!str.empty()) {
@@ -462,73 +619,10 @@ void KkcEngine::deactivate(const InputMethodEntry &entry,
 
 void KkcEngine::keyEvent(const InputMethodEntry & /*entry*/,
                          KeyEvent &keyEvent) {
-    auto state = static_cast<uint32_t>(keyEvent.rawKey().states());
-    state &= static_cast<uint32_t>(KeyState::SimpleMask);
-    if (keyEvent.isRelease()) {
-        state |= KKC_MODIFIER_TYPE_RELEASE_MASK;
-    }
-
-    KKC_DEBUG() << "Kkc received key: " << keyEvent.rawKey()
-                << " isRelease: " << keyEvent.isRelease()
-                << " keycode: " << keyEvent.rawKey().code();
-
     auto *kkcstate = this->state(keyEvent.inputContext());
-    auto *context = kkcstate->context_.get();
-    KkcCandidateList *kkcCandidates = kkc_context_get_candidates(context);
-    if (kkc_candidate_list_get_page_visible(kkcCandidates) &&
-        !keyEvent.isRelease()) {
-        if (keyEvent.key().checkKeyList(*config_.cursorUpKey)) {
-            kkc_candidate_list_cursor_up(kkcCandidates);
-            keyEvent.filterAndAccept();
-        } else if (keyEvent.key().checkKeyList(*config_.cursorDownKey)) {
-            kkc_candidate_list_cursor_down(kkcCandidates);
-            keyEvent.filterAndAccept();
-        } else if (keyEvent.key().checkKeyList(*config_.prevPageKey)) {
-            kkc_candidate_list_page_up(kkcCandidates);
-            keyEvent.filterAndAccept();
-        } else if (keyEvent.key().checkKeyList(*config_.nextPageKey)) {
-            kkc_candidate_list_page_down(kkcCandidates);
-            keyEvent.filterAndAccept();
-        } else if (keyEvent.key().isDigit()) {
-            KeySym syms[] = {
-                FcitxKey_1, FcitxKey_2, FcitxKey_3, FcitxKey_4, FcitxKey_5,
-                FcitxKey_6, FcitxKey_7, FcitxKey_8, FcitxKey_9, FcitxKey_0,
-            };
-
-            KeyList selectionKey;
-            KeyStates states;
-            for (auto sym : syms) {
-                selectionKey.emplace_back(sym, states);
-            }
-            auto idx = keyEvent.key().keyListIndex(selectionKey);
-            if (idx >= 0) {
-                kkc_candidate_list_select_at(
-                    kkcCandidates,
-                    idx % kkc_candidate_list_get_page_size(kkcCandidates));
-                keyEvent.filterAndAccept();
-            }
-        }
-    }
-
-    if (keyEvent.filtered()) {
-        updateUI(keyEvent.inputContext());
-        return;
-    }
-
-    auto key = makeGObjectUnique(kkc_key_event_new_from_x_event(
-        keyEvent.rawKey().sym(), keyEvent.rawKey().code() - 8,
-        static_cast<KkcModifierType>(state)));
-    if (!key) {
-        KKC_DEBUG() << "Failed to obtain kkc key event";
-        return;
-    }
-    kkcstate->modeChanged_ = false;
-    if (kkc_context_process_key_event(context, key.get())) {
-        keyEvent.filterAndAccept();
-        updateUI(keyEvent.inputContext());
-    }
-    KKC_DEBUG() << "Key event filtered: " << keyEvent.filtered();
+    kkcstate->keyEvent(keyEvent);
 }
+
 void KkcEngine::reloadConfig() {
     readAsIni(config_, "conf/kkc.conf");
 
@@ -546,47 +640,17 @@ void KkcEngine::reloadConfig() {
 void KkcEngine::reset(const InputMethodEntry & /*entry*/,
                       InputContextEvent &event) {
     auto *state = this->state(event.inputContext());
-    auto *context = state->context_.get();
-    kkc_context_reset(context);
-    updateUI(event.inputContext());
+    state->reset();
 }
 void KkcEngine::save() { kkc_dictionary_list_save(dictionaries_.get()); }
 
-void KkcEngine::updateUI(InputContext *inputContext) {
-    auto *state = this->state(inputContext);
-    auto *context = state->context_.get();
-
-    auto &inputPanel = inputContext->inputPanel();
-    inputPanel.reset();
-    Text preedit = kkcContextGetPreedit(context);
-    if (inputContext->capabilityFlags().test(CapabilityFlag::Preedit)) {
-        inputPanel.setClientPreedit(preedit);
-        inputContext->updatePreedit();
-    } else {
-        inputPanel.setPreedit(preedit);
+void KkcEngine::updateInputMode(InputContext *ic) {
+    if (!constructed_) {
+        return;
     }
-
-    KkcCandidateList *kkcCandidates = kkc_context_get_candidates(context);
-    if (kkc_candidate_list_get_page_visible(kkcCandidates)) {
-        inputPanel.setCandidateList(
-            std::make_unique<KkcFcitxCandidateList>(this, inputContext));
-    }
-
-    if (kkc_context_has_output(context)) {
-        gchar *str = kkc_context_poll_output(context);
-        inputContext->commitString(str);
-        g_free(str);
-    }
-
-    // Ensure we are not composing any text.
-    if (state->modeChanged_ && preedit.empty() && !inputPanel.candidateList()) {
-        instance_->showInputMethodInformation(inputContext);
-    }
-
-    inputContext->updateUserInterface(UserInterfaceComponent::InputPanel);
+    modeAction_->update(ic);
+    instance_->showInputMethodInformation(ic);
 }
-
-void KkcEngine::updateInputMode(InputContext *ic) { modeAction_->update(ic); }
 
 void KkcEngine::loadDictionary() {
     kkc_dictionary_list_clear(dictionaries_.get());
