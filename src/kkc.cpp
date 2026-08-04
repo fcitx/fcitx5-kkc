@@ -429,6 +429,7 @@ Text kkcContextGetPreedit(KkcContext *context) {
 } // namespace
 
 void KkcState::keyEvent(KeyEvent &keyEvent) {
+    KeyEventScope scope(*this);
     auto state = static_cast<uint32_t>(keyEvent.rawKey().states());
     state &= static_cast<uint32_t>(KeyState::SimpleMask);
     if (keyEvent.isRelease()) {
