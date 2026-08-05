@@ -57,7 +57,6 @@ struct RuleAnnotation : public EnumAnnotation {
         EnumAnnotation::dumpDescription(config);
         int length;
         auto *rules = kkc_rule_list(&length);
-        FCITX_INFO() << length;
         int total = 0;
         for (int i = 0; i < length; i++) {
             int priority;
@@ -172,8 +171,6 @@ public:
     auto model() { return model_.get(); }
     auto rule() { return userRule_.get(); }
 
-    void updateUI(InputContext *inputContext);
-
     std::string subMode(const InputMethodEntry & /*entry*/,
                         InputContext & /*inputContext*/) override;
     std::string subModeLabelImpl(const fcitx::InputMethodEntry & /*unused*/,
@@ -187,6 +184,7 @@ private:
     void loadDictionary();
     void loadRule();
 
+    bool constructed_ = false;
     KkcConfig config_;
     Instance *instance_;
     FactoryFor<KkcState> factory_;
