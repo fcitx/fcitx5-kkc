@@ -2,7 +2,7 @@
 Name=KKC Addon of Fcitx
 Category=InputMethod
 Version=@PROJECT_VERSION@
-Library=kkc
+Library=libkkc
 Type=SharedLibrary
 OnDemand=True
 Configurable=True
